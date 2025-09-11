@@ -65,5 +65,4 @@ class ForgotPasswordController extends Controller
 
         return response()->json(['message' => 'OTP verified successfully.']);
     }
-
 }

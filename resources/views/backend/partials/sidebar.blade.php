@@ -123,10 +123,10 @@
                 </li>
 
                 <!-- Main Menu: Student Review -->
-                <li class="nav-item {{ request()->routeIs('product.index') || request()->is('admin/product/*') ? 'menu-open' : '' }}">
-                    <a href="" class="nav-link {{ request()->routeIs('student.review.index') || request()->is('admin/student-review/*') ? 'active' : '' }}">
+                <li class="nav-item {{ request()->routeIs('share.experiance.index') ? 'menu-open' : '' }}">
+                    <a href="{{ route('share.experiance.index') }}" class="nav-link {{ request()->routeIs('share.experiance.index') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-star"></i>
-                        <p>Student Review</p>
+                        <p>Share Experience</p>
                     </a>
                 </li>
 

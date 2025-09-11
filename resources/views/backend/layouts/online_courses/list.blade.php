@@ -39,7 +39,7 @@
                     <div class="info-box mb-3 d-flex justify-content-between align-items-center">
                         <div class="info-box-content">
                             <span class="info-box-text fw-bold" style="font-size: 1.5rem;">Total Courses</span>
-                            <span class="info-box-number text-primary" style="font-size: 2rem;">120</span>
+                            <span class="info-box-number text-primary" style="font-size: 2rem;"> {{ $totalCourses }}</span>
                         </div>
                         <span class="info-box-icon bg-white elevation-1 text-dark">
                             <i class="fas fa-graduation-cap" style="font-size: 2rem;"></i>
@@ -52,7 +52,7 @@
                     <div class="info-box mb-3 d-flex justify-content-between align-items-center">
                         <div class="info-box-content">
                             <span class="info-box-text fw-bold" style="font-size: 1.5rem;">In Progress</span>
-                            <span class="info-box-number text-primary" style="font-size: 2rem;">45</span>
+                            <span class="info-box-number text-primary" style="font-size: 2rem;">{{ $inProgress }}</span>
                         </div>
                         <span class="info-box-icon bg-white elevation-1 text-dark">
                             <i class="fas fa-graduation-cap" style="font-size: 2rem;"></i>
@@ -65,7 +65,7 @@
                     <div class="info-box mb-3 d-flex justify-content-between align-items-center">
                         <div class="info-box-content">
                             <span class="info-box-text fw-bold" style="font-size: 1.5rem;">Completed</span>
-                            <span class="info-box-number text-primary" style="font-size: 2rem;">75</span>
+                            <span class="info-box-number text-primary" style="font-size: 2rem;">{{$inComplete}}</span>
                         </div>
                         <span class="info-box-icon bg-white elevation-1 text-dark">
                             <i class="fas fa-graduation-cap" style="font-size: 2rem;"></i>
@@ -154,7 +154,7 @@
 
             {{-- Pagination --}}
             <div class="d-flex justify-content-center">
-                {{ $courses->links() }}
+{{--                {{ $courses->links() }}--}}
             </div>
         </div>
 

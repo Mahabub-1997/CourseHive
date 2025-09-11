@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Web\Backend\StudentReview\ApiController;
 use App\Http\Controllers\Web\Backend\CMS\AboutUs\AboutUsController;
 use App\Http\Controllers\Web\Backend\CMS\Category\CategoryController;
 use App\Http\Controllers\Web\Backend\CMS\ContactUs\ContactUsController;
@@ -49,6 +50,8 @@ Route::resource('subscriptions', SubscriptionController::class);
 Route::resource('contactus', ContactUsController::class);
 Route::resource('hero-images', HeroImageController::class);
 Route::resource('hero-sections', HeroSectionController::class);
+
+Route::get('/share-experiance', [ApiController::class, 'index'])->name('share.experiance.index');
 
 
 

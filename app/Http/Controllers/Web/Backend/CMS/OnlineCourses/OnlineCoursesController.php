@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Web\Backend\CMS\OnlineCourses;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\Enrollment;
 use App\Models\OnlineCourse;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -17,8 +18,11 @@ class OnlineCoursesController extends Controller
     {
         $courses = OnlineCourse::latest()->paginate(10); // fetch courses
         $users = User::all(); // Fetch all users
+        $totalCourses = OnlineCourse::count();
+        $inProgress = Enrollment::where('status', 'pending')->count();
+        $inComplete = Enrollment::where('status', 'success')->count();
         $categories = Category::all();
-        return view('backend.layouts.online_courses.list', compact('courses', 'users', 'categories'));
+        return view('backend.layouts.online_courses.list', compact('courses', 'users', 'categories', 'totalCourses', 'inProgress','inComplete'));
     }
 
     public function create()

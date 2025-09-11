@@ -1,4 +1,4 @@
-<nav class="main-header navbar navbar-expand navbar-dark">
+<nav class="main-header navbar navbar-expand navbar-white">
     <!-- Left navbar links -->
     <ul class="navbar-nav">
         <li class="nav-item">
@@ -8,58 +8,82 @@
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
 
-        <li class="nav-item dropdown">
-            <a class="nav-link" data-toggle="dropdown" href="{{asset('backend')}}/AdminAssets/backend/dist/img/avatar.png">
-                <i class="far fa-bell"></i>
-                <span class="badge badge-warning navbar-badge">15</span>
+{{--        <li class="nav-item dropdown">--}}
+{{--            <a class="nav-link" data-toggle="dropdown" href="{{asset('backend')}}/AdminAssets/backend/dist/img/avatar.png">--}}
+{{--                <i class="far fa-bell"></i>--}}
+{{--                <span class="badge badge-warning navbar-badge">15</span>--}}
+{{--            </a>--}}
+{{--            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">--}}
+{{--                <span class="dropdown-item dropdown-header">15 Notifications</span>--}}
+{{--                <div class="dropdown-divider"></div>--}}
+{{--                <a href="#" class="dropdown-item">--}}
+{{--                    <i class="fas fa-envelope mr-2"></i> 4 new messages--}}
+{{--                    <span class="float-right text-muted text-sm">3 mins</span>--}}
+{{--                </a>--}}
+{{--                <div class="dropdown-divider"></div>--}}
+{{--                <a href="#" class="dropdown-item">--}}
+{{--                    <i class="fas fa-users mr-2"></i> 8 friend requests--}}
+{{--                    <span class="float-right text-muted text-sm">12 hours</span>--}}
+{{--                </a>--}}
+{{--                <div class="dropdown-divider"></div>--}}
+{{--                <a href="#" class="dropdown-item">--}}
+{{--                    <i class="fas fa-file mr-2"></i> 3 new reports--}}
+{{--                    <span class="float-right text-muted text-sm">2 days</span>--}}
+{{--                </a>--}}
+{{--                <div class="dropdown-divider"></div>--}}
+{{--                <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>--}}
+{{--            </div>--}}
+{{--        </li>--}}
+
+        <li class="nav-item nav-profile ">
+            <!-- Dropdown toggle -->
+            <a class="nav-link  d-flex align-items-center" href="#" data-toggle="dropdown" id="profileDropdown"
+                style="display:flex; align-items:center; gap:10px;">
+                <!-- User avatar -->
+                <div class="rounded-circle bg-primary text-white d-flex justify-content-center align-items-center"
+                     style="width:35px; height:35px; font-weight:bold;">
+                    {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+                </div>
+                <div class="ms-4 text-dark"><span>{{ Auth::user()->name }}</span></div>
+                <!-- Gap + User name -->
+
+                <!-- Dropdown icon -->
+                <i class="fa-solid fa-angle-down text-dark ms-2"></i>
             </a>
-            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                <span class="dropdown-item dropdown-header">15 Notifications</span>
-                <div class="dropdown-divider"></div>
-                <a href="#" class="dropdown-item">
-                    <i class="fas fa-envelope mr-2"></i> 4 new messages
-                    <span class="float-right text-muted text-sm">3 mins</span>
-                </a>
-                <div class="dropdown-divider"></div>
-                <a href="#" class="dropdown-item">
-                    <i class="fas fa-users mr-2"></i> 8 friend requests
-                    <span class="float-right text-muted text-sm">12 hours</span>
-                </a>
-                <div class="dropdown-divider"></div>
-                <a href="#" class="dropdown-item">
-                    <i class="fas fa-file mr-2"></i> 3 new reports
-                    <span class="float-right text-muted text-sm">2 days</span>
-                </a>
-                <div class="dropdown-divider"></div>
-                <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
-            </div>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" data-widget="fullscreen" href="#" role="button">
-                <i class="fas fa-expand-arrows-alt"></i>
-            </a>
-        </li>
-        <li class="nav-item nav-profile dropdown">
-            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
-                <span class="ml-1">{{ Auth::user()->name }} (ID: {{ Auth::user()->id }})</span>
-            </a>
+
+            <!-- Dropdown menu -->
             <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
-                <a class="dropdown-item text-primary" href="{{route('profile.edit')}}">
-                    <i class="fa-solid fa-user me-2" style="color:#ffc107"></i>
-                    Update Profile
+                <div style="display:flex; align-items:center; padding:0.5rem 1rem; border-bottom:1px solid #dee2e6; gap:10px;">
+                    <!-- Avatar -->
+                    <div style="width:35px; height:35px; border-radius:50%;
+                background-color:#0d6efd; color:white;
+                display:flex; justify-content:center; align-items:center; font-weight:bold;">
+                        {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+                    </div>
+
+                    <!-- Name and Email -->
+                    <div style="display:flex; flex-direction:column;">
+                        <span style="font-weight:bold; color:black;">{{ Auth::user()->name }}</span>
+                        <small style="color:gray;">{{ Auth::user()->email }}</small>
+                    </div>
+                </div>
+
+                <!-- Menu links -->
+                <a class="dropdown-item fw-bold text-dark" href="{{ route('dashboard') }}">
+                    <i class="fa-solid fa-home me-2 text-dark"></i> Dashboard
                 </a>
-                <a class="dropdown-item text-primary" href="{{route('profile.update')}}">
-                    <i class="fa-solid fa-key me-2" style="color:#ffc107"></i>
-                    Change Password
+                <a class="dropdown-item fw-bold text-dark" href="{{ route('profile.update') }}">
+                    <i class="fa-solid fa-user me-2 text-dark"></i> My Account
                 </a>
-                <a class="dropdown-item text-primary" href="{{ route('logout') }}" onclick="event.preventDefault();
-                                document.getElementById('logout-form').submit();">
-                    <i class="fa-solid fa-lock me-2" style="color:#ffc107"></i> {{ __('Logout') }}
+                <a class="dropdown-item fw-bold text-dark" href="{{ route('logout') }}"
+                   onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                    <i class="fas fa-sign-out-alt me-2 text-dark"></i> Logout
                 </a>
                 <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                     @csrf
                 </form>
             </div>
         </li>
+
     </ul>
 </nav>

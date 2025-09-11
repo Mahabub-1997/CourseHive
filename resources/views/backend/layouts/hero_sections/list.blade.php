@@ -9,7 +9,7 @@
 
                     </div><!-- /.col -->
                     <div class="col-sm-6">
-                        <h1 class="m-0">Contact Us </h1>
+                        <h1 class="m-0">Hero Sections </h1>
                     </div><!-- /.col -->
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
