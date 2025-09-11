@@ -26,8 +26,10 @@ class HeroImageController extends Controller
      */
     public function store(Request $request)
     {
+        // Validate that 'images' is required and each file meets requirements
         $request->validate([
-            'images.*' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'images' => 'required|array',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif,webp|max:2048',
         ]);
 
         $uploadedImages = [];
@@ -40,8 +42,13 @@ class HeroImageController extends Controller
             }
         }
 
+        // Prevent creating a record if no images were uploaded
+        if (empty($uploadedImages)) {
+            return response()->json(['message' => 'No images uploaded'], 422);
+        }
+
         $heroImage = HeroImage::create([
-            'images' => $uploadedImages,
+            'images' => $uploadedImages, // Eloquent casts array to JSON automatically
         ]);
 
         return response()->json($heroImage, 201);

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\CMS;
+namespace App\Http\Controllers\API\CMS;
 
 use App\Http\Controllers\Controller;
 use App\Models\HeroSection;
