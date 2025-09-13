@@ -28,8 +28,12 @@ class CategorySeeder extends Seeder
             ],
         ];
 
-        foreach ($categories as $category) {
-            Category::create($category);
+        foreach ($categories as $cat) {
+            // Prevent duplicate insertion
+            Category::firstOrCreate(
+                ['name' => $cat['name']],
+                ['description' => $cat['description']]
+            );
         }
     }
 }
