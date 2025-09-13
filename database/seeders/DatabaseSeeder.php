@@ -1,5 +1,4 @@
 <?php
-
 namespace Database\Seeders;
 
 use App\Models\User;
@@ -12,15 +11,19 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Create a test user
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        // Create or update the test user to avoid duplicates
+        User::updateOrCreate(
+            ['email' => 'test@example.com'], // unique key
+            [
+                'name' => 'Test User',
+                'password' => bcrypt('password123'), // set a password
+            ]
+        );
 
-        // Call the OnlineCourseSeeder to seed courses
+        // Call other seeders
         $this->call([
             OnlineCourseSeeder::class,
+            CategorySeeder::class
         ]);
     }
 }
