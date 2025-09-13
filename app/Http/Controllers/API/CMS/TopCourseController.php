@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\API\CMS;
 
 use App\Http\Controllers\Controller;
+use App\Models\OnlineCourse;
 use App\Models\TopCourse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class TopCourseController extends Controller
 {
@@ -13,70 +15,28 @@ class TopCourseController extends Controller
      */
     public function index()
     {
-        $topCourses = TopCourse::all();
+        $topCourses = OnlineCourse::withCount(['enrollments as enrollments_count' => function ($query) {
+            $query->where('status', 'success'); // only successful enrollments
+        }])
+            ->orderByDesc('enrollments_count')
+            ->take(5)
+            ->get()
+            ->map(function ($course) {
+                return [
+                    'id' => $course->id,
+                    'title' => $course->title,
+                    'subtitle' => $course->subtitle,
+                    'description' => $course->description,
+                    'enrollments_count' => $course->enrollments_count,
+                    'image' => $course->image
+                        ? asset('uploads/courses/' . $course->image)
+                        : asset('images/default-course.png')
+                ];
+            });
 
         return response()->json([
-            'success' => true,
-            'message' => 'Top courses retrieved successfully.',
+            'status' => 'success',
             'data' => $topCourses
-        ], 200);
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        $topCourse = TopCourse::create($request->only([
-            'title',
-            'subtitle',
-            'image',
-            'description'
-        ]));
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Top course created successfully.',
-            'data' => $topCourse
-        ], 201);
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(TopCourse $topCourse)
-    {
-        return response()->json([
-            'success' => true,
-            'message' => 'Top course retrieved successfully.',
-            'data' => $topCourse
-        ], 200);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, TopCourse $topCourse)
-    {
-        $topCourse->update($request->only(['title', 'subtitle', 'image', 'description']));
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Top course updated successfully.',
-            'data' => $topCourse
-        ], 200);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(TopCourse $topCourse)
-    {
-        $topCourse->delete();
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Top course deleted successfully.'
-        ], 200);
+        ]);
     }
 }

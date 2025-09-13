@@ -49,10 +49,22 @@ class AboutUsController extends Controller
         }
     }
 
-    public function show($id)
+    public function show()
     {
-        $aboutUs = AboutUs::findOrFail($id);
-        return response()->json($aboutUs);
+        $about = AboutUs::first();
+
+        if (!$about) {
+            return response()->json(['status' => 'error', 'message' => 'About Us page not found'], 404);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'data' => [
+                'title' => $about->title,
+                'description' => $about->description,
+                'image' => $about->image ? asset('storage/' . $about->image) : asset('images/default-about.png')
+            ]
+        ]);
     }
 
 // PUT/PATCH /api/contact-us/{id}
@@ -102,28 +114,51 @@ class AboutUsController extends Controller
 
 
     // DELETE /api/contact-us/{id}
+//    public function destroy($id)
+//    {
+//        try {
+//            $contact = ContactUs::findOrFail($id);
+//
+//            if ($contact->image) {
+//                Storage::disk('public')->delete($contact->image);
+//            }
+//
+//            $contact->delete();
+//
+//            return response()->json([
+//                'success' => true,
+//                'message' => 'Contact deleted successfully.'
+//            ], 200);
+//
+//        } catch (\Exception $e) {
+//            return response()->json([
+//                'success' => false,
+//                'message' => $e->getMessage()
+//            ], 500);
+//        }
+//    }
+
     public function destroy($id)
     {
-        try {
-            $contact = ContactUs::findOrFail($id);
+        $contact = ContactUs::find($id);
 
-            if ($contact->image) {
-                Storage::disk('public')->delete($contact->image);
-            }
-
-            $contact->delete();
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Contact deleted successfully.'
-            ], 200);
-
-        } catch (\Exception $e) {
+        if (!$contact) {
             return response()->json([
                 'success' => false,
-                'message' => $e->getMessage()
-            ], 500);
+                'message' => 'Contact not found.'
+            ], 404);
         }
+
+        if ($contact->image) {
+            Storage::disk('public')->delete($contact->image);
+        }
+
+        $contact->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Contact deleted successfully.'
+        ], 200);
     }
 
 }

@@ -104,7 +104,7 @@
             <div class="row">
                 @foreach($courses as $course)
                     <div class="col-md-4 mb-4">
-                        <div class="card shadow-sm" style="width: 500px; height: 500px;">
+                        <div class="card shadow-sm" style="width: 500px; height: 500px; border-radius: 15px; ">
                             @if($course->image)
                                 <img src="{{ asset('uploads/courses/' . $course->image) }}" class="card-img-top" alt="{{ $course->title }}" style="height:120px; object-fit:cover;">
                             @endif

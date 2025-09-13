@@ -8,6 +8,7 @@ use App\Http\Controllers\API\Auth\ResetPasswordController;
 
 use App\Http\Controllers\API\CMS\AboutUsController;
 use App\Http\Controllers\API\CMS\CategoryController;
+use App\Http\Controllers\API\CMS\ContactController;
 use App\Http\Controllers\API\CMS\ContactUsController;
 use App\Http\Controllers\API\CMS\HeroImageController;
 use App\Http\Controllers\API\CMS\HeroSectionController;
@@ -66,3 +67,10 @@ Route::apiResource('share-experiance', ShareExperianceController::class);
 Route::patch('update-hero-section/{id}', [HeroSectionController::class,'updateHeroSection']);
 
 Route::get('hero-sections/search/courses', [HeroSectionController::class, 'searchCourses']);
+
+
+Route::get('/top-courses', [TopCourseController::class, 'index']);
+Route::get('/about-us', [AboutUsController::class, 'show']);
+Route::get('contacts', [ContactController::class, 'index']);
+Route::post('contacts', [ContactController::class, 'store']);
+Route::delete('contacts/{id}', [ContactController::class, 'destroy']);

@@ -1,59 +1,41 @@
-<aside class="main-sidebar sidebar-dark-primary elevation-4">
+<aside class="main-sidebar sidebar-primary elevation-4">
     <!-- Brand Logo -->
     <a href="" class="brand-link">
-        <div style="text-align: center;">
-            <img src="{{ asset('backend/AdminAssets/backend/dist/img/logo2.png') }}"
+        <div style="text-align: center; padding: 5px 0; background-color: #f8f9fa;">
+            <img src="{{ asset('backend/AdminAssets/backend/dist/img/BrandLogo.jpg') }}"
                  alt="Logo"
-                 class="brand-image img-circle elevation-3"
-                 style=" width: 150px; height: 150px; object-fit: contain;">
+                 style="width: 180px; height: 80px; object-fit: contain; display: block; margin: 0 auto;">
         </div>
     </a>
 
     <!-- Sidebar -->
     <div class="sidebar">
-        <!-- Sidebar Menu -->
-        <nav class="mt-2">
-            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+        <nav class="mt-10" style="margin-top: 50px;">
+            <ul class="nav nav-pills nav-sidebar flex-column"
+                data-widget="treeview"
+                role="menu"
+                data-accordion="false">
 
-                <!-- Main Menu: Dashboard -->
+                <!-- Dashboard -->
                 <li class="nav-item">
-                    <a href="{{route('dashboard')}}" class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}">
+                    <a href="{{ route('dashboard') }}"
+                       class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-home"></i>
                         <p>Dashboard</p>
                     </a>
                 </li>
 
-                <!-- Main Menu: CMS -->
-                <li class="nav-item {{ request()->routeIs([
-                        'categories.index',
-                        'category.index',
-                        'subcategories.index',
-                        'online-courses.index',
-                        'top-course.index',
-                        'about-us.index',
-                        'subscriptions.index'
-                    ]) || request()->is('admin/categories/*')
-                      || request()->is('admin/category/*')
-                      || request()->is('admin/subcategories/*')
-                      || request()->is('admin/online-courses/*')
-                      || request()->is('admin/top-course/*')
-                      || request()->is('admin/about-us/*')
-                      || request()->is('admin/subscriptions/*') ? 'menu-open' : '' }}">
-                    <a href="#" class="nav-link {{ request()->routeIs([
-                            'categories.index',
-                            'category.index',
-                            'subcategories.index',
-                            'online-courses.index',
-                            'top-course.index',
-                            'about-us.index',
-                            'subscriptions.index'
-                        ]) || request()->is('admin/categories/*')
-                          || request()->is('admin/category/*')
-                          || request()->is('admin/subcategories/*')
-                          || request()->is('admin/online-courses/*')
-                          || request()->is('admin/top-course/*')
-                          || request()->is('admin/about-us/*')
-                          || request()->is('admin/subscriptions/*') ? 'active' : '' }}">
+                <!-- CMS Menu -->
+                @php
+                    $cmsRoutes = [
+                        'categories.index', 'category.index', 'subcategories.index',
+                        'online-courses.index', 'top-course.index', 'about-us.index', 'subscriptions.index'
+                    ];
+                    $cmsOpen = collect($cmsRoutes)->contains(fn($r) => request()->routeIs($r) || request()->is("admin/{$r}/*"));
+                @endphp
+                <li class="nav-item {{ $cmsOpen ? 'menu-open' : '' }}">
+                    <a href="#"
+                       class="nav-link {{ $cmsOpen ? 'active' : '' }}">
                         <i class="nav-icon fas fa-folder"></i>
                         <p>
                             CMS
@@ -61,86 +43,54 @@
                         </p>
                     </a>
 
-                    <!-- Sub-menu items under CMS -->
                     <ul class="nav nav-treeview">
-                        <!-- Sub-menu: Category -->
-                        <li class="nav-item">
-                            <a href="{{ route('categories.index') }}" class="nav-link {{ request()->routeIs('categories.index') ? 'active' : '' }}">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Category</p>
-                            </a>
-                        </li>
-                        <!-- Sub-menu: Online Courses -->
-                        <li class="nav-item">
-                            <a href="{{ route('online-courses.index') }}" class="nav-link {{ request()->routeIs('online-courses.index') ? 'active' : '' }}">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Online Courses</p>
-                            </a>
-                        </li>
-                        <!-- Sub-menu: Top Course -->
-                        <li class="nav-item">
-                            <a href="{{ route('top-course.index') }}" class="nav-link {{ request()->routeIs('top-course.index') ? 'active' : '' }}">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Top Course</p>
-                            </a>
-                        </li>
-                        <!-- Sub-menu: About Us -->
-                        <li class="nav-item">
-                            <a href="{{ route('about-us.index') }}" class="nav-link {{ request()->routeIs('about-us.index') ? 'active' : '' }}">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>About Us</p>
-                            </a>
-                        </li>
-                        <!-- Sub-menu: Subscription -->
-                        <li class="nav-item">
-                            <a href="{{ route('subscriptions.index') }}" class="nav-link {{ request()->routeIs('subscriptions.index') ? 'active' : '' }}">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Subscription</p>
-                            </a>
-                        </li>
-                        <!-- Sub-menu: Hero Images -->
-                        <li class="nav-item">
-                            <a href="{{ route('hero-images.index') }}" class="nav-link {{ request()->routeIs('hero-images.*') ? 'active' : '' }}">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Hero Images</p>
-                            </a>
-                        </li>
-                        <!-- Sub-menu: Hero sections -->
-                        <li class="nav-item">
-                            <a href="{{ route('hero-sections.index') }}" class="nav-link {{ request()->routeIs('hero-images.*') ? 'active' : '' }}">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Hero Sections</p>
-                            </a>
-                        </li>
-                        <!-- Sub-menu: Contact Us -->
-                        <li class="nav-item">
-                            <a href="{{ route('contactus.index') }}" class="nav-link {{ request()->routeIs('contact-us.index') ? 'active' : '' }}">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Contact Us</p>
-                            </a>
-                        </li>
+                        @php
+                            $subMenu = [
+                                ['route' => 'categories.index', 'icon' => 'far fa-circle', 'label' => 'Category'],
+                                ['route' => 'online-courses.index', 'icon' => 'far fa-circle', 'label' => 'Online Courses'],
+                                ['route' => 'top.courses', 'icon' => 'far fa-circle', 'label' => 'Top Course'],
+                                ['route' => 'about-us.index', 'icon' => 'far fa-circle', 'label' => 'About Us'],
+                                ['route' => 'subscriptions.index', 'icon' => 'far fa-circle', 'label' => 'Subscription'],
+                                ['route' => 'hero-images.index', 'icon' => 'far fa-circle', 'label' => 'Hero Images'],
+                                ['route' => 'hero-sections.index', 'icon' => 'far fa-circle', 'label' => 'Hero Sections'],
+                                ['route' => 'contactus.index', 'icon' => 'far fa-circle', 'label' => 'Contact Us'],
+                            ];
+                        @endphp
+
+                        @foreach($subMenu as $item)
+                            <li class="nav-item">
+                                <a href="{{ route($item['route']) }}"
+                                   class="nav-link {{ request()->routeIs($item['route']) ? 'active' : '' }}">
+                                    <i class="{{ $item['icon'] }} nav-icon"></i>
+                                    <p>{{ $item['label'] }}</p>
+                                </a>
+                            </li>
+                        @endforeach
                     </ul>
                 </li>
 
-                <!-- Main Menu: Student Review -->
-                <li class="nav-item {{ request()->routeIs('share.experiance.index') ? 'menu-open' : '' }}">
-                    <a href="{{ route('share.experiance.index') }}" class="nav-link {{ request()->routeIs('share.experiance.index') ? 'active' : '' }}">
+                <!-- Student Review -->
+                <li class="nav-item">
+                    <a href="{{ route('share.experiance.index') }}"
+                       class="nav-link {{ request()->routeIs('share.experiance.index') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-star"></i>
                         <p>Share Experience</p>
                     </a>
                 </li>
 
-                <!-- Main Menu: Student Enrollment -->
+                <!-- Enrollments -->
                 <li class="nav-item">
-                    <a href="{{route('enrollments.index')}}" class="nav-link {{ request()->routeIs('courses.index') ? 'active' : '' }}">
-                        <i class="fas fa-user-graduate"></i>
+                    <a href="{{ route('enrollments.index') }}"
+                       class="nav-link {{ request()->routeIs('enrollments.index') ? 'active' : '' }}">
+                        <i class="fas fa-user-graduate nav-icon"></i>
                         <p>Enrollments</p>
                     </a>
                 </li>
 
-                <!-- Main Menu: Earning -->
-                <li class="nav-item {{ request()->routeIs('order.index') || request()->is('admin/order/*') ? 'menu-open' : '' }}">
-                    <a href="" class="nav-link {{ request()->routeIs('earning.index') || request()->is('admin/earning/*') ? 'active' : '' }}">
+                <!-- Earning -->
+                <li class="nav-item">
+                    <a href=""
+                       class="nav-link {{ request()->routeIs('earning.index') || request()->is('admin/earning/*') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-coins"></i>
                         <p>Earning</p>
                     </a>
@@ -148,7 +98,57 @@
 
             </ul>
         </nav>
-        <!-- /.sidebar-menu -->
     </div>
-    <!-- /.sidebar -->
 </aside>
+<style>
+    /* Default hover effect */
+    .nav-sidebar .nav-item .nav-link:hover {
+        background-color: #007bff !important; /* Bootstrap blue */
+        color: #fff !important;
+        position: relative;
+    }
+
+    /* White dot on hover - RIGHT SIDE */
+    .nav-sidebar .nav-item .nav-link:hover::after {
+        content: "•";
+        color: #fff;
+        font-size: 18px;
+        position: absolute;
+        right: 15px;  /* move to right */
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    /* Keep white dot for active menu - RIGHT SIDE */
+    .nav-sidebar .nav-item .nav-link.active {
+        background-color: #007bff !important;
+        color: #fff !important;
+        position: relative;
+    }
+
+    .nav-sidebar .nav-item .nav-link.active::after {
+        content: "•";
+        color: #fff;
+        font-size: 18px;
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    /* Default link icon color */
+    .nav-sidebar .nav-item .nav-link i.nav-icon {
+        color: #343a40; /* dark gray, or whatever default you want */
+    }
+
+    /* Icon color on hover */
+    .nav-sidebar .nav-item .nav-link:hover i.nav-icon {
+        color: #fff !important;
+    }
+
+    /* Icon color when active */
+    .nav-sidebar .nav-item .nav-link.active i.nav-icon {
+        color: #fff !important;
+    }
+</style>
+

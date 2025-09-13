@@ -1,154 +1,36 @@
-
-
 @extends('backend.partials.master')
-
 @section('content')
-    <div class="content-wrapper ">
-
+    <div class="content-wrapper">
         <div class="content-header">
             <div class="container-fluid">
                 <div class="row mb-2">
-                    <div class="col-md-12 align-items-center">
-
-                    </div><!-- /.col -->
-                    <div class="col-sm-6">
-                        <h1 class="m-0">Top Courses </h1>
-                    </div><!-- /.col -->
-                    <div class="col-sm-6">
-                        <ol class="breadcrumb float-sm-right">
-
-                        </ol>
-                    </div><!-- /.col -->
-                </div><!-- /.row -->
-            </div><!-- /.container-fluid -->
+                    <div class="col-md-12">
+                        <h1 class="m-0">📚 Top 5 Courses </h1>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        {{-- Dashboard Info Boxes --}}
         <div class="container-fluid mb-4">
-            <div class="row mt-4">
-                <div class="col-12">
-                    <div class="info-box mb-3 d-flex justify-content-between align-items-center bg-primary text-white">
-                        <div class="info-box-content">
-                            <span class="info-box-text fw-bold" style="font-size: 2rem;">My Course</span>
-                            <span class="info-box-number" style="font-size: .7rem;">
-                                You're making excellent progress in your healthcare training
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <div class="row">
-                <!-- Total Courses Card -->
-                <div class="col-12 col-sm-6 col-md-4">
-                    <div class="info-box mb-3 d-flex justify-content-between align-items-center">
-                        <div class="info-box-content">
-                            <span class="info-box-text fw-bold" style="font-size: 1.5rem;">Total Courses</span>
-                            <span class="info-box-number text-primary" style="font-size: 2rem;">120</span>
+                @forelse($topCourses as $course)
+                    <div class="col-12 col-sm-6 col-md-4 mb-4">
+                        <div class="card h-100 shadow-sm">
+                            <img src="{{ asset('uploads/courses/' . $course->image) }}" class="card-img-top"  style="height:200px; object-fit:cover;">
+                            <div class="card-body">
+                                <h5 class="card-title fw-bold">{{ $course->title }}</h5>
+                                <p class="card-text text-muted">{{ $course->subtitle }}</p>
+                                <p class="text-primary fw-bold mb-0">
+                                    <i class="fas fa-users"></i> {{ $course->enrollments_count }} Successful Enrollments
+                                </p>
+                            </div>
                         </div>
-                        <span class="info-box-icon bg-white elevation-1 text-dark">
-                            <i class="fas fa-graduation-cap" style="font-size: 2rem;"></i>
-                        </span>
                     </div>
-                </div>
-
-                <!-- In Progress Card -->
-                <div class="col-12 col-sm-6 col-md-4">
-                    <div class="info-box mb-3 d-flex justify-content-between align-items-center">
-                        <div class="info-box-content">
-                            <span class="info-box-text fw-bold" style="font-size: 1.5rem;">In Progress</span>
-                            <span class="info-box-number text-primary" style="font-size: 2rem;">45</span>
-                        </div>
-                        <span class="info-box-icon bg-white elevation-1 text-dark">
-                            <i class="fas fa-graduation-cap" style="font-size: 2rem;"></i>
-                        </span>
+                @empty
+                    <div class="col-12">
+                        <div class="alert alert-info text-center">No courses found!</div>
                     </div>
-                </div>
-
-                <!-- Completed Card -->
-                <div class="col-12 col-sm-6 col-md-4">
-                    <div class="info-box mb-3 d-flex justify-content-between align-items-center">
-                        <div class="info-box-content">
-                            <span class="info-box-text fw-bold" style="font-size: 1.5rem;">Completed</span>
-                            <span class="info-box-number text-primary" style="font-size: 2rem;">75</span>
-                        </div>
-                        <span class="info-box-icon bg-white elevation-1 text-dark">
-                            <i class="fas fa-graduation-cap" style="font-size: 2rem;"></i>
-                        </span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="content-header">
-            <div class="container-fluid">
-                <div class="row mb-2">
-                    <div class="col-sm-6">
-                        <h1 class="m-0">All Top Courses</h1>
-                    </div>
-                    <div class="col-sm-6">
-                        <ol class="breadcrumb float-sm-right">
-                            <a href="{{ route('top-course.create') }}" class="btn bg-gradient-teal btn-sm">
-                                <i class="fa fa-plus text-light"></i> Add New Top Course
-                            </a>
-                        </ol>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        {{-- Top Courses Table --}}
-        <div class="card">
-            <div class="card-body">
-                @if(Session::get('message'))
-                    <div class="alert alert-success alert-dismissible col-md-5">
-                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                        <h5><i class="icon fas fa-check"></i> {{ Session::get('message') }}</h5>
-                    </div>
-                @endif
-
-                <!-- Table -->
-                <div class="table-responsive">
-                    <table class="table table-bordered table-striped">
-                        <thead class="bg-gradient-teal text-white">
-                        <tr>
-                            <th>#</th>
-                            <th>Title</th>
-                            <th>Subtitle</th>
-                            <th>Description</th>
-                            <th>Image</th>
-                            <th class="text-center">Actions</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        @foreach($topCourses as $course)
-                            <tr>
-                                <td>{{ $loop->iteration }}</td>
-                                <td>{{ $course->title }}</td>
-                                <td>{{ $course->subtitle }}</td>
-                                <td>{{ Str::limit($course->description, 50) }}</td>
-                                <td>
-                                    @if($course->image)
-                                        <img src="{{ asset('storage/' . $course->image) }}" alt="Course Image" width="50">
-                                    @endif
-                                </td>
-                                <td class="text-center">
-                                    <a href="{{ route('top-course.edit', $course->id) }}" class="btn btn-info btn-sm">
-                                        <i class="fa fa-edit"></i>
-                                    </a>
-                                    <form action="{{ route('top-course.destroy', $course->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this course?');">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-sm">
-                                            <i class="fas fa-trash-alt"></i>
-                                        </button>
-                                    </form>
-                                </td>
-                            </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
-                    {{ $topCourses->links() }}
-                </div>
+                @endforelse
             </div>
         </div>
     </div>

@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Web\Backend\CMS\Enrollment;
+namespace App\Http\Controllers\Web\Backend\Enrollment;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\OnlineCourse;
 use App\Models\Enrollment;
+use App\Models\OnlineCourse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class EnrollmentController extends Controller
@@ -119,5 +119,20 @@ class EnrollmentController extends Controller
         $enrollment->save();
 
         return redirect()->back()->with('message', 'Enrollment status updated successfully!');
+    }
+
+
+
+    public function topCourses()
+    {
+        // Get courses with ONLY successful enrollments counted
+        $topCourses = OnlineCourse::withCount(['enrollments as enrollments_count' => function ($query) {
+            $query->where('status', 'success');
+        }])
+            ->orderByDesc('enrollments_count')
+            ->take(5)
+            ->get();
+
+        return view('backend.layouts.top_course.list', compact('topCourses'));
     }
 }
