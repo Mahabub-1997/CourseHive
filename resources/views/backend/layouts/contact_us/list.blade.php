@@ -146,7 +146,7 @@
                     </table>
 
                     {{-- Pagination --}}
-                    {{ $contacts->links() }}
+                    {{ $contacts->links('pagination::bootstrap-5') }}
                 </div>
 
             </div>

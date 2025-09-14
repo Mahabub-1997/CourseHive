@@ -151,7 +151,7 @@
 
                     {{-- Pagination --}}
                     <div class="mt-3">
-                        {{ $heroSections->links() }}
+                        {{ $heroSections->links('pagination::bootstrap-5') }}
                     </div>
                 </div>
             </div>

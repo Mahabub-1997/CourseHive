@@ -69,6 +69,48 @@
                     </ul>
                 </li>
 
+
+                @php
+                    $quizRoutes = [
+                         'lessons.index','parts.index','quizzes.index','questions.index','options.index'
+                    ];
+                    $quizOpen = collect($quizRoutes)->contains(fn($r) => request()->routeIs($r) || request()->is("admin/{$r}/*"));
+                @endphp
+
+                <li class="nav-item {{ $quizOpen ? 'menu-open' : '' }}">
+                    <a href="#"
+                       class="nav-link {{ $quizOpen ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-question-circle"></i>
+                        <p>
+                            Quiz
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+
+                    <ul class="nav nav-treeview">
+                        @php
+                            $quizSubMenu = [
+
+                                ['route' => 'lessons.index', 'icon' => 'far fa-circle', 'label' => 'Lessons'],
+                                ['route' => 'parts.index', 'icon' => 'far fa-circle', 'label' => 'Parts'],
+                                ['route' => 'quizzes.index', 'icon' => 'far fa-circle', 'label' => 'Quizzes'],
+                                ['route' => 'questions.index', 'icon' => 'far fa-circle', 'label' => 'Questions'],
+                                ['route' => 'options.index', 'icon' => 'far fa-circle', 'label' => 'Options'],
+                            ];
+                        @endphp
+
+                        @foreach($quizSubMenu as $item)
+                            <li class="nav-item">
+                                <a href="{{ route($item['route']) }}"
+                                   class="nav-link {{ request()->routeIs($item['route']) ? 'active' : '' }}">
+                                    <i class="{{ $item['icon'] }} nav-icon"></i>
+                                    <p>{{ $item['label'] }}</p>
+                                </a>
+                            </li>
+                        @endforeach
+                    </ul>
+                </li>
+
                 <!-- Student Review -->
                 <li class="nav-item">
                     <a href="{{ route('share.experiance.index') }}"
