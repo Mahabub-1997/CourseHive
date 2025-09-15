@@ -30,6 +30,12 @@ class OnlineCourse extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+    // Relationships
+    public function lessons()
+    {
+        return $this->hasMany(Lesson::class, 'course_id');
+    }
+
 
     public function rating()
     {

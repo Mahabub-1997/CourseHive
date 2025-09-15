@@ -125,7 +125,7 @@
 
                     {{-- Pagination if you used paginate() --}}
                     @if(method_exists($enrollments, 'links'))
-                        {{ $enrollments->links() }}
+                        {{ $enrollments->links('pagination::bootstrap-5') }}
                     @endif
                 </div>
             </div>

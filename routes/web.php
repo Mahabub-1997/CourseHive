@@ -9,6 +9,11 @@ use App\Http\Controllers\Web\Backend\CMS\OnlineCourses\OnlineCoursesController;
 use App\Http\Controllers\Web\Backend\CMS\Subscription\SubscriptionController;
 use App\Http\Controllers\Web\Backend\Dashboard\ProfileController;
 use App\Http\Controllers\Web\Backend\Enrollment\EnrollmentController;
+use App\Http\Controllers\Web\Backend\Quiz\Lesson\LessonController;
+use App\Http\Controllers\Web\Backend\Quiz\Option\OptionController;
+use App\Http\Controllers\Web\Backend\Quiz\Part\PartController;
+use App\Http\Controllers\Web\Backend\Quiz\Question\QuestionController;
+use App\Http\Controllers\Web\Backend\Quiz\Quiz\QuizController;
 use App\Http\Controllers\Web\Backend\StudentReview\ApiController;
 use Illuminate\Support\Facades\Route;
 
@@ -51,10 +56,15 @@ Route::resource('hero-images', HeroImageController::class);
 Route::resource('hero-sections', HeroSectionController::class);
 
 Route::get('/share-experiance', [ApiController::class, 'index'])->name('share.experiance.index');
-
 Route::get('/top-courses', [EnrollmentController::class, 'topCourses'])->name('top.courses');
 
 
 
+//quiz
+Route::resource('lessons', LessonController::class);
+Route::resource('parts', PartController::class);
+Route::resource('quizzes', QuizController::class);
+Route::resource('questions', QuestionController::class);
+Route::resource('options', OptionController::class);
 
 require __DIR__.'/auth.php';

@@ -150,9 +150,8 @@
                     </table>
 
                     {{-- Pagination --}}
-                    {{ $aboutUsRecords->links() }}
+                    {{ $aboutUsRecords->links('pagination::bootstrap-5') }}
                 </div>
-
             </div>
         </div>
     </div>
