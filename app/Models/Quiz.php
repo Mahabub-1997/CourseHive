@@ -18,4 +18,14 @@ class Quiz extends Model
     {
         return $this->hasMany(Question::class, 'quiz_id');
     }
+    public function results()
+    {
+        return $this->hasMany(QuizResult::class);
+    }
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'quiz_results')
+            ->withPivot(['score', 'percentage', 'is_passed', 'attempt_number'])
+            ->withTimestamps();
+    }
 }

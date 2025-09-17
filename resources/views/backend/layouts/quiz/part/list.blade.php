@@ -64,9 +64,25 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $part->lesson->title ?? 'N/A' }}</td>
                                 <td>{{ $part->title }}</td>
+{{--                                <td>--}}
+{{--                                    @if($part->video)--}}
+{{--                                        <a href="{{ $part->video }}" target="_blank">View Video</a>--}}
+{{--                                    @else--}}
+{{--                                        N/A--}}
+{{--                                    @endif--}}
+{{--                                </td>--}}
                                 <td>
                                     @if($part->video)
-                                        <a href="{{ $part->video }}" target="_blank">View Video</a>
+                                        @if(Str::contains($part->video, ['youtube.com', 'youtu.be', 'vimeo.com']))
+                                            {{-- External video link --}}
+                                            <a href="{{ $part->video }}" target="_blank">View Video</a>
+                                        @else
+                                            {{-- Uploaded file preview --}}
+                                            <video width="200" controls>
+                                                <source src="{{ asset('storage/' . $part->video) }}" type="video/mp4">
+                                                Your browser does not support the video tag.
+                                            </video>
+                                        @endif
                                     @else
                                         N/A
                                     @endif

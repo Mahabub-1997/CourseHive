@@ -11,10 +11,10 @@ class ApiController extends Controller
 {
     public function index()
     {
-        // Fetch all ShareExperiances from the database
-        $data = ShareExperiance::all();
+        // Fetch ShareExperiances with pagination
+        $data = ShareExperiance::orderBy('created_at', 'desc')
+            ->paginate(15); // 15 per page
 
-        // Pass data to Blade view
         return view('backend.layouts.studentreview.list', compact('data'));
     }
 }

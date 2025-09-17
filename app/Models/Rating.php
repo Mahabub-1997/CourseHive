@@ -9,24 +9,48 @@ class Rating extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'rating_point'];
+    /**
+     * The attributes that are mass assignable.
+     */
+    protected $fillable = [
+        'user_id',
+        'rating_point'
+    ];
 
-    // Relationship to User
+    /* =====================
+     *   RELATIONSHIPS
+     * ===================== */
+
+    /**
+     * Rating belongs to a user (who gave the rating).
+     */
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    // Rating belongs to a course
+    /**
+     * A rating is associated with one course.
+     */
     public function course()
     {
         return $this->hasOne(OnlineCourse::class, 'rating_id');
     }
 
-    // A rating can belong to many share experiences
+    /**
+     * A rating can belong to many share experiences (reviews/feedback).
+     */
     public function shareExperiences()
     {
         return $this->hasMany(ShareExperiance::class, 'rating_id');
     }
 
+    /*
+    // Alternative relation (if you store course_id in ratings table)
+    public function courses()
+    {
+        return $this->belongsTo(OnlineCourse::class, 'online_course_id');
+        // Replace 'online_course_id' with the actual column name in your ratings table
+    }
+    */
 }

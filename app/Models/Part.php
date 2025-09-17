@@ -15,4 +15,5 @@ class Part extends Model
     public function quiz() {
         return $this->hasOne(Quiz::class, 'part_id');
     }
+
 }
