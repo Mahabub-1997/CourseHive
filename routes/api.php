@@ -17,6 +17,7 @@ use App\Http\Controllers\API\CMS\RatingController;
 use App\Http\Controllers\API\CMS\ShareExperianceController;
 use App\Http\Controllers\API\CMS\SubscriptionController;
 use App\Http\Controllers\API\CMS\TopCourseController;
+use App\Http\Controllers\API\MyCourse\CourseController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -44,6 +45,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Logout
     Route::post('/logout', [AuthenticatedSessionController::class, 'destroy']);
+    Route::get('/my-courses', [CourseController::class, 'index']);
 });
 
 
@@ -74,3 +76,16 @@ Route::get('/about-us', [AboutUsController::class, 'show']);
 Route::get('contacts', [ContactController::class, 'index']);
 Route::post('contacts', [ContactController::class, 'store']);
 Route::delete('contacts/{id}', [ContactController::class, 'destroy']);
+
+// My courses
+Route::middleware('auth:sanctum')->get('/my-courses', [CourseController::class, 'index']);
+Route::get('/online-courses/{id}', [CourseController::class, 'show']);
+
+Route::middleware('auth:sanctum')->get('courses', [CourseController::class, 'courseindex']);
+
+//Route::get('/learns', [CourseController::class, 'learnindex']);    // get all learn
+//Route::post('/learns', [CourseController::class, 'learnstore']);   // create learn
+//
+//
+//Route::get('/courses/{courseId}/reviews', [CourseController::class, 'reviewIndex']); //  Get all reviews for a course
+//Route::middleware('auth:sanctum')->post('/courses/{courseId}/reviews', [CourseController::class, 'reviewStore']);// ✅ Store a new review (requires auth)

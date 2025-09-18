@@ -68,6 +68,7 @@
                                 ['route' => 'hero-images.index', 'icon' => 'far fa-circle', 'label' => 'Hero Images'],
                                 ['route' => 'hero-sections.index', 'icon' => 'far fa-circle', 'label' => 'Hero Sections'],
                                 ['route' => 'contactus.index', 'icon' => 'far fa-circle', 'label' => 'Contact Us'],
+                                ['route' => 'overview.index', 'icon' => 'far fa-circle', 'label' => 'Course Overview'], //new
                             ];
                         @endphp
 

@@ -105,4 +105,20 @@ class User extends Authenticatable
             ->withPivot(['score', 'percentage', 'is_passed', 'attempt_number'])
             ->withTimestamps();
     }
+    // ✅ A user can write many reviews
+    public function reviews()
+    {
+        return $this->hasMany(Reviews::class);
+    }
+    /**
+     * User এর Learn গুলো
+     */
+    public function learns()
+    {
+        return $this->hasMany(Learn::class, 'user_id');
+    }
+    public function instructors()
+    {
+        return $this->hasMany(Instructor::class);
+    }
 }

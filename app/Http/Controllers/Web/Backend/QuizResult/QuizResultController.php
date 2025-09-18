@@ -12,11 +12,11 @@ class QuizResultController extends Controller
 
 
     // Show quiz (form)
-    public function start($quizId)
-    {
-        $quiz = Quiz::with('questions.options')->findOrFail($quizId);
-        return view('backend.layouts.quiz_results.start', compact('quiz'));
-    }
+//    public function start($quizId)
+//    {
+//        $quiz = Quiz::with('questions.options')->findOrFail($quizId);
+//        return view('backend.layouts.quiz_results.start', compact('quiz'));
+//    }
 
     // Review answers before final submit
     public function review(Request $request, $quizId)

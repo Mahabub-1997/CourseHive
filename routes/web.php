@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Web\Backend\CMS\CourseOverview\OverviewController;
 use App\Http\Controllers\Web\Backend\QuizResult\QuizResultController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Web\Backend\CMS\AboutUs\AboutUsController;
@@ -96,6 +97,7 @@ Route::resource('parts', PartController::class);
 Route::resource('quizzes', QuizController::class);
 Route::resource('questions', QuestionController::class);
 Route::resource('options', OptionController::class);
+Route::resource('overview', OverviewController::class);
 
 /* ==============================
    My Courses
@@ -113,7 +115,7 @@ Route::post('/quiz/{courseId}/start', [CourseController::class, 'start'])->name(
    ============================== */
 
 // Show quiz (GET)
-Route::get('/quiz/{quiz}/start', [QuizResultController::class, 'start'])->name('quiz.start');
+//Route::get('/quiz/{quiz}/start', [QuizResultController::class, 'start'])->name('quiz.start');
 
 // Review answers before final submit (POST)
 Route::post('/quiz/{quiz}/review', [QuizResultController::class, 'review'])->name('quiz.review');

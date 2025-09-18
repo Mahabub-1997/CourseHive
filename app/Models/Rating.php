@@ -53,4 +53,16 @@ class Rating extends Model
         // Replace 'online_course_id' with the actual column name in your ratings table
     }
     */
+
+
+    // ✅ Rating may be linked to a review
+    public function review()
+    {
+        return $this->hasOne(Reviews::class);
+    }
+    public function instructors()
+    {
+        return $this->belongsTo(Instructor::class, 'instructor_id');
+    }
+
 }
