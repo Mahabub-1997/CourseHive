@@ -87,11 +87,23 @@ class EnrollmentController extends Controller
 //    -------------list -----------
 
     // All enrollments (admin/list page)
+//    public function indexEnrollments()
+//    {
+//        $enrollments = Enrollment::with(['user', 'course'])
+//            ->orderBy('created_at', 'desc')
+//            ->paginate(15); // or ->get() if you prefer
+//
+//        $course = null; // always pass $course (null means "all")
+//        return view('backend.layouts.enrollment.list', compact('enrollments', 'course'));
+//    }
     public function indexEnrollments()
     {
+        $userId = auth()->id(); // লগইন ইউজারের আইডি নিলাম
+
         $enrollments = Enrollment::with(['user', 'course'])
+            ->where('user_id', $userId) // শুধু তার নিজের enrollment
             ->orderBy('created_at', 'desc')
-            ->paginate(15); // or ->get() if you prefer
+            ->paginate(15);
 
         $course = null; // always pass $course (null means "all")
         return view('backend.layouts.enrollment.list', compact('enrollments', 'course'));

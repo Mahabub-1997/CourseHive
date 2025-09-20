@@ -2,6 +2,7 @@
 
 @section('content')
     <div class="content-wrapper">
+
         <!-- Page Header -->
         <div class="content-header">
             <div class="container-fluid">
@@ -13,20 +14,23 @@
             </div>
         </div>
 
-        <!-- Table Section -->
-        <div class="card">
+        <!-- Main Card -->
+        <div class="card shadow-sm">
             <div class="card-body">
 
-                {{-- Flash Message --}}
+                <!-- Flash Message -->
                 @if(Session::get('message'))
-                    <div class="alert alert-success alert-dismissible col-md-5">
+                    <div class="alert alert-success alert-dismissible fade show col-md-5">
                         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                        <h5><i class="icon fas fa-check"></i> {{ Session::get('message') }}</h5>
+                        <h5 class="mb-0">
+                            <i class="icon fas fa-check"></i> {{ Session::get('message') }}
+                        </h5>
                     </div>
                 @endif
 
+                <!-- Data Table -->
                 <div class="table-responsive">
-                    <table class="table table-bordered table-striped">
+                    <table class="table table-bordered table-striped align-middle">
                         <thead class="bg-gradient-teal text-white">
                         <tr>
                             <th>#</th>
@@ -34,40 +38,51 @@
                             <th>Review</th>
                             <th>Course</th>
                             <th>Rating</th>
-{{--                            <th class="text-center">Actions</th>--}}
+                            {{-- <th class="text-center">Actions</th> --}}
                         </tr>
                         </thead>
+
                         <tbody>
                         @forelse($data as $item)
                             <tr>
+                                <!-- Loop iteration -->
                                 <td>{{ $loop->iteration }}</td>
+
+                                <!-- User Name -->
                                 <td>{{ $item->name }}</td>
+
+                                <!-- Review (limited text) -->
                                 <td>{{ Str::limit($item->description, 50) ?? '-' }}</td>
+
+                                <!-- Related Course -->
                                 <td>{{ $item->onlineCourse->title ?? '-' }}</td>
-                                <td>{{ $item->rating->rating_point ?? '-' }}</td>
-{{--                                <td class="text-center">--}}
-{{--                                    <a href="{{ route('share.experiance.edit', $item->id) }}" class="btn btn-info btn-sm">--}}
-{{--                                        <i class="fa fa-edit"></i>--}}
-{{--                                    </a>--}}
-{{--                                    <form action="{{ route('share.experiance.destroy', $item->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this record?');">--}}
-{{--                                        @csrf--}}
-{{--                                        @method('DELETE')--}}
-{{--                                        <button type="submit" class="btn btn-danger btn-sm">--}}
-{{--                                            <i class="fas fa-trash-alt"></i>--}}
-{{--                                        </button>--}}
-{{--                                    </form>--}}
-{{--                                </td>--}}
+
+                                <!-- Rating -->
+                                <td>
+                                    @if($item->rating)
+                                        <span class="badge bg-warning text-dark">
+                                            {{ $item->rating->rating_point }} ★
+                                        </span>
+                                    @else
+                                        <span class="text-muted">-</span>
+                                    @endif
+                                </td>
                             </tr>
                         @empty
+                            <!-- Empty State -->
                             <tr>
-                                <td colspan="6" class="text-center">No Share Experience records found</td>
+                                <td colspan="6" class="text-center text-muted">
+                                    No Share Experience records found
+                                </td>
                             </tr>
                         @endforelse
                         </tbody>
                     </table>
+                </div>
 
-                    {{-- Pagination (if using paginate() in controller) --}}
-                    {{-- {{ $data->links() }} --}}
+                <!-- Pagination -->
+                <div class="d-flex justify-content-center mt-3">
+                    {{ $data->links('pagination::bootstrap-5') }}
                 </div>
             </div>
         </div>

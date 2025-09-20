@@ -1,5 +1,6 @@
 <aside class="main-sidebar sidebar-primary elevation-4">
-    <!-- Brand Logo -->
+
+    <!-- Brand Logo Section -->
     <a href="" class="brand-link">
         <div style="text-align: center; padding: 5px 0; background-color: #f8f9fa;">
             <img src="{{ asset('backend/AdminAssets/backend/dist/img/BrandLogo.jpg') }}"
@@ -8,15 +9,17 @@
         </div>
     </a>
 
-    <!-- Sidebar -->
+    <!-- Sidebar Section -->
     <div class="sidebar">
+
+        <!-- Sidebar Menu -->
         <nav class="mt-10" style="margin-top: 50px;">
             <ul class="nav nav-pills nav-sidebar flex-column"
                 data-widget="treeview"
                 role="menu"
                 data-accordion="false">
 
-                <!-- Dashboard -->
+                <!-- =================== Dashboard =================== -->
                 <li class="nav-item">
                     <a href="{{ route('dashboard') }}"
                        class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}">
@@ -25,14 +28,24 @@
                     </a>
                 </li>
 
-                <!-- CMS Menu -->
+                <!-- =================== My Courses =================== -->
+                <li class="nav-item">
+                    <a href="{{ route('courses.in-progress') }}"
+                       class="nav-link {{ request()->routeIs('courses.in-progress') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-book"></i>
+                        <p>My Courses</p>
+                    </a>
+                </li>
+
+                <!-- =================== CMS (Expandable Menu) =================== -->
                 @php
                     $cmsRoutes = [
                         'categories.index', 'category.index', 'subcategories.index',
-                        'online-courses.index', 'top-course.index', 'about-us.index', 'subscriptions.index'
+                        'online-courses.index', 'top-course.index', 'about-us.index', 'subscriptions.index','instructors.index'
                     ];
                     $cmsOpen = collect($cmsRoutes)->contains(fn($r) => request()->routeIs($r) || request()->is("admin/{$r}/*"));
                 @endphp
+
                 <li class="nav-item {{ $cmsOpen ? 'menu-open' : '' }}">
                     <a href="#"
                        class="nav-link {{ $cmsOpen ? 'active' : '' }}">
@@ -43,6 +56,7 @@
                         </p>
                     </a>
 
+                    <!-- CMS Submenu -->
                     <ul class="nav nav-treeview">
                         @php
                             $subMenu = [
@@ -54,6 +68,8 @@
                                 ['route' => 'hero-images.index', 'icon' => 'far fa-circle', 'label' => 'Hero Images'],
                                 ['route' => 'hero-sections.index', 'icon' => 'far fa-circle', 'label' => 'Hero Sections'],
                                 ['route' => 'contactus.index', 'icon' => 'far fa-circle', 'label' => 'Contact Us'],
+                                ['route' => 'overview.index', 'icon' => 'far fa-circle', 'label' => 'Course Overview'], //new
+                                ['route' => 'instructors.index', 'icon' => 'far fa-circle', 'label' => 'Course instructor'], //new
                             ];
                         @endphp
 
@@ -69,11 +85,9 @@
                     </ul>
                 </li>
 
-
+                <!-- =================== Quiz (Expandable Menu) =================== -->
                 @php
-                    $quizRoutes = [
-                         'lessons.index','parts.index','quizzes.index','questions.index','options.index'
-                    ];
+                    $quizRoutes = ['lessons.index','parts.index','quizzes.index','questions.index','options.index'];
                     $quizOpen = collect($quizRoutes)->contains(fn($r) => request()->routeIs($r) || request()->is("admin/{$r}/*"));
                 @endphp
 
@@ -87,10 +101,10 @@
                         </p>
                     </a>
 
+                    <!-- Quiz Submenu -->
                     <ul class="nav nav-treeview">
                         @php
                             $quizSubMenu = [
-
                                 ['route' => 'lessons.index', 'icon' => 'far fa-circle', 'label' => 'Lessons'],
                                 ['route' => 'parts.index', 'icon' => 'far fa-circle', 'label' => 'Parts'],
                                 ['route' => 'quizzes.index', 'icon' => 'far fa-circle', 'label' => 'Quizzes'],
@@ -111,7 +125,7 @@
                     </ul>
                 </li>
 
-                <!-- Student Review -->
+                <!-- =================== Student Review =================== -->
                 <li class="nav-item">
                     <a href="{{ route('share.experiance.index') }}"
                        class="nav-link {{ request()->routeIs('share.experiance.index') ? 'active' : '' }}">
@@ -120,7 +134,7 @@
                     </a>
                 </li>
 
-                <!-- Enrollments -->
+                <!-- =================== Enrollments =================== -->
                 <li class="nav-item">
                     <a href="{{ route('enrollments.index') }}"
                        class="nav-link {{ request()->routeIs('enrollments.index') ? 'active' : '' }}">
@@ -129,9 +143,9 @@
                     </a>
                 </li>
 
-                <!-- Earning -->
+                <!-- =================== Earning =================== -->
                 <li class="nav-item">
-                    <a href=""
+                    <a href="#"
                        class="nav-link {{ request()->routeIs('earning.index') || request()->is('admin/earning/*') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-coins"></i>
                         <p>Earning</p>
@@ -140,34 +154,38 @@
 
             </ul>
         </nav>
+        <!-- /.sidebar-menu -->
+
     </div>
+    <!-- /.sidebar -->
 </aside>
+
+<!-- =================== Sidebar Custom Styles =================== -->
 <style>
-    /* Default hover effect */
+    /* Sidebar link hover effect */
     .nav-sidebar .nav-item .nav-link:hover {
-        background-color: #007bff !important; /* Bootstrap blue */
-        color: #fff !important;
-        position: relative;
-    }
-
-    /* White dot on hover - RIGHT SIDE */
-    .nav-sidebar .nav-item .nav-link:hover::after {
-        content: "•";
-        color: #fff;
-        font-size: 18px;
-        position: absolute;
-        right: 15px;  /* move to right */
-        top: 50%;
-        transform: translateY(-50%);
-    }
-
-    /* Keep white dot for active menu - RIGHT SIDE */
-    .nav-sidebar .nav-item .nav-link.active {
         background-color: #007bff !important;
         color: #fff !important;
         position: relative;
     }
 
+    /* White dot on hover (right side) */
+    .nav-sidebar .nav-item .nav-link:hover::after {
+        content: "•";
+        color: #fff;
+        font-size: 18px;
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    /* Keep white dot for active menu (right side) */
+    .nav-sidebar .nav-item .nav-link.active {
+        background-color: #007bff !important;
+        color: #fff !important;
+        position: relative;
+    }
     .nav-sidebar .nav-item .nav-link.active::after {
         content: "•";
         color: #fff;
@@ -178,9 +196,9 @@
         transform: translateY(-50%);
     }
 
-    /* Default link icon color */
+    /* Default icon color */
     .nav-sidebar .nav-item .nav-link i.nav-icon {
-        color: #343a40; /* dark gray, or whatever default you want */
+        color: #343a40;
     }
 
     /* Icon color on hover */
@@ -193,4 +211,3 @@
         color: #fff !important;
     }
 </style>
-

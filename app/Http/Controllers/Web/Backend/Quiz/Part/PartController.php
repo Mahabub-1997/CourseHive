@@ -13,7 +13,8 @@ class PartController extends Controller
     public function index()
     {
         $parts = Part::with('lesson')->latest()->paginate(10);
-        return view('backend.layouts.quiz.part.list', compact('parts'));
+        $partsCount = Part::count();
+        return view('backend.layouts.quiz.part.list', compact('parts', 'partsCount'));
     }
 
     public function create()
@@ -21,19 +22,46 @@ class PartController extends Controller
         $lessons = Lesson::all(); // For dropdown
         return view('backend.layouts.quiz.part.add', compact('lessons'));
     }
+//    public function store(Request $request)
+//    {
+//        $request->validate([
+//            'lesson_id' => 'required|exists:lessons,id',
+//            'title' => 'required|string|max:255',
+//            'content' => 'nullable|string',
+//            'video' => 'nullable|string|max:255'
+//        ]);
+//
+//        Part::create($request->all());
+//
+//        return redirect()->route('parts.index')->with('success', 'Part created successfully!');
+//    }
     public function store(Request $request)
     {
         $request->validate([
             'lesson_id' => 'required|exists:lessons,id',
             'title' => 'required|string|max:255',
             'content' => 'nullable|string',
-            'video' => 'nullable|string|max:255'
+            'video' => 'nullable|mimes:mp4,mov,avi,wmv|max:51200', // max 50MB
         ]);
 
-        Part::create($request->all());
+        $videoPath = null;
+
+        if ($request->hasFile('video')) {
+            // Save video to storage/app/public/parts
+            $videoPath = $request->file('video')->store('parts', 'public');
+        }
+
+        Part::create([
+            'lesson_id' => $request->lesson_id,
+            'title' => $request->title,
+            'content' => $request->content,
+            'video' => $videoPath,
+        ]);
 
         return redirect()->route('parts.index')->with('success', 'Part created successfully!');
     }
+
+
 
     public function show(Part $part)
     {
@@ -45,16 +73,57 @@ class PartController extends Controller
         return view('backend.layouts.quiz.part.edit', compact('part', 'lessons'));
     }
 
+//    public function update(Request $request, Part $part)
+//    {
+//        $request->validate([
+//            'lesson_id' => 'required|exists:lessons,id',
+//            'title' => 'required|string|max:255',
+//            'content' => 'nullable|string',
+//            'video' => 'nullable|string|max:255'
+//        ]);
+//
+//        $part->update($request->all());
+//
+//        return redirect()->route('parts.index')->with('success', 'Part updated successfully!');
+//    }
+
     public function update(Request $request, Part $part)
     {
         $request->validate([
             'lesson_id' => 'required|exists:lessons,id',
             'title' => 'required|string|max:255',
             'content' => 'nullable|string',
-            'video' => 'nullable|string|max:255'
+            // allow both file upload and external link
+            'video' => 'nullable',
         ]);
 
-        $part->update($request->all());
+        $videoPath = $part->video;
+
+        // Case 1: New video file uploaded
+        if ($request->hasFile('video')) {
+            $request->validate([
+                'video' => 'mimes:mp4,mov,avi,wmv|max:51200', // max 50MB
+            ]);
+
+            // delete old file if exists
+            if ($part->video && \Storage::disk('public')->exists($part->video)) {
+                \Storage::disk('public')->delete($part->video);
+            }
+
+            // save new file
+            $videoPath = $request->file('video')->store('parts', 'public');
+        }
+        // Case 2: External video link (string)
+        elseif ($request->filled('video') && !$request->hasFile('video')) {
+            $videoPath = $request->video; // store YouTube/Vimeo link
+        }
+
+        $part->update([
+            'lesson_id' => $request->lesson_id,
+            'title' => $request->title,
+            'content' => $request->content,
+            'video' => $videoPath,
+        ]);
 
         return redirect()->route('parts.index')->with('success', 'Part updated successfully!');
     }

@@ -17,6 +17,8 @@ use App\Http\Controllers\API\CMS\RatingController;
 use App\Http\Controllers\API\CMS\ShareExperianceController;
 use App\Http\Controllers\API\CMS\SubscriptionController;
 use App\Http\Controllers\API\CMS\TopCourseController;
+use App\Http\Controllers\API\MyCourse\CourseController;
+use App\Http\Controllers\API\QuizOverview\QuizController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -44,6 +46,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Logout
     Route::post('/logout', [AuthenticatedSessionController::class, 'destroy']);
+    Route::get('/my-courses', [CourseController::class, 'index']);
 });
 
 
@@ -74,3 +77,22 @@ Route::get('/about-us', [AboutUsController::class, 'show']);
 Route::get('contacts', [ContactController::class, 'index']);
 Route::post('contacts', [ContactController::class, 'store']);
 Route::delete('contacts/{id}', [ContactController::class, 'destroy']);
+
+// My courses
+Route::middleware('auth:sanctum')->get('/my-courses', [CourseController::class, 'index']);
+Route::get('/online-courses/{id}', [CourseController::class, 'show']);
+
+Route::middleware('auth:sanctum')->get('courses', [CourseController::class, 'courseindex']);
+Route::middleware('auth:sanctum')->get('/courses/{id}', [CourseController::class, 'courseShow']);
+
+Route::middleware('auth:sanctum')->get('/courses/{id}', [CourseController::class, 'Contentshow']);
+
+Route::middleware('auth:sanctum')->get('/courses/{courseId}/quiz', [CourseController::class, 'quiz']);
+Route::middleware('auth:sanctum')->get('quiz/{quizId}/result', [CourseController::class, 'getResult']);
+
+
+
+Route::middleware('auth:sanctum')->get('/quiz-performance', [QuizController::class, 'performance']);
+
+
+

@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('options', function (Blueprint $table) {
+        Schema::create('reviews', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('question_id');
-            $table->json('option_text'); // ✅ JSON column
-            $table->boolean('is_correct')->default(false); // multiple correct allowed
+            $table->foreignId('course_id');
+            $table->foreignId('user_id');
+            $table->foreignId('rating_id');
+            $table->text('description');
             $table->timestamps();
         });
     }
@@ -25,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('options');
+        Schema::dropIfExists('reviews');
     }
 };

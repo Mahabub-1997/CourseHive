@@ -91,4 +91,34 @@ class User extends Authenticatable
     {
         return $this->hasMany(ShareExperiance::class, 'user_id');
     }
+
+    // 👇 Add relations
+    public function quizResults()
+    {
+        return $this->hasMany(QuizResult::class);
+    }
+
+    // If you want to quickly access all quizzes a user has attempted:
+    public function quizzesAttempted()
+    {
+        return $this->belongsToMany(Quiz::class, 'quiz_results')
+            ->withPivot(['score', 'percentage', 'is_passed', 'attempt_number'])
+            ->withTimestamps();
+    }
+    // ✅ A user can write many reviews
+    public function reviews()
+    {
+        return $this->hasMany(Reviews::class);
+    }
+    /**
+     * User এর Learn গুলো
+     */
+    public function learns()
+    {
+        return $this->hasMany(Learn::class, 'user_id');
+    }
+    public function instructors()
+    {
+        return $this->hasMany(Instructor::class);
+    }
 }
