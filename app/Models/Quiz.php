@@ -28,4 +28,17 @@ class Quiz extends Model
             ->withPivot(['score', 'percentage', 'is_passed', 'attempt_number'])
             ->withTimestamps();
     }
+    public function course()
+    {
+        return $this->belongsTo(OnlineCourse::class, 'course_id');
+    }
+
+    public function getCourseTitleAttribute()
+    {
+        return $this->part
+        && $this->part->lesson
+        && $this->part->lesson->course
+            ? $this->part->lesson->course->title
+            : 'N/A';
+    }
 }

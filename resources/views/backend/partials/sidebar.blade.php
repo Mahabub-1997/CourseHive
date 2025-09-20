@@ -41,7 +41,7 @@
                 @php
                     $cmsRoutes = [
                         'categories.index', 'category.index', 'subcategories.index',
-                        'online-courses.index', 'top-course.index', 'about-us.index', 'subscriptions.index'
+                        'online-courses.index', 'top-course.index', 'about-us.index', 'subscriptions.index','instructors.index'
                     ];
                     $cmsOpen = collect($cmsRoutes)->contains(fn($r) => request()->routeIs($r) || request()->is("admin/{$r}/*"));
                 @endphp
@@ -69,6 +69,7 @@
                                 ['route' => 'hero-sections.index', 'icon' => 'far fa-circle', 'label' => 'Hero Sections'],
                                 ['route' => 'contactus.index', 'icon' => 'far fa-circle', 'label' => 'Contact Us'],
                                 ['route' => 'overview.index', 'icon' => 'far fa-circle', 'label' => 'Course Overview'], //new
+                                ['route' => 'instructors.index', 'icon' => 'far fa-circle', 'label' => 'Course instructor'], //new
                             ];
                         @endphp
 

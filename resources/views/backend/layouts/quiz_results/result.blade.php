@@ -34,7 +34,7 @@
                 <div class="col-md-3">
                     <div class="card shadow-sm text-center">
                         <div class="card-body">
-                            <h4 class="fw-bold">{{ $attemptNumber }}</h4>
+                            <h4 class="fw-bold">{{ $attemptNumber ?? 1 }}</h4>
                             <p class="mb-0 text-muted">Attempt</p>
                         </div>
                     </div>
@@ -61,11 +61,15 @@
                         <p class="fw-bold mb-2">{{ $loop->iteration }}. {!! $r['question'] !!}</p>
                         <p class="mb-1">
                             <strong>Your Answer:</strong>
-                            {!! $r['user_answer'] ?? '<em class="text-muted">Not answered</em>' !!}
+                            {!! is_array($r['user_answer'])
+                                ? implode(', ', $r['user_answer'])
+                                : ($r['user_answer'] ?? '<em class="text-muted">Not answered</em>') !!}
                         </p>
                         <p class="mb-1">
                             <strong>Correct Answer:</strong>
-                            {!! $r['correct_answer'] ?? '<em class="text-muted">N/A</em>' !!}
+                            {!! is_array($r['correct_answer'])
+                                ? implode(', ', $r['correct_answer'])
+                                : ($r['correct_answer'] ?? '<em class="text-muted">N/A</em>') !!}
                         </p>
                         <p class="mb-0">
                             <strong>Status:</strong>

@@ -18,6 +18,7 @@ use App\Http\Controllers\API\CMS\ShareExperianceController;
 use App\Http\Controllers\API\CMS\SubscriptionController;
 use App\Http\Controllers\API\CMS\TopCourseController;
 use App\Http\Controllers\API\MyCourse\CourseController;
+use App\Http\Controllers\API\QuizOverview\QuizController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -82,10 +83,16 @@ Route::middleware('auth:sanctum')->get('/my-courses', [CourseController::class, 
 Route::get('/online-courses/{id}', [CourseController::class, 'show']);
 
 Route::middleware('auth:sanctum')->get('courses', [CourseController::class, 'courseindex']);
+Route::middleware('auth:sanctum')->get('/courses/{id}', [CourseController::class, 'courseShow']);
 
-//Route::get('/learns', [CourseController::class, 'learnindex']);    // get all learn
-//Route::post('/learns', [CourseController::class, 'learnstore']);   // create learn
-//
-//
-//Route::get('/courses/{courseId}/reviews', [CourseController::class, 'reviewIndex']); //  Get all reviews for a course
-//Route::middleware('auth:sanctum')->post('/courses/{courseId}/reviews', [CourseController::class, 'reviewStore']);// ✅ Store a new review (requires auth)
+Route::middleware('auth:sanctum')->get('/courses/{id}', [CourseController::class, 'Contentshow']);
+
+Route::middleware('auth:sanctum')->get('/courses/{courseId}/quiz', [CourseController::class, 'quiz']);
+Route::middleware('auth:sanctum')->get('quiz/{quizId}/result', [CourseController::class, 'getResult']);
+
+
+
+Route::middleware('auth:sanctum')->get('/quiz-performance', [QuizController::class, 'performance']);
+
+
+

@@ -9,7 +9,7 @@
                 </div>
                 <div class="card-body">
 
-                    {{-- Show Validation Errors --}}
+                    {{-- Validation Errors --}}
                     @if ($errors->any())
                         <div class="alert alert-danger">
                             <ul class="mb-0">
@@ -24,18 +24,33 @@
                     <form action="{{ route('overview.store') }}" method="POST">
                         @csrf
 
+                        {{-- Course --}}
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label">Select Course <i class="text-danger">*</i></label>
+                            <div class="col-md-9">
+                                <select name="course_id" required class="form-control">
+                                    <option value="">-- Select Course --</option>
+                                    @foreach($courses as $course)
+                                        <option value="{{ $course->id }}" {{ old('course_id')==$course->id ? 'selected' : '' }}>
+                                            {{ $course->title }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
                         {{-- Title --}}
                         <div class="form-group row">
                             <label class="col-md-3 col-form-label">Title <i class="text-danger">*</i></label>
                             <div class="col-md-9">
                                 <input type="text" required class="form-control" name="title"
-                                       value="{{ old('title') }}" placeholder="Enter course title">
+                                       value="{{ old('title') }}" placeholder="Enter overview title">
                             </div>
                         </div>
 
                         {{-- Description (JSON Array Input) --}}
                         <div class="form-group row">
-                            <label class="col-md-3 col-form-label">Description <i class="text-danger">*</i></label>
+                            <label class="col-md-3 col-form-label">Description</label>
                             <div class="col-md-9">
                                 <textarea name="description[]" class="form-control mb-2"
                                           placeholder="Enter description point">{{ old('description.0') }}</textarea>
@@ -46,7 +61,7 @@
                             </div>
                         </div>
 
-                        {{-- Submit Button --}}
+                        {{-- Submit --}}
                         <div class="form-group row">
                             <div class="col-md-9 offset-md-3">
                                 <input type="submit" class="btn btn-primary" value="Save Overview">

@@ -41,7 +41,7 @@ class OptionController extends Controller
                 'question_id' => $request->question_id,
                 'option_text' => [
                     'en' => $option['en'] ?? '',
-                    'bn' => $option['bn'] ?? '',
+//                    'bn' => $option['bn'] ?? '',
                 ],
                 'is_correct'  => $option['is_correct'],
             ]);

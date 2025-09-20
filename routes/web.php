@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Web\Backend\CMS\CourseOverview\OverviewController;
+use App\Http\Controllers\Web\Backend\CMS\Instructor\InstructorController;
+use App\Http\Controllers\Web\Backend\Quiz\Quiz\QuizController;
 use App\Http\Controllers\Web\Backend\QuizResult\QuizResultController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Web\Backend\CMS\AboutUs\AboutUsController;
@@ -17,7 +19,6 @@ use App\Http\Controllers\Web\Backend\Quiz\Lesson\LessonController;
 use App\Http\Controllers\Web\Backend\Quiz\Option\OptionController;
 use App\Http\Controllers\Web\Backend\Quiz\Part\PartController;
 use App\Http\Controllers\Web\Backend\Quiz\Question\QuestionController;
-use App\Http\Controllers\Web\Backend\Quiz\Quiz\QuizController;
 use App\Http\Controllers\Web\Backend\StudentReview\ApiController;
 
 /*
@@ -98,6 +99,8 @@ Route::resource('quizzes', QuizController::class);
 Route::resource('questions', QuestionController::class);
 Route::resource('options', OptionController::class);
 Route::resource('overview', OverviewController::class);
+Route::resource('instructors', InstructorController::class);
+
 
 /* ==============================
    My Courses
@@ -107,8 +110,22 @@ Route::get('/courses/{id}', [CourseController::class, 'show'])->name('courses.sh
 Route::get('/course/{id}/content', [CourseController::class, 'content'])->name('course.content');
 Route::get('/course/{id}/content/{partId?}', [CourseController::class, 'content'])->name('course.content');
 Route::get('/course/{id}/quiz', [CourseController::class, 'quiz'])->name('course.quiz');
-//Route::get('/quiz/{course}/start', [CourseController::class, 'start'])->name('quiz.start');
-Route::post('/quiz/{courseId}/start', [CourseController::class, 'start'])->name('quiz.start');
+
+
+
+Route::post('/quiz/{quiz}/submit', [QuizResultController::class, 'submit'])
+    ->name('quiz.submit');
+
+//Route::get('/quiz/{course}/start', [QuizResultController::class, 'start'])->name('quiz.start');
+//Route::post('/quiz/{courseId}/start', [QuizResultController::class, 'start'])->name('quiz.start');
+
+// Show the quiz start page (GET)
+Route::post('/quiz/{course}/start', [QuizResultController::class, 'start'])->name('quiz.start');
+
+// Submit quiz answers (POST)
+Route::post('/quiz/{quiz}/submit', [QuizResultController::class, 'quizsubmit'])->name('quiz.submit');
+
+
 
 /* ==============================
    Quiz Results

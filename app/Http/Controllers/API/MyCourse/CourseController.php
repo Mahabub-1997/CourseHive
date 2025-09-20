@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Enrollment;
 use App\Models\Learn;
 use App\Models\OnlineCourse;
+use App\Models\Quiz;
+use App\Models\QuizResult;
 use App\Models\Rating;
 use App\Models\Reviews;
 use Illuminate\Http\Request;
@@ -98,4 +100,177 @@ class CourseController extends Controller
             ]
         ]);
     }
+    public function courseShow($courseId)
+    {
+        $userId = auth()->id();
+
+        // Find if user enrolled in this course
+        $enrollment = Enrollment::with([
+            'course.learns',
+            'course.reviews.user',
+            'course.instructors.user',
+            'course.instructors.ratings',
+            'course.lessons.parts.quiz.questions.options',
+
+
+
+        ])
+            ->where('user_id', $userId)
+            ->where('course_id', $courseId)
+            ->first();
+
+        if (!$enrollment) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Course not found or not enrolled',
+            ], 404);
+        }
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Course data retrieved successfully',
+            'data' => $enrollment->course
+        ]);
+    }
+
+    public function contentshow($id, $partId = null)
+    {
+        $userId = auth()->id();
+
+        // Load course with lessons and parts
+        $course = OnlineCourse::with(['lessons.parts', 'creator'])->findOrFail($id);
+
+        $lessons = $course->lessons;
+
+        // Flatten all parts into a single ordered collection
+        $allParts = $lessons->pluck('parts')->flatten(1)->values();
+
+        if ($allParts->isEmpty()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'No course parts found.'
+            ], 404);
+        }
+
+        // Find the requested part (or default to the first part)
+        $currentPart = $partId ? $allParts->firstWhere('id', $partId) : null;
+        $currentPart = $currentPart ?? $allParts->first();
+
+        // Find index and prev/next
+        $currentIndex = $allParts->search(fn($p) => $p->id === $currentPart->id);
+        $previousPart = $allParts->get($currentIndex - 1);
+        $nextPart     = $allParts->get($currentIndex + 1);
+
+        $totalParts = $allParts->count();
+        $completedParts = 0; // You can compute based on user progress later
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Course content retrieved successfully',
+            'data' => [
+                'course'         => $course,
+                'lessons'        => $lessons,
+                'totalParts'     => $totalParts,
+                'completedParts' => $completedParts,
+                'currentPart'    => $currentPart,
+                'previousPart'   => $previousPart,
+                'nextPart'       => $nextPart,
+            ]
+        ]);
+    }
+    public function quiz($courseId)
+    {
+        $userId = auth()->id();
+
+        // Load course with lessons + parts
+        $course = OnlineCourse::with('lessons.parts')->findOrFail($courseId);
+
+        // All lessons for sidebar
+        $lessons = $course->lessons;
+
+        // Flatten all parts for progress calculation
+        $allParts = $lessons->pluck('parts')->flatten(1);
+
+        $totalParts = $allParts->count();
+        $completedParts = $allParts->where('is_completed', true)->count();
+
+        if ($allParts->isEmpty()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'No parts found for this course.'
+            ], 404);
+        }
+
+        // Get current part (first part by default)
+        $currentPart = $allParts->first();
+
+        // Load quiz with questions + options
+        $quiz = Quiz::with('questions.options')
+            ->where('part_id', $currentPart->id)
+            ->first();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Quiz data retrieved successfully',
+            'data' => [
+                'course'         => $course,
+                'lessons'        => $lessons,
+                'currentPart'    => $currentPart,
+                'quiz'           => $quiz,
+                'totalParts'     => $totalParts,
+                'completedParts' => $completedParts,
+
+            ]
+        ]);
+    }
+    //result
+
+    public function getResult($quizId)
+    {
+        $userId = auth()->id();
+
+        // Load the latest result for this user & quiz
+        $latestResult = QuizResult::where('quiz_id', $quizId)
+            ->where('user_id', $userId)
+            ->latest()
+            ->first();
+
+        if (!$latestResult) {
+            return response()->json([
+                'status'  => false,
+                'message' => 'No result found for this quiz.',
+            ], 404);
+        }
+
+        // Load quiz with questions & options
+        $quiz = Quiz::with('questions.options')->find($quizId);
+
+        if (!$quiz) {
+            return response()->json([
+                'status'  => false,
+                'message' => 'Quiz not found.',
+            ], 404);
+        }
+
+        // Decode stored answers (if stored as JSON)
+        $results = $latestResult->answers;
+        if (is_string($results)) {
+            $results = json_decode($results, true);
+        }
+
+        // Make sure attemptNumber is defined
+        $attemptNumber = $latestResult->attempt_number ?? 1;
+
+        return response()->json([
+            'status'         => true,
+            'quiz'           => $quiz,
+            'score'          => $latestResult->score,
+            'percentage'     => $latestResult->percentage,
+            'totalQuestions' => $latestResult->total_questions,
+            'isPassed'       => $latestResult->is_passed,
+            'attemptNumber'  => $attemptNumber,
+            'results'        => $results,
+        ]);
+    }
+
 }

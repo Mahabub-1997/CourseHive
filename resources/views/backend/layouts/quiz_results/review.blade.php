@@ -69,7 +69,7 @@
             </div>
         @endforeach
 
-        <form action="{{ route('quiz.result', $quiz->id) }}" method="POST" class="mt-4 text-center">
+        <form action="{{ route('quiz.submit', $quiz->id) }}" method="POST" class="mt-4 text-center">
             @csrf
 
             {{-- Re-send all answers as hidden inputs --}}

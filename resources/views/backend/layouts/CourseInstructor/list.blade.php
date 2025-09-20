@@ -8,12 +8,12 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 class="m-0">Course Overview</h1>
+                        <h1 class="m-0">Instructor List</h1>
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
-                            <a href="{{ route('overview.create') }}" class="btn bg-gradient-teal btn-sm">
-                                <i class="fa fa-plus text-light"></i> Add Course Overview
+                            <a href="{{ route('instructors.create') }}" class="btn bg-gradient-teal btn-sm">
+                                <i class="fa fa-plus text-light"></i> Add Instructor
                             </a>
                         </ol>
                     </div>
@@ -39,35 +39,37 @@
                         <tr>
                             <th style="width: 50px">#</th>
                             <th>Course</th>
-                            <th>Title</th>
-                            <th>Description</th>
+                            <th>Name</th>
+                            <th>Rating</th>
+                            <th>Total Lessons</th>
                             <th>Created By</th>
                             <th class="text-center" style="width: 180px">Actions</th>
                         </tr>
                         </thead>
                         <tbody>
-                        @forelse ($learns as $learn)
+                        @forelse($instructors as $inst)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $learn->course->title ?? '-' }}</td>
-                                <td>{{ $learn->title }}</td>
+                                <td>{{ $inst->course->title ?? '-' }}</td>
                                 <td>
-                                    @if(is_array($learn->description))
-                                        <ul class="mb-0">
-                                            @foreach($learn->description as $desc)
-                                                <li>{{ $desc }}</li>
-                                            @endforeach
-                                        </ul>
-                                    @else
-                                        {{ $learn->description }}
-                                    @endif
+                                    <div class="d-flex align-items-center">
+                                        @if($inst->image)
+                                            <img src="{{ asset('storage/'.$inst->image) }}" alt="Instructor"
+                                                 class="rounded-circle me-2" width="40" height="40">
+                                        @endif
+                                        {{ $inst->name }}
+                                    </div>
                                 </td>
-                                <td>{{ $learn->user->name ?? 'N/A' }}</td>
+                                <td>{{ number_format($inst->rating, 2) }}</td>
+                                <td>{{ $inst->total_lesson }}</td>
+                                <td>{{ $inst->user->name ?? 'N/A' }}</td>
                                 <td class="text-center">
-                                    <a href="{{ route('overview.edit', $learn->id) }}" class="btn btn-info btn-sm">
+                                    <a href="{{ route('instructors.edit', $inst->id) }}" class="btn btn-info btn-sm">
                                         <i class="fa fa-edit"></i>
                                     </a>
-                                    <form action="{{ route('overview.destroy', $learn->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this item?');">
+                                    <form action="{{ route('instructors.destroy', $inst->id) }}" method="POST"
+                                          class="d-inline"
+                                          onsubmit="return confirm('Are you sure you want to delete this instructor?');">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-danger btn-sm">
@@ -78,7 +80,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6" class="text-center">No records found</td>
+                                <td colspan="7" class="text-center">No instructors found</td>
                             </tr>
                         @endforelse
                         </tbody>
@@ -86,7 +88,7 @@
 
                     <!-- Pagination -->
                     <div class="d-flex justify-content-center">
-                        {{ $learns->links() }}
+                        {{ $instructors->links('pagination::bootstrap-5') }}
                     </div>
                 </div>
             </div>

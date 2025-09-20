@@ -28,8 +28,14 @@ class QuizResult extends Model
         return $this->belongsTo(User::class);
     }
 
+
     public function quiz()
     {
-        return $this->belongsTo(Quiz::class);
+        return $this->belongsTo(Quiz::class, 'quiz_id'); // usually correct
     }
+
+    public  function course(){
+        return $this->belongsTo(OnlineCourse::class, 'course_id');
+    }
+
 }

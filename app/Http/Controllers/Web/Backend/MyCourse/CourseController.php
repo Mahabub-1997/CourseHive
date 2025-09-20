@@ -50,6 +50,8 @@ class CourseController extends Controller
     /**
      * Show a specific course with lessons, reviews, and ratings.
      */
+
+
     public function show($id)
     {
         $userId = auth()->id();
@@ -92,6 +94,7 @@ class CourseController extends Controller
             'shareExperiances'
         ));
     }
+
 
     /**
      * Store or update a review for a course.
@@ -270,19 +273,5 @@ class CourseController extends Controller
             'completedParts',
             'currentPart'
         ));
-    }
-
-    public function start($courseId)
-    {
-        // Find course with lessons and parts
-        $course = OnlineCourse::with('lessons.parts')->findOrFail($courseId);
-        // Get the first part
-        $currentPart = $course->lessons->pluck('parts')->flatten(1)->first();
-        // Find quiz for that part
-        $quiz = Quiz::with('questions.options')
-            ->where('part_id', $currentPart->id)
-            ->firstOrFail();
-
-        return view('backend.layouts.quiz_results.start', compact('course', 'quiz', 'currentPart'));
     }
 }
