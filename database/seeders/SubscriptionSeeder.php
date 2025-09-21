@@ -14,11 +14,11 @@ class SubscriptionSeeder extends Seeder
     public function run(): void
     {
         $subscriptions = [
-            ['email' => 'john.doe@example.com'],
-            ['email' => 'jane.smith@example.com'],
-            ['email' => 'michael.brown@example.com'],
-            ['email' => 'susan.williams@example.com'],
-            ['email' => 'david.johnson@example.com'],
+            ['email' => 'rinab@example.com'],
+            ['email' => 'nirob@example.com'],
+            ['email' => 'shehab@example.com'],
+            ['email' => 'fahim@example.com'],
+            ['email' => 'raihan@example.com'],
         ];
 
         foreach ($subscriptions as $sub) {

@@ -27,7 +27,6 @@ class DatabaseSeeder extends Seeder
             InstructorSeeder::class,
             AboutUsSeeder::class,
             SubscriptionSeeder::class,
-            ContactSeeder::class,
             LessonSeeder::class,
             PartSeeder::class,
             QuizSeeder::class,
