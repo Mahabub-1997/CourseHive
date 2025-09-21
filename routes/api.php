@@ -6,6 +6,7 @@ use App\Http\Controllers\API\Auth\OtpVerificationController;
 use App\Http\Controllers\API\Auth\RegisteredUserController;
 use App\Http\Controllers\API\Auth\ResetPasswordController;
 
+use App\Http\Controllers\API\Certificate\CertificateController;
 use App\Http\Controllers\API\CMS\AboutUsController;
 use App\Http\Controllers\API\CMS\CategoryController;
 use App\Http\Controllers\API\CMS\ContactController;
@@ -93,6 +94,10 @@ Route::middleware('auth:sanctum')->get('quiz/{quizId}/result', [CourseController
 
 
 Route::middleware('auth:sanctum')->get('/quiz-performance', [QuizController::class, 'performance']);
+
+
+Route::middleware('auth:sanctum')->get('/certificates', [CertificateController::class, 'index']);
+Route::middleware('auth:sanctum')->get('/certificates/{id}', [CertificateController::class, 'show']);
 
 
 

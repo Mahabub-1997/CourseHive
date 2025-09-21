@@ -142,6 +142,14 @@
                         <p>Enrollments</p>
                     </a>
                 </li>
+                <!-- =================== Certificate =================== -->
+                <li class="nav-item">
+                    <a href="{{ route('certificate.index') }}"
+                       class="nav-link {{ request()->routeIs('certificate.index') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-certificate"></i>
+                        <p>Certificates</p>
+                    </a>
+                </li>
 
                 <!-- =================== Earning =================== -->
                 <li class="nav-item">
