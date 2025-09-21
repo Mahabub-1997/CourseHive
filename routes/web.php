@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Web\Backend\Certificate\CertificateController;
 use App\Http\Controllers\Web\Backend\CMS\CourseOverview\OverviewController;
 use App\Http\Controllers\Web\Backend\CMS\Instructor\InstructorController;
 use App\Http\Controllers\Web\Backend\Quiz\Quiz\QuizController;
@@ -59,14 +60,18 @@ Route::middleware('auth')->group(function () {
 
     /** -------- Enrollment & Course Enrollment -------- */
     Route::post('courses/{id}/enroll', [EnrollmentController::class, 'enroll'])->name('courses.enroll');
+
     Route::get('courses/{id}/pay', [EnrollmentController::class, 'pay'])->name('courses.pay');
     Route::get('courses/{id}/payment-success', [EnrollmentController::class, 'paymentSuccess'])->name('courses.payment.success');
+
     Route::get('my-courses', [EnrollmentController::class, 'myCourses'])->name('courses.my');
 
     /** -------- Enrolled Users Management -------- */
     Route::get('courses/{id}/enrolled-users', [EnrollmentController::class, 'courseEnrolledUsers'])->name('courses.enrolled-users');
     Route::get('admin/enrollments', [EnrollmentController::class, 'indexEnrollments'])->name('enrollments.index');
     Route::patch('enrollments/{id}/update-status', [EnrollmentController::class, 'updateStatus'])->name('enrollments.update-status');
+    Route::get('/certificate/{enrollment}/download', [CertificateController::class, 'download'])->name('certificate.download');
+    Route::get('/certificates', [CertificateController::class, 'index'])->name('certificate.index');
 });
 
 /* ==============================

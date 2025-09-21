@@ -23,7 +23,16 @@ class DatabaseSeeder extends Seeder
         // Call other seeders
         $this->call([
             OnlineCourseSeeder::class,
-            CategorySeeder::class
+            CategorySeeder::class,
+            InstructorSeeder::class,
+            AboutUsSeeder::class,
+            SubscriptionSeeder::class,
+            ContactSeeder::class,
+            LessonSeeder::class,
+            PartSeeder::class,
+            QuizSeeder::class,
+            QuestionSeeder::class,
+            OptionSeeder::class,
         ]);
     }
 }
