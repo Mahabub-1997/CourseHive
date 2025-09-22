@@ -4,52 +4,48 @@ namespace App\Http\Controllers\Web\Backend\QuizResult;
 
 use App\Http\Controllers\Controller; // <-- must extend THIS
 use App\Models\OnlineCourse;
+use App\Models\Part;
 use App\Models\Quiz;
 use App\Models\QuizResult;
 use Illuminate\Http\Request;
 
 class QuizResultController extends Controller
 {
-
-
-    // Show quiz (form)
-
-    public function start($courseId)
+    public function start($partId)
     {
-        // Find course with lessons and parts
-        $course = OnlineCourse::with('lessons.parts')->findOrFail($courseId);
+        $part = Part::with('quiz.questions.options')->findOrFail($partId);
 
-        // Get the first part of the course
-        $currentPart = $course->lessons->pluck('parts')->flatten(1)->first();
-
-        if (! $currentPart) {
-            return response()->json([
-                'status' => false,
-                'message' => 'This course has no parts.'
-            ], 404);
+        if (!$part->quiz) {
+            return redirect()->back()->with('error', 'No quiz found for this part.');
         }
 
-        // Find quiz for that part
-        $quiz = Quiz::with([
-            'questions.options',
-            'part.lesson.course.lessons.parts'
-        ])
-            ->where('part_id', $currentPart->id)
-            ->first();
+        $quiz = $part->quiz;
 
-        if (! $quiz) {
-            return response()->json([
-                'status' => false,
-                'message' => 'No quiz found for the first part of this course.'
-            ], 404);
-        }
+        return view('backend.layouts.mycourse.start-quiz', compact('part', 'quiz'));
+    }
 
-        return view('backend.layouts.mycourse.start-quiz', compact(
+    // Show course content with lessons, parts, and quiz panel
+    public function showCourseQuiz($courseId)
+    {
+        $course = OnlineCourse::with('lessons.parts.quiz')->findOrFail($courseId);
+
+        $lessons = $course->lessons;
+        $totalParts = $course->lessons->pluck('parts')->flatten()->count();
+        $completedParts = 0; // You can calculate this based on user progress
+
+        $currentPart = null;
+        $quiz = null;
+
+        return view('backend.layouts.mycourse.quiz', compact(
             'course',
-            'quiz',
-            'currentPart'
+            'lessons',
+            'totalParts',
+            'completedParts',
+            'currentPart',
+            'quiz'
         ));
     }
+
     public function quizsubmit(Request $request, $quizId)
     {
         $quiz = Quiz::with('questions.options')->findOrFail($quizId);

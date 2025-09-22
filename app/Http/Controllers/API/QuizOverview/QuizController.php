@@ -73,4 +73,5 @@ class QuizController extends Controller
             ]
         ]);
     }
+
 }

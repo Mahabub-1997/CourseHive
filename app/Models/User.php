@@ -121,4 +121,28 @@ class User extends Authenticatable
     {
         return $this->hasMany(Instructor::class);
     }
+
+    // All payments made by this user
+
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
+
+    // Promo codes applied by this user (optional, if tracking per user)
+
+    public function promoCodesUsed()
+    {
+        return $this->hasManyThrough(
+            PromoCode::class,
+            Payment::class,
+            'user_id',        // Foreign key on payments table
+            'id',             // Local key on PromoCode table (id)
+            'id',             // Local key on User table (id)
+            'promo_code_id'   // Foreign key on Payment table pointing to PromoCode
+        );
+    }
+
+
+
 }

@@ -3,6 +3,7 @@
 use App\Http\Controllers\Web\Backend\Certificate\CertificateController;
 use App\Http\Controllers\Web\Backend\CMS\CourseOverview\OverviewController;
 use App\Http\Controllers\Web\Backend\CMS\Instructor\InstructorController;
+use App\Http\Controllers\Web\Backend\Payment\PaymentController;
 use App\Http\Controllers\Web\Backend\Quiz\Quiz\QuizController;
 use App\Http\Controllers\Web\Backend\QuizResult\QuizResultController;
 use Illuminate\Support\Facades\Route;
@@ -62,7 +63,16 @@ Route::middleware('auth')->group(function () {
     Route::post('courses/{id}/enroll', [EnrollmentController::class, 'enroll'])->name('courses.enroll');
 
     Route::get('courses/{id}/pay', [EnrollmentController::class, 'pay'])->name('courses.pay');
-    Route::get('courses/{id}/payment-success', [EnrollmentController::class, 'paymentSuccess'])->name('courses.payment.success');
+    Route::get('courses/{id}/payment-success', [EnrollmentController::class, 'processPayment'])->name('courses.payment.success');
+
+
+    Route::post('payment/{course}/process', [EnrollmentController::class, 'processPayment'])
+        ->name('payment.process');
+
+
+
+
+
 
     Route::get('my-courses', [EnrollmentController::class, 'myCourses'])->name('courses.my');
 
@@ -126,6 +136,7 @@ Route::post('/quiz/{quiz}/submit', [QuizResultController::class, 'submit'])
 
 // Show the quiz start page (GET)
 Route::post('/quiz/{course}/start', [QuizResultController::class, 'start'])->name('quiz.start');
+Route::get('/quiz/{course}/start', [QuizResultController::class, 'start'])->name('quiz.start');  ///adddddddddddddddd
 
 // Submit quiz answers (POST)
 Route::post('/quiz/{quiz}/submit', [QuizResultController::class, 'quizsubmit'])->name('quiz.submit');
@@ -135,10 +146,6 @@ Route::post('/quiz/{quiz}/submit', [QuizResultController::class, 'quizsubmit'])-
 /* ==============================
    Quiz Results
    ============================== */
-
-// Show quiz (GET)
-//Route::get('/quiz/{quiz}/start', [QuizResultController::class, 'start'])->name('quiz.start');
-
 // Review answers before final submit (POST)
 Route::post('/quiz/{quiz}/review', [QuizResultController::class, 'review'])->name('quiz.review');
 
@@ -146,6 +153,26 @@ Route::post('/quiz/{quiz}/review', [QuizResultController::class, 'review'])->nam
 Route::post('/quiz/{courseId}/submit', [QuizResultController::class, 'submit'])->name('quiz.submit');
 
 Route::post('/quiz/{quiz}/result', [QuizResultController::class, 'result'])->name('quiz.result');
+
+
+/* ==============================
+     Payments
+   ============================== */
+
+//    // Show checkout page
+//    Route::middleware('auth')->get('/course/{course}/pay', [PaymentController::class, 'pay'])->name('course.pay');
+//
+//    // Handle checkout form submission
+//    Route::middleware('auth')->post('/course/{course}/checkout', [PaymentController::class, 'checkout'])->name('course.checkout');
+//
+//    // Payment success
+//    Route::middleware('auth')->get('/payment/success/{payment}', [PaymentController::class, 'success'])->name('payment.success');
+//
+//    // Payment cancel
+//    Route::middleware('auth')->get('/payment/cancel', [PaymentController::class, 'cancel'])->name('payment.cancel');
+
+
+
 
 
 
@@ -157,5 +184,10 @@ Route::middleware('auth')->post('/courses/{id}/reviews', [CourseController::clas
 
 /* ==============================
    Auth Routes
+
+
+
    ============================== */
+Route::get('courses/{course}/my-quiz', [QuizResultController::class, 'showCourseQuiz'])->name('course.my-quiz');
+
 require __DIR__.'/auth.php';

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Web\Backend\Enrollment;
 use App\Http\Controllers\Controller;
 use App\Models\Enrollment;
 use App\Models\OnlineCourse;
+use App\Models\Payment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -39,6 +40,19 @@ class EnrollmentController extends Controller
     }
 
     // 2️⃣ Redirect to payment page for paid courses
+//    public function pay($course_id)
+//    {
+//        $course = OnlineCourse::findOrFail($course_id);
+//
+//        if ($course->course_type != 'paid') {
+//            return redirect()->back()->with('error', 'This course is free. You can enroll directly.');
+//        }
+//
+//        // Here you can redirect to your payment gateway page
+////        return redirect()->route('payment.pay', $course_id);
+//        return view('backend.layouts.payments.checkout', compact('course'));
+//    }
+
     public function pay($course_id)
     {
         $course = OnlineCourse::findOrFail($course_id);
@@ -47,33 +61,57 @@ class EnrollmentController extends Controller
             return redirect()->back()->with('error', 'This course is free. You can enroll directly.');
         }
 
-        // Here you can redirect to your payment gateway page
-        // Example: return redirect()->route('payment.page', $course_id);
-        return view('backend.layouts.payments.checkout', compact('course'));
-    }
+        // Get the current user's enrollment for this course, if any
+        $enrollment = Enrollment::where('user_id', auth()->id())
+            ->where('course_id', $course->id)
+            ->first();
 
-    // 3️⃣ Handle successful payment callback
-    public function paymentSuccess(Request $request, $course_id)
+        return view('backend.layouts.payments.checkout', compact('course', 'enrollment'));
+    }
+    public function processPayment(Request $request, $course_id)
     {
         $course = OnlineCourse::findOrFail($course_id);
 
-        // Check if already enrolled
-        $existing = Enrollment::where('user_id', Auth::id())
-            ->where('course_id', $course_id)
-            ->first();
-        if ($existing) {
-            return redirect()->route('courses.index')->with('message', 'You are already enrolled in this course.');
-        }
-
-        Enrollment::create([
-            'user_id' => Auth::id(),
-            'course_id' => $course_id,
-            'status' => 'active',
-            'enrolled_at' => now(),
+        $request->validate([
+            'payment_method' => 'required|in:stripe,paypal,manual',
         ]);
 
-        return redirect()->route('courses.index')->with('message', 'Payment successful! You are now enrolled.');
+        // Create payment record
+        $payment = Payment::create([
+            'user_id' => Auth::id(),
+            'course_id' => $course->id,
+            'amount' => $course->price,
+            'currency' => 'USD',
+            'payment_method' => $request->payment_method,
+            'status' => 'completed', // mark as completed for now
+        ]);
+
+        return redirect()->route('courses.enroll', $course->id)
+            ->with('success', 'Payment successful! You are now enrolled.');
     }
+
+    // 3️⃣ Handle successful payment callback
+//    public function paymentSuccess(Request $request, $course_id)
+//    {
+//        $course = OnlineCourse::findOrFail($course_id);
+//
+//        // Check if already enrolled
+//        $existing = Enrollment::where('user_id', Auth::id())
+//            ->where('course_id', $course_id)
+//            ->first();
+//        if ($existing) {
+//            return redirect()->route('courses.index')->with('message', 'You are already enrolled in this course.');
+//        }
+//
+//        Enrollment::create([
+//            'user_id' => Auth::id(),
+//            'course_id' => $course_id,
+//            'status' => 'active',
+//            'enrolled_at' => now(),
+//        ]);
+//
+//        return redirect()->route('courses.index')->with('message', 'Payment successful! You are now enrolled.');
+//    }
 
     // 4️⃣ Optional: Show user's enrolled courses
     public function myCourses()

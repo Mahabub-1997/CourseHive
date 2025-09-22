@@ -92,7 +92,11 @@ Route::middleware('auth:sanctum')->get('/courses/{id}', [CourseController::class
 
 Route::middleware('auth:sanctum')->get('/courses/{id}', [CourseController::class, 'Contentshow']);
 
-Route::middleware('auth:sanctum')->get('/courses/{courseId}/quiz', [CourseController::class, 'quiz']);
+//Route::middleware('auth:sanctum')->get('/courses/{courseId}/quiz', [CourseController::class, 'quiz']);
+
+
+Route::middleware('auth:sanctum')->get('courses/{course}/quiz', [CourseController::class, 'getCourseQuiz']);   ////addaddddddd
+
 Route::middleware('auth:sanctum')->get('quiz/{quizId}/result', [CourseController::class, 'getResult']);
 
 

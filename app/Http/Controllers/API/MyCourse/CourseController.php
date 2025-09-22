@@ -178,51 +178,118 @@ class CourseController extends Controller
             ]
         ]);
     }
-    public function quiz($courseId)
+//    public function quiz($courseId)
+//    {
+//        $userId = auth()->id();
+//
+//        // Load course with lessons + parts
+//        $course = OnlineCourse::with('lessons.parts')->findOrFail($courseId);
+//
+//        // All lessons for sidebar
+//        $lessons = $course->lessons;
+//
+//        // Flatten all parts for progress calculation
+//        $allParts = $lessons->pluck('parts')->flatten(1);
+//
+//        $totalParts = $allParts->count();
+//        $completedParts = $allParts->where('is_completed', true)->count();
+//
+//        if ($allParts->isEmpty()) {
+//            return response()->json([
+//                'status' => false,
+//                'message' => 'No parts found for this course.'
+//            ], 404);
+//        }
+//
+//        // Get current part (first part by default)
+//        $currentPart = $allParts->first();
+//
+//        // Load quiz with questions + options
+//        $quiz = Quiz::with('questions.options')
+//            ->where('part_id', $currentPart->id)
+//            ->first();
+//
+//        return response()->json([
+//            'status' => true,
+//            'message' => 'Quiz data retrieved successfully',
+//            'data' => [
+//                'course'         => $course,
+//                'lessons'        => $lessons,
+//                'currentPart'    => $currentPart,
+//                'quiz'           => $quiz,
+//                'totalParts'     => $totalParts,
+//                'completedParts' => $completedParts,
+//
+//            ]
+//        ]);
+//    }
+    // GET API to fetch course content with lessons, parts, and part-wise quizzes
+// GET API to fetch course content with part-wise quizzes
+    public function getCourseQuiz($courseId)
     {
-        $userId = auth()->id();
+        // Load course with lessons, parts, quizzes, questions, and options
+        $course = OnlineCourse::with('lessons.parts.quiz.questions.options')->find($courseId);
 
-        // Load course with lessons + parts
-        $course = OnlineCourse::with('lessons.parts')->findOrFail($courseId);
-
-        // All lessons for sidebar
-        $lessons = $course->lessons;
-
-        // Flatten all parts for progress calculation
-        $allParts = $lessons->pluck('parts')->flatten(1);
-
-        $totalParts = $allParts->count();
-        $completedParts = $allParts->where('is_completed', true)->count();
-
-        if ($allParts->isEmpty()) {
+        if (!$course) {
             return response()->json([
                 'status' => false,
-                'message' => 'No parts found for this course.'
+                'message' => "No course found with ID {$courseId}"
             ], 404);
         }
 
-        // Get current part (first part by default)
-        $currentPart = $allParts->first();
+        $totalParts = $course->lessons->pluck('parts')->flatten()->count();
+        $completedParts = 0; // You can calculate this dynamically per user
 
-        // Load quiz with questions + options
-        $quiz = Quiz::with('questions.options')
-            ->where('part_id', $currentPart->id)
-            ->first();
+        $data = [
+            'id' => $course->id,
+            'title' => $course->title,
+            'completed_parts' => $completedParts,
+            'total_parts' => $totalParts,
+            'lessons' => $course->lessons->map(function($lesson) {
+                return [
+                    'id' => $lesson->id,
+                    'title' => $lesson->title,
+                    'parts' => $lesson->parts->map(function($part) {
+                        return [
+                            'id' => $part->id,
+                            'title' => $part->title,
+                            'duration' => $part->duration,
+                            'video' => $part->video,
+                            'quiz' => $part->quiz ? [
+                                'id' => $part->quiz->id,
+                                'title' => $part->quiz->title,
+                                'questions' => $part->quiz->questions->map(function($question) {
+                                    return [
+                                        'id' => $question->id,
+                                        'quiz_id' => $question->quiz_id,
+                                        'question_text' => $question->question_text,
+                                        'created_at' => $question->created_at,
+                                        'updated_at' => $question->updated_at,
+                                        'options' => $question->options->map(function($option) {
+                                            return [
+                                                'id' => $option->id,
+                                                'question_id' => $option->question_id,
+                                                'option_text' => $option->option_text, // keeps JSON format
+                                                'is_correct' => $option->is_correct,
+                                                'created_at' => $option->created_at,
+                                                'updated_at' => $option->updated_at,
+                                            ];
+                                        }),
+                                    ];
+                                }),
+                            ] : null,
+                        ];
+                    }),
+                ];
+            }),
+        ];
 
         return response()->json([
             'status' => true,
-            'message' => 'Quiz data retrieved successfully',
-            'data' => [
-                'course'         => $course,
-                'lessons'        => $lessons,
-                'currentPart'    => $currentPart,
-                'quiz'           => $quiz,
-                'totalParts'     => $totalParts,
-                'completedParts' => $completedParts,
-
-            ]
+            'course' => $data,
         ]);
     }
+
     //result
 
     public function getResult($quizId)

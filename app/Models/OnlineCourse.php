@@ -101,5 +101,18 @@ class OnlineCourse extends Model
     {
         return $this->hasOne(Instructor::class, 'course_id');
     }
+//---------------------------payment----------
+    public function payments()
+    {
+        return $this->hasMany(Payment::class, 'course_id');
+    }
+
+    // Promo codes applied to this course (via payments)
+    public function promoCodesApplied()
+    {
+        return $this->hasManyThrough(PromoCode::class,
+            Payment::class, 'course_id', 'id', 'id', 'promo_code_id');
+    }
+
 
 }
