@@ -18,7 +18,7 @@
                     @endif
 
                     {{-- Form --}}
-                    <form action="{{ route('online-courses.store') }}" method="post" enctype="multipart/form-data">
+                    <form action="{{ route('web-online-courses.store') }}" method="post" enctype="multipart/form-data">
                         @csrf
 
                         {{-- Title --}}

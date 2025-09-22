@@ -15,7 +15,7 @@ use App\Http\Controllers\Web\Backend\CMS\OnlineCourses\OnlineCoursesController;
 use App\Http\Controllers\Web\Backend\CMS\Subscription\SubscriptionController;
 use App\Http\Controllers\Web\Backend\Dashboard\ProfileController;
 use App\Http\Controllers\Web\Backend\Enrollment\EnrollmentController;
-use App\Http\Controllers\Web\Backend\Mycourse\CourseController;
+use App\Http\Controllers\Web\Backend\MyCourse\CourseController;
 use App\Http\Controllers\Web\Backend\Quiz\Lesson\LessonController;
 use App\Http\Controllers\Web\Backend\Quiz\Option\OptionController;
 use App\Http\Controllers\Web\Backend\Quiz\Part\PartController;
@@ -79,7 +79,7 @@ Route::middleware('auth')->group(function () {
    ============================== */
 Route::resource('about-us', AboutUsController::class);
 Route::resource('categories', CategoryController::class);
-Route::resource('online-courses', OnlineCoursesController::class);
+Route::resource('web-online-courses', OnlineCoursesController::class);
 Route::resource('subscriptions', SubscriptionController::class);
 Route::resource('contactus', ContactUsController::class);
 Route::resource('hero-images', HeroImageController::class);

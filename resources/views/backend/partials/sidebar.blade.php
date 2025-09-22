@@ -61,7 +61,7 @@
                         @php
                             $subMenu = [
                                 ['route' => 'categories.index', 'icon' => 'far fa-circle', 'label' => 'Category'],
-                                ['route' => 'online-courses.index', 'icon' => 'far fa-circle', 'label' => 'Online Courses'],
+                                ['route' => 'web-online-courses.index', 'icon' => 'far fa-circle', 'label' => 'Online Courses'],
                                 ['route' => 'top.courses', 'icon' => 'far fa-circle', 'label' => 'Top Course'],
                                 ['route' => 'about-us.index', 'icon' => 'far fa-circle', 'label' => 'About Us'],
                                 ['route' => 'subscriptions.index', 'icon' => 'far fa-circle', 'label' => 'Subscription'],

@@ -83,7 +83,7 @@
                         <h1 class="m-0">All Online Courses</h1>
                     </div>
                     <div class="col-sm-6 d-flex justify-content-end">
-                        <a href="{{ route('online-courses.create') }}" class="btn bg-gradient-teal btn-sm">
+                        <a href="{{ route('web-online-courses.create') }}" class="btn bg-gradient-teal btn-sm">
                             <i class="fa fa-plus text-light"></i> Add New Course
                         </a>
                     </div>
@@ -135,10 +135,10 @@
 
                                 {{-- Admin Actions --}}
                                 <div class="mt-2 d-flex justify-content-between">
-                                    <a href="{{ route('online-courses.edit', $course->id) }}" class="btn btn-info btn-sm">
+                                    <a href="{{ route('web-online-courses.edit', $course->id) }}" class="btn btn-info btn-sm">
                                         <i class="fa fa-edit"></i> Edit
                                     </a>
-                                    <form action="{{ route('online-courses.destroy', $course->id) }}" method="POST" onsubmit="return confirm('Are you sure?');">
+                                    <form action="{{ route('web-online-courses.destroy', $course->id) }}" method="POST" onsubmit="return confirm('Are you sure?');">
 
                                         @csrf
                                         @method('DELETE')
