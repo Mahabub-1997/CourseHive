@@ -31,7 +31,7 @@ use App\Http\Controllers\API\CMS\TopCourseController;
 // Other Feature Controllers
 // ==========================
 use App\Http\Controllers\API\Certificate\CertificateController;
-use App\Http\Controllers\Api\Dashboard\DashboardController;
+use App\Http\Controllers\API\Dashboard\DashboardController;
 use App\Http\Controllers\API\Enroll\EnrollmentController;
 use App\Http\Controllers\API\MyCourse\CourseController;
 use App\Http\Controllers\API\QuizOverview\QuizController;
