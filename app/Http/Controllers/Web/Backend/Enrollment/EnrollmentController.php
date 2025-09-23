@@ -116,7 +116,11 @@ class EnrollmentController extends Controller
             // ✅ Store enrollment record
             Enrollment::updateOrCreate(
                 ['user_id' => Auth::id(), 'course_id' => $course->id],
-                ['status' => 'success', 'payment_id' => $payment->id]
+                [
+                    'status'      => 'success',
+                    'payment_id'  => $payment->id,
+                    'enrolled_at' => now(), // ✅ Free course er motoi enrolled_at save hobe
+                ]
             );
 
             return redirect()->route('my.courses')
@@ -165,7 +169,11 @@ class EnrollmentController extends Controller
         if ($status === 'success') {
             Enrollment::updateOrCreate(
                 ['user_id' => Auth::id(), 'course_id' => $course->id],
-                ['status' => 'success', 'payment_id' => $payment->id]
+                [
+                    'status'      => 'pending',
+                    'payment_id'  => $payment->id,
+                    'enrolled_at' => now(), // ✅ ekhaneo enrolled_at save korchi
+                ]
             );
         }
 

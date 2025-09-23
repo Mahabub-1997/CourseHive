@@ -68,6 +68,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Enrollment
     Route::post('courses/{id}/enroll', [EnrollmentController::class, 'enroll']);
+    Route::post('createPayment/{id}', [EnrollmentController::class, 'createPayment']);
+
 
     // Courses
     Route::get('courses', [CourseController::class, 'courseindex']);
@@ -87,6 +89,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index']);
     Route::get('/get-profile-info', [DashboardController::class, 'userprofileinfo']);
     Route::post('/profile-update', [DashboardController::class, 'userprofileupdate']);
+//    new-----
+    Route::middleware('auth:sanctum')->post('/user/password/update', [DashboardController::class, 'updatePassword']);
 });
 
 
