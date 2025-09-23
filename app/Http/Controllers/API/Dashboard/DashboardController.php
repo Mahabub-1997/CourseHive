@@ -4,19 +4,19 @@ namespace App\Http\Controllers\API\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Models\Enrollment;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
-
 
 class DashboardController extends Controller
 {
+    /**
+     * Dashboard main data
+     * Returns user info, enrollments, and stats
+     */
     public function index(Request $request)
     {
-        $user = $request->user(); // Logged-in user
+        $user = $request->user(); // Authenticated user
 
         // Get all enrollments with related course info
         $enrollments = Enrollment::with('course')
@@ -25,9 +25,9 @@ class DashboardController extends Controller
 
         // Calculate stats
         $totalCourses = $enrollments->count();  // Total enrollments
-        $inProgress   = $enrollments->where('status', 'success')->count(); // Completed
+        $inProgress   = $enrollments->where('status', 'success')->count(); // Completed courses
         $inComplete   = $enrollments->where('status', '!=', 'success')->count(); // Pending or failed
-        $certificates = $inProgress; // Certificates are awarded for completed courses
+        $certificates = $inProgress; // Certificates awarded for completed courses
 
         // Prepare response
         return response()->json([
@@ -56,62 +56,13 @@ class DashboardController extends Controller
         ]);
     }
 
-    //    public function update(Request $request)
-    //    {
-    //        $user = $request->user();
-    //
-    //        // Merge JSON input if sent as JSON
-    //        $request->merge($request->json()->all());
-    //
-    //
-    //        $validated = $request->validate([
-    //            'name' => 'nullable|string|max:255',
-    //            'email' => 'nullable|email|max:255|',  // no update
-    //            'phone' => 'nullable|string|max:20',
-    //            'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-    //        ]);
-    //
-    //        // Handle profile image upload
-    //        if ($request->hasFile('profile_image')) {
-    //            // Delete old image if exists
-    //            if ($user->profile_image && Storage::exists('public/' . $user->profile_image)) {
-    //                Storage::delete('public/' . $user->profile_image);
-    //            }
-    //
-    //            // Store new image
-    //            $path = $request->file('profile_image')->store('profile_images', 'public');
-    //            $validated['profile_image'] = $path;
-    //        }
-    //
-    //        // Update only provided fields
-    //        foreach ($validated as $key => $value) {
-    //            $user->$key = $value;
-    //        }
-    //        $user->save();
-    //
-    //        return response()->json([
-    //            'status' => true,
-    //            'message' => 'Profile updated successfully',
-    //            'user' => $user
-    //        ]);
-    //    }
-
-
-
-
-
-
-
-
-
-
-    //user info get 
+    /**
+     * Get authenticated user profile info
+     */
     public function userprofileinfo(Request $request)
     {
-        // Get the authenticated user
         $user = $request->user();
 
-        //check 
         if (!$user) {
             return response()->json([
                 'status' => false,
@@ -119,7 +70,6 @@ class DashboardController extends Controller
             ], 401);
         }
 
-        //response 
         return response()->json([
             'status' => true,
             'message' => 'User profile fetched successfully',
@@ -127,109 +77,86 @@ class DashboardController extends Controller
         ]);
     }
 
-
-
-
-    // public function userprofileupdate(Request $request)
-    // {
-    //     $user = $request->user();
-    //     if (!$user) {
-    //         return response()->json([
-    //             'status' => false,
-    //             'message' => 'User not authenticated'
-    //         ], 401);
-    //     }
-
-    //     // Validate input data
-    //     $validator = Validator::make($request->all(), [
-    //         'name' => 'required|string|max:255',
-    //         'phone' => 'nullable|string|max:20',
-    //         'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // 2MB max
-    //     ]);
-
-    //     if ($validator->fails()) {
-    //         return response()->json([
-    //             'status' => false,
-    //             'message' => 'Validation error',
-    //             'errors' => $validator->errors()
-    //         ], 422);
-    //     }
-
-    //     $validated = $validator->validated();
-
-    //     // Handle profile image upload
-    //     if ($request->hasFile('profile_image')) {
-    //         $file = $request->file('profile_image');
-    //         $filename = time() . '_' . $file->getClientOriginalName();
-
-    //         // Move the file to public/profile_images
-    //         $file->move(public_path('profile_images'), $filename);
-
-    //         // Delete old profile image if exists
-    //         if ($user->profile_image) {
-    //             $oldPath = public_path('profile_images/' . basename($user->profile_image));
-    //             if (file_exists($oldPath)) {
-    //                 unlink($oldPath);
-    //             }
-    //         }
-
-    //         // Save filename in DB
-    //         $validated['profile_image'] = $filename;
-    //     }
-
-
-    //     $user->update($validated);
-
-    //     return response()->json([
-    //         'status' => true,
-    //         'message' => 'Profile updated successfully',
-    //         'user' => $user
-    //     ]);
-    // }
-
-
+    /**
+     * Update user profile
+     * Supports name, phone, and profile image upload
+     */
     public function userprofileupdate(Request $request)
-{
-    $user = $request->user();
+    {
+        $user = $request->user();
 
-    if (!$user) {
-        return response()->json([
-            'status' => false,
-            'message' => 'User not authenticated'
-        ], 401);
-    }
-
-    // Validate input
-    $validated = $request->validate([
-        'name' => 'required|string|max:255',
-        'phone' => 'nullable|string|max:20',
-        'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-    ]);
-
-    // Handle profile image upload
-    if ($request->hasFile('profile_image')) {
-        $file = $request->file('profile_image');
-        $filename = time() . '_' . $file->getClientOriginalName();
-
-        // Move the file to public/profile_images
-        $file->move(public_path('profile_images'), $filename);
-
-        // Delete old image if exists
-        if ($user->profile_image && file_exists(public_path('profile_images/' . $user->profile_image))) {
-            unlink(public_path('profile_images/' . $user->profile_image));
+        if (!$user) {
+            return response()->json([
+                'status' => false,
+                'message' => 'User not authenticated'
+            ], 401);
         }
 
-        $validated['profile_image'] = $filename;
+        // Validate input
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'phone' => 'nullable|string|max:20',
+            'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        // Handle profile image upload
+        if ($request->hasFile('profile_image')) {
+            $file = $request->file('profile_image');
+            $filename = time() . '_' . $file->getClientOriginalName();
+
+            // Move file to public/profile_images
+            $file->move(public_path('profile_images'), $filename);
+
+            // Delete old image if exists
+            if ($user->profile_image && file_exists(public_path('profile_images/' . $user->profile_image))) {
+                unlink(public_path('profile_images/' . $user->profile_image));
+            }
+
+            $validated['profile_image'] = $filename;
+        }
+
+        // Update user
+        $user->update($validated);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Profile updated successfully',
+            'user' => $user
+        ]);
     }
+//    new added
+    public function updatePassword(Request $request)
+    {
+        $user = $request->user(); // Authenticated user
 
-    // Update user
-    $user->update($validated);
+        // Validate request
+        $validator = Validator::make($request->all(), [
+            'current_password' => ['required'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'], // 'confirmed' checks password_confirmation
+        ]);
 
-    return response()->json([
-        'status' => true,
-        'message' => 'Profile updated successfully',
-        'user' => $user
-    ]);
-}
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'errors' => $validator->errors()
+            ], 422);
+        }
 
+        // Check current password
+        if (!Hash::check($request->current_password, $user->password)) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Current password is incorrect'
+            ], 403);
+        }
+
+        // Update password
+        $user->password = Hash::make($request->password);
+        $user->save();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Password updated successfully!'
+        ]);
+    }
 }

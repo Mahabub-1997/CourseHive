@@ -31,7 +31,7 @@ use App\Http\Controllers\API\CMS\TopCourseController;
 // Other Feature Controllers
 // ==========================
 use App\Http\Controllers\API\Certificate\CertificateController;
-use App\Http\Controllers\Api\Dashboard\DashboardController;
+use App\Http\Controllers\API\Dashboard\DashboardController;
 use App\Http\Controllers\API\Enroll\EnrollmentController;
 use App\Http\Controllers\API\MyCourse\CourseController;
 use App\Http\Controllers\API\QuizOverview\QuizController;
@@ -68,6 +68,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Enrollment
     Route::post('courses/{id}/enroll', [EnrollmentController::class, 'enroll']);
+    Route::post('createPayment/{id}', [EnrollmentController::class, 'createPayment']);
+
 
     // Courses
     Route::get('courses', [CourseController::class, 'courseindex']);
@@ -78,6 +80,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('courses/{course}/quiz', [CourseController::class, 'getCourseQuiz']);
     Route::get('quiz/{quizId}/result', [CourseController::class, 'getResult']);
     Route::get('/quiz-performance', [QuizController::class, 'performance']);
+    Route::middleware('auth:sanctum')->post('/quizzes/{quizId}/submit', [QuizController::class, 'submit']);
 
     // Certificates
     Route::get('/certificates', [CertificateController::class, 'index']);
@@ -87,6 +90,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index']);
     Route::get('/get-profile-info', [DashboardController::class, 'userprofileinfo']);
     Route::post('/profile-update', [DashboardController::class, 'userprofileupdate']);
+//    new-----
+    Route::middleware('auth:sanctum')->post('/user/password/update', [DashboardController::class, 'updatePassword']);
 });
 
 
