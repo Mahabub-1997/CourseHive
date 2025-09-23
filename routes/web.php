@@ -1,12 +1,17 @@
 <?php
 
-use App\Http\Controllers\Web\Backend\Certificate\CertificateController;
-use App\Http\Controllers\Web\Backend\CMS\CourseOverview\OverviewController;
-use App\Http\Controllers\Web\Backend\CMS\Instructor\InstructorController;
-use App\Http\Controllers\Web\Backend\Payment\PaymentController;
-use App\Http\Controllers\Web\Backend\Quiz\Quiz\QuizController;
-use App\Http\Controllers\Web\Backend\QuizResult\QuizResultController;
 use Illuminate\Support\Facades\Route;
+
+// ==============================
+// Auth Controllers
+// ==============================
+use App\Http\Controllers\Web\Backend\Dashboard\ProfileController;
+
+// Enrollment / Payment
+use App\Http\Controllers\Web\Backend\Enrollment\EnrollmentController;
+use App\Http\Controllers\Web\Backend\Payment\PaymentController;
+
+// CMS
 use App\Http\Controllers\Web\Backend\CMS\AboutUs\AboutUsController;
 use App\Http\Controllers\Web\Backend\CMS\Category\CategoryController;
 use App\Http\Controllers\Web\Backend\CMS\ContactUs\ContactUsController;
@@ -14,13 +19,24 @@ use App\Http\Controllers\Web\Backend\CMS\HeroImage\HeroImageController;
 use App\Http\Controllers\Web\Backend\CMS\HeroSection\HeroSectionController;
 use App\Http\Controllers\Web\Backend\CMS\OnlineCourses\OnlineCoursesController;
 use App\Http\Controllers\Web\Backend\CMS\Subscription\SubscriptionController;
-use App\Http\Controllers\Web\Backend\Dashboard\ProfileController;
-use App\Http\Controllers\Web\Backend\Enrollment\EnrollmentController;
-use App\Http\Controllers\Web\Backend\MyCourse\CourseController;
+
+// Certificate
+use App\Http\Controllers\Web\Backend\Certificate\CertificateController;
+
+// Quiz Module
+use App\Http\Controllers\Web\Backend\Quiz\Quiz\QuizController;
+use App\Http\Controllers\Web\Backend\QuizResult\QuizResultController;
 use App\Http\Controllers\Web\Backend\Quiz\Lesson\LessonController;
-use App\Http\Controllers\Web\Backend\Quiz\Option\OptionController;
 use App\Http\Controllers\Web\Backend\Quiz\Part\PartController;
 use App\Http\Controllers\Web\Backend\Quiz\Question\QuestionController;
+use App\Http\Controllers\Web\Backend\Quiz\Option\OptionController;
+use App\Http\Controllers\Web\Backend\CMS\CourseOverview\OverviewController;
+use App\Http\Controllers\Web\Backend\CMS\Instructor\InstructorController;
+
+// My Courses
+use App\Http\Controllers\Web\Backend\MyCourse\CourseController;
+
+// Student Reviews
 use App\Http\Controllers\Web\Backend\StudentReview\ApiController;
 
 /*
@@ -59,33 +75,29 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    /** -------- Enrollment & Course Enrollment -------- */
+    /** -------- Enrollment & Payments -------- */
     Route::post('courses/{id}/enroll', [EnrollmentController::class, 'enroll'])->name('courses.enroll');
+    Route::post('payment/{course}/process', [EnrollmentController::class, 'processPayment'])->name('payment.process');
+    Route::get('courses/{id}/checkout', [EnrollmentController::class, 'checkout'])->name('payment.checkout');
+    Route::get('courses/{id}/success', [EnrollmentController::class, 'success'])->name('payment.success');
+    Route::get('courses/{id}/cancel', [EnrollmentController::class, 'cancel'])->name('payment.cancel');
+    Route::get('courses/{id}/pay', [PaymentController::class, 'pay'])->name('courses.pay');
 
-    Route::get('courses/{id}/pay', [EnrollmentController::class, 'pay'])->name('courses.pay');
-    Route::get('courses/{id}/payment-success', [EnrollmentController::class, 'processPayment'])->name('courses.payment.success');
-
-
-    Route::post('payment/{course}/process', [EnrollmentController::class, 'processPayment'])
-        ->name('payment.process');
-
-
-
-
-
-
+    /** -------- My Courses -------- */
     Route::get('my-courses', [EnrollmentController::class, 'myCourses'])->name('courses.my');
 
-    /** -------- Enrolled Users Management -------- */
+    /** -------- Enrolled Users -------- */
     Route::get('courses/{id}/enrolled-users', [EnrollmentController::class, 'courseEnrolledUsers'])->name('courses.enrolled-users');
     Route::get('admin/enrollments', [EnrollmentController::class, 'indexEnrollments'])->name('enrollments.index');
     Route::patch('enrollments/{id}/update-status', [EnrollmentController::class, 'updateStatus'])->name('enrollments.update-status');
+
+    /** -------- Certificates -------- */
     Route::get('/certificate/{enrollment}/download', [CertificateController::class, 'download'])->name('certificate.download');
     Route::get('/certificates', [CertificateController::class, 'index'])->name('certificate.index');
 });
 
 /* ==============================
-   CMS Management Routes
+   CMS Management
    ============================== */
 Route::resource('about-us', AboutUsController::class);
 Route::resource('categories', CategoryController::class);
@@ -116,78 +128,41 @@ Route::resource('options', OptionController::class);
 Route::resource('overview', OverviewController::class);
 Route::resource('instructors', InstructorController::class);
 
-
 /* ==============================
    My Courses
    ============================== */
 Route::get('/my-courses/in-progress', [CourseController::class, 'inProgress'])->name('courses.in-progress');
 Route::get('/courses/{id}', [CourseController::class, 'show'])->name('courses.show');
-Route::get('/course/{id}/content', [CourseController::class, 'content'])->name('course.content');
 Route::get('/course/{id}/content/{partId?}', [CourseController::class, 'content'])->name('course.content');
 Route::get('/course/{id}/quiz', [CourseController::class, 'quiz'])->name('course.quiz');
 
+/* ==============================
+   Quiz Flow
+   ============================== */
+// Start Quiz
+Route::match(['get', 'post'], '/quiz/{course}/start', [QuizResultController::class, 'start'])->name('quiz.start');
 
-
-Route::post('/quiz/{quiz}/submit', [QuizResultController::class, 'submit'])
-    ->name('quiz.submit');
-
-//Route::get('/quiz/{course}/start', [QuizResultController::class, 'start'])->name('quiz.start');
-//Route::post('/quiz/{courseId}/start', [QuizResultController::class, 'start'])->name('quiz.start');
-
-// Show the quiz start page (GET)
-Route::post('/quiz/{course}/start', [QuizResultController::class, 'start'])->name('quiz.start');
-Route::get('/quiz/{course}/start', [QuizResultController::class, 'start'])->name('quiz.start');  ///adddddddddddddddd
-
-// Submit quiz answers (POST)
+// Submit Quiz
 Route::post('/quiz/{quiz}/submit', [QuizResultController::class, 'quizsubmit'])->name('quiz.submit');
 
-
-
-/* ==============================
-   Quiz Results
-   ============================== */
-// Review answers before final submit (POST)
+// Review Answers
 Route::post('/quiz/{quiz}/review', [QuizResultController::class, 'review'])->name('quiz.review');
 
-// Submit final answers (POST)
+// Final Submit
 Route::post('/quiz/{courseId}/submit', [QuizResultController::class, 'submit'])->name('quiz.submit');
 
+// Quiz Result
 Route::post('/quiz/{quiz}/result', [QuizResultController::class, 'result'])->name('quiz.result');
 
+// My Quiz
+Route::get('courses/{course}/my-quiz', [QuizResultController::class, 'showCourseQuiz'])->name('course.my-quiz');
 
 /* ==============================
-     Payments
+   Course Reviews
    ============================== */
-
-//    // Show checkout page
-//    Route::middleware('auth')->get('/course/{course}/pay', [PaymentController::class, 'pay'])->name('course.pay');
-//
-//    // Handle checkout form submission
-//    Route::middleware('auth')->post('/course/{course}/checkout', [PaymentController::class, 'checkout'])->name('course.checkout');
-//
-//    // Payment success
-//    Route::middleware('auth')->get('/payment/success/{payment}', [PaymentController::class, 'success'])->name('payment.success');
-//
-//    // Payment cancel
-//    Route::middleware('auth')->get('/payment/cancel', [PaymentController::class, 'cancel'])->name('payment.cancel');
-
-
-
-
-
-
-/* ==============================
-   Course Reviews (Requires Auth)
-   ============================== */
-Route::middleware('auth')->post('/courses/{id}/reviews', [CourseController::class, 'store'])
-    ->name('courses.reviews.store');
+Route::middleware('auth')->post('/courses/{id}/reviews', [CourseController::class, 'store'])->name('courses.reviews.store');
 
 /* ==============================
    Auth Routes
-
-
-
    ============================== */
-Route::get('courses/{course}/my-quiz', [QuizResultController::class, 'showCourseQuiz'])->name('course.my-quiz');
-
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

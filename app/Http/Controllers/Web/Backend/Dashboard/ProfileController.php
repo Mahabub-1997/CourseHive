@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web\Backend\Dashboard;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\Enrollment;
 use App\Models\OnlineCourse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -20,10 +21,26 @@ class ProfileController extends Controller
 
     public function index()
     {
-        $totalCourses = OnlineCourse::count(); // Count all courses
+        $userId = auth()->id();
 
-        // Pass it to the view
-        return view('backend.layouts.dashboard', compact('totalCourses'));
+        // Get all enrollments for the logged-in user
+        $enrollments = Enrollment::where('user_id', $userId)->get();
+
+        // Total courses the user is enrolled in
+        $totalCourses = $enrollments->count();
+
+        // Completed courses
+        $inProgress = $enrollments->where('status', 'success')->count();
+
+        // Incomplete courses
+        $inComplete = $enrollments->where('status', '!=', 'success')->count();
+
+        return view('backend.layouts.dashboard', compact(
+            'totalCourses',
+            'inProgress',
+            'inComplete',
+            'enrollments'
+        ));
     }
     public function edit(Request $request): View
     {
