@@ -80,6 +80,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('courses/{course}/quiz', [CourseController::class, 'getCourseQuiz']);
     Route::get('quiz/{quizId}/result', [CourseController::class, 'getResult']);
     Route::get('/quiz-performance', [QuizController::class, 'performance']);
+    Route::middleware('auth:sanctum')->post('/quizzes/{quizId}/submit', [QuizController::class, 'submit']);
 
     // Certificates
     Route::get('/certificates', [CertificateController::class, 'index']);

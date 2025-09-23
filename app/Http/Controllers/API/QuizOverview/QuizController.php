@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\QuizOverview;
 
 use App\Http\Controllers\Controller;
 use App\Models\OnlineCourse;
+use App\Models\Quiz;
 use App\Models\QuizResult;
 use Dflydev\DotAccessData\Data;
 use Illuminate\Http\Request;
@@ -73,5 +74,71 @@ class QuizController extends Controller
             ]
         ]);
     }
+
+
+    /**
+     * Submit quiz answers and calculate score
+     */
+    public function submit(Request $request, $quizId)
+    {
+        $quiz = Quiz::with('questions.options')->findOrFail($quizId);
+        $userId = $request->user()->id;
+
+        // Get submitted answers (question_id => option_id)
+        $answers = $request->input('answers', []);
+
+        $score = 0;
+        $results = [];
+
+        foreach ($quiz->questions as $question) {
+            $correctOption = $question->options->where('is_correct', 1)->first();
+            $userAnswerId  = $answers[$question->id] ?? null;
+            $userOption    = $userAnswerId ? $question->options->where('id', $userAnswerId)->first() : null;
+            $isCorrect     = $correctOption && $userAnswerId == $correctOption->id;
+
+            if ($isCorrect) {
+                $score++;
+            }
+
+            $results[] = [
+                'question_id'    => $question->id,
+                'question'       => $question->question_text,
+                'correct_answer' => $correctOption ? $correctOption->option_text : null,
+                'user_answer'    => $userOption ? $userOption->option_text : null,
+                'is_correct'     => $isCorrect,
+            ];
+        }
+
+        $totalQuestions = $quiz->questions->count();
+        $percentage     = $totalQuestions > 0 ? round(($score / $totalQuestions) * 100, 2) : 0;
+        $isPassed       = $percentage >= 70;
+
+        // Save result
+        $quizResult = QuizResult::create([
+            'quiz_id'         => $quiz->id,
+            'user_id'         => $userId,
+            'score'           => $score,
+            'total_questions' => $totalQuestions,
+            'percentage'      => $percentage,
+            'is_passed'       => $isPassed,
+            'answers'         => json_encode($results),
+        ]);
+
+        // Return JSON response instead of view
+        return response()->json([
+            'status' => true,
+            'message' => 'Quiz submitted successfully',
+            'quiz' => [
+                'id' => $quiz->id,
+                'title' => $quiz->title,
+            ],
+            'score' => $score,
+            'total_questions' => $totalQuestions,
+            'percentage' => $percentage,
+            'is_passed' => $isPassed,
+            'results' => $results,
+        ]);
+    }
+
 
 }
