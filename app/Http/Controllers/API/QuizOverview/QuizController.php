@@ -9,6 +9,7 @@ use App\Models\QuizResult;
 use Dflydev\DotAccessData\Data;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Arr;
 
 class QuizController extends Controller
 {
@@ -139,6 +140,120 @@ class QuizController extends Controller
             'results' => $results,
         ]);
     }
+    public function review(Request $request, $quizId)
+    {
+        // Accept answers as associative array: question_id => option_id
+        $request->validate([
+            'answers' => 'required|array',
+        ]);
+
+        $answers = $request->input('answers', []);
+
+        // Load quiz with questions and options
+        $quiz = Quiz::with('questions.options')->findOrFail($quizId);
+
+        $results = [];
+        $score = 0;
+
+        foreach ($quiz->questions as $question) {
+            $correctOption = $question->options->firstWhere('is_correct', 1);
+            $userAnswerId = $answers[$question->id] ?? null;
+            $userOption = $question->options->firstWhere('id', $userAnswerId);
+
+            $isCorrect = $correctOption && $userOption && $userOption->id == $correctOption->id;
+            if ($isCorrect) $score++;
+
+            $results[] = [
+                'question_id'      => $question->id,
+                'question'         => $question->question_text,
+                'correct_option_id'=> $correctOption?->id,
+                'correct_answer'   => $correctOption?->option_text,
+                'user_option_id'   => $userOption?->id,
+                'user_answer'      => $userOption?->option_text,
+                'is_correct'       => $isCorrect,
+            ];
+        }
+
+        $totalQuestions = $quiz->questions->count();
+        $percentage = $totalQuestions > 0 ? round(($score / $totalQuestions) * 100, 2) : 0;
+
+        return response()->json([
+            'quiz_id'         => $quiz->id,
+            'score'           => $score,
+            'total_questions' => $totalQuestions,
+            'percentage'      => $percentage,
+            'results'         => $results,
+        ]);
+    }
 
 
+
+
+
+
+
+
+
+
+
+//    public function resultApi($quizId)
+//    {
+//        $userId = auth()->id();
+//
+//        $latestResult = QuizResult::where('quiz_id', $quizId)
+//            ->where('user_id', $userId)
+//            ->latest()
+//            ->first();
+//
+//        if (!$latestResult) {
+//            return response()->json([
+//                'status'  => false,
+//                'message' => 'No result found for this quiz.'
+//            ], 404);
+//        }
+//
+//        $quiz = Quiz::with('questions.options')->findOrFail($quizId);
+//
+//        $userAnswers = $latestResult->answers;
+//        if (is_string($userAnswers)) {
+//            $userAnswers = json_decode($userAnswers, true);
+//        }
+//
+//        $results = [];
+//        foreach ($quiz->questions as $question) {
+//            $correctOption = $question->options->firstWhere('is_correct', 1);
+//
+//            $userAnswerId = null;
+//            foreach ($userAnswers as $item) {
+//                if (isset($item['question_id']) && $item['question_id'] == $question->id) {
+//                    $userAnswerId = $item['option_id'] ?? null;
+//                    break;
+//                }
+//            }
+//
+//            $userOption = $userAnswerId ? $question->options->firstWhere('id', $userAnswerId) : null;
+//            $isCorrect = $correctOption && $userOption && $userOption->id == $correctOption->id;
+//
+//            $results[] = [
+//                'question_id'       => $question->id,
+//                'question'          => $question->question_text,
+//                'correct_option_id' => $correctOption?->id,
+//                'correct_answer'    => $correctOption?->option_text,
+//                'user_option_id'    => $userOption?->id,
+//                'user_answer'       => $userOption?->option_text,
+//                'is_correct'        => $isCorrect,
+//            ];
+//        }
+//
+//        return response()->json([
+//            'status'          => true,
+//            'quiz_id'         => $quiz->id,
+//            'score'           => $latestResult->score,
+//            'total_questions' => $latestResult->total_questions,
+//            'percentage'      => $latestResult->percentage,
+//            'is_passed'       => $latestResult->is_passed,
+//            'attempt_number'  => $latestResult->attempt_number ?? 1,
+//            'results'         => $results,
+//        ]);
+//    }
 }

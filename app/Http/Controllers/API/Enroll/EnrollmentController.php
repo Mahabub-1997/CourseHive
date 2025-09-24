@@ -13,12 +13,12 @@ use Stripe\Stripe;
 
 class EnrollmentController extends Controller
 {
-    public function enroll($course_id)
+
+    public function enroll(Request $request, $course_id)
     {
         $user = Auth::user();
-
-        // 1️⃣ Find course
         $course = OnlineCourse::find($course_id);
+
         if (!$course) {
             return response()->json([
                 'status' => 'error',
@@ -26,41 +26,130 @@ class EnrollmentController extends Controller
             ], 404);
         }
 
-        // 2️⃣ Only free courses can be enrolled directly
-        if ($course->course_type != 'free') {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'This is a paid course. Please buy it.'
-            ], 403);
-        }
-
-        // 3️⃣ Check if already enrolled
+        // Check if already enrolled
         $existing = Enrollment::where('user_id', $user->id)
             ->where('course_id', $course_id)
             ->first();
 
         if ($existing) {
+            // If payment was pending but now successful, update enrollment
+            if ($existing->status === 'pending') {
+                $payment = Payment::where('id', $existing->payment_id)
+                    ->where('status', 'success')
+                    ->first();
+
+                if ($payment) {
+                    $existing->status = 'success';
+                    $existing->enrolled_at = now();
+                    $existing->save();
+
+                    return response()->json([
+                        'status' => 'pending',
+                        'message' => 'Payment confirmed. You are now enrolled!',
+                        'enrollment_status' => $existing->status
+                    ], 200);
+                }
+            }
+
             return response()->json([
                 'status' => 'success',
-                'message' => 'You are already enrolled in this course.'
+                'message' => 'You are already enrolled in this course.',
+                'enrollment_status' => $existing->status
             ], 200);
         }
 
-        // 4️⃣ Create enrollment
-        Enrollment::create([
+        // Free course → enroll directly
+        if ($course->course_type === 'free') {
+            $enrollment = Enrollment::create([
+                'user_id' => $user->id,
+                'course_id' => $course->id,
+                'status' => 'pending',
+                'enrolled_at' => now(),
+            ]);
+
+            return response()->json([
+                'status' => 'pending',
+                'message' => 'You have successfully enrolled in this free course!',
+                'enrollment_status' => $enrollment->status
+            ], 201);
+        }
+
+        // Paid course → check if payment already succeeded
+        $successfulPayment = Payment::where('user_id', $user->id)
+            ->where('course_id', $course->id)
+            ->where('status', 'success')
+            ->first();
+
+        if ($successfulPayment) {
+            $enrollment = Enrollment::create([
+                'user_id' => $user->id,
+                'course_id' => $course->id,
+                'status' => 'pending',
+                'payment_id' => $successfulPayment->id,
+                'enrolled_at' => now(),
+            ]);
+
+            return response()->json([
+                'status' => 'pending',
+                'message' => 'Payment already completed. You are now enrolled!',
+                'enrollment_status' => $enrollment->status
+            ], 201);
+        }
+
+        // Paid course → create Stripe session
+        Stripe::setApiKey(env('STRIPE_SECRET'));
+
+        $session = StripeSession::create([
+            'payment_method_types' => ['card'],
+            'line_items' => [[
+                'price_data' => [
+                    'currency' => 'usd',
+                    'product_data' => ['name' => $course->title],
+                    'unit_amount' => $course->price * 100,
+                ],
+                'quantity' => 1,
+            ]],
+            'mode' => 'payment',
+            'success_url' => $request->success_url . '?session_id={CHECKOUT_SESSION_ID}',
+            'cancel_url' => $request->cancel_url,
+            'metadata' => [
+                'user_id' => $user->id,
+                'course_id' => $course->id,
+            ]
+        ]);
+
+        // Save payment as pending
+        $payment = Payment::create([
             'user_id' => $user->id,
-            'course_id' => $course_id,
+            'course_id' => $course->id,
+            'amount' => $course->price,
+            'currency' => 'USD',
+            'payment_method' => 'stripe',
             'status' => 'pending',
+            'stripe_payment_id' => $session->id
+        ]);
+
+        // Save enrollment as pending
+        $enrollment = Enrollment::create([
+            'user_id' => $user->id,
+            'course_id' => $course->id,
+            'status' => 'pending',
+            'payment_id' => $payment->id,
             'enrolled_at' => now(),
         ]);
 
         return response()->json([
-            'status' => 'success',
-            'message' => 'You have successfully enrolled in this course!'
-        ], 201);
+            'status' => 'pending',
+            'message' => 'Payment required for this course. Please complete payment.',
+            'payment_url' => $session->url,
+            'payment_id' => $payment->id,
+            'session_id' => $session->id,
+            'enrollment_status' => $enrollment->status
+        ], 200);
     }
 
-  public function createPayment(Request $request, $course_id)
+
+    public function createPayment(Request $request, $course_id)
 {
     $course = OnlineCourse::findOrFail($course_id);
 
@@ -78,7 +167,7 @@ class EnrollmentController extends Controller
             'amount' => $course->price,
             'currency' => 'USD',
             'payment_method' => $request->payment_method,
-            'status' => 'pending',
+            'status' => 'success',
         ]);
 
         return response()->json([
@@ -118,7 +207,7 @@ class EnrollmentController extends Controller
         'amount' => $course->price,
         'currency' => 'USD',
         'payment_method' => 'stripe',
-        'status' => 'pending',
+        'status' => 'success',
         'stripe_payment_id' => $session->id
     ]);
 
@@ -126,7 +215,7 @@ class EnrollmentController extends Controller
     return response()->json([
         'payment_url' => $session->url,
         'payment_id' => $payment->id,
+        'session_id' => $session->id,
     ]);
 }
-
 }

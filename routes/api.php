@@ -69,6 +69,9 @@ Route::middleware('auth:sanctum')->group(function () {
     // Enrollment
     Route::post('courses/{id}/enroll', [EnrollmentController::class, 'enroll']);
     Route::post('createPayment/{id}', [EnrollmentController::class, 'createPayment']);
+    Route::post('/enroll/payment-success', [EnrollmentController::class, 'handlePaymentSuccess']);
+
+
 
 
     // Courses
@@ -81,6 +84,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('quiz/{quizId}/result', [CourseController::class, 'getResult']);
     Route::get('/quiz-performance', [QuizController::class, 'performance']);
     Route::middleware('auth:sanctum')->post('/quizzes/{quizId}/submit', [QuizController::class, 'submit']);
+
+    Route::middleware('auth:sanctum')->post('/quizzes/{quiz}/review', [QuizController::class, 'review']);  //addd
+//    Route::middleware('auth:sanctum')->get('/quizzes/{quiz}/result', [QuizController::class, 'resultApi']);
 
     // Certificates
     Route::get('/certificates', [CertificateController::class, 'index']);
@@ -136,3 +142,11 @@ Route::delete('contacts/{id}', [ContactController::class, 'destroy']);
 Route::get('/top-courses', [TopCourseController::class, 'index']); // duplicate with apiResource
 Route::get('/about-us', [AboutUsController::class, 'show']); // duplicate with apiResource
 Route::get('/online-courses/{id}', [CourseController::class, 'show']); // note: might conflict with OnlineCourseController
+
+
+
+
+// Free + Paid course enroll API
+Route::middleware('auth:sanctum')->post('/enroll/{course_id}', [EnrollmentController::class, 'enroll']);
+
+
