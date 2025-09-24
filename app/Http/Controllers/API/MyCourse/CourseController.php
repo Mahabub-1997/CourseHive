@@ -178,51 +178,7 @@ class CourseController extends Controller
             ]
         ]);
     }
-//    public function quiz($courseId)
-//    {
-//        $userId = auth()->id();
-//
-//        // Load course with lessons + parts
-//        $course = OnlineCourse::with('lessons.parts')->findOrFail($courseId);
-//
-//        // All lessons for sidebar
-//        $lessons = $course->lessons;
-//
-//        // Flatten all parts for progress calculation
-//        $allParts = $lessons->pluck('parts')->flatten(1);
-//
-//        $totalParts = $allParts->count();
-//        $completedParts = $allParts->where('is_completed', true)->count();
-//
-//        if ($allParts->isEmpty()) {
-//            return response()->json([
-//                'status' => false,
-//                'message' => 'No parts found for this course.'
-//            ], 404);
-//        }
-//
-//        // Get current part (first part by default)
-//        $currentPart = $allParts->first();
-//
-//        // Load quiz with questions + options
-//        $quiz = Quiz::with('questions.options')
-//            ->where('part_id', $currentPart->id)
-//            ->first();
-//
-//        return response()->json([
-//            'status' => true,
-//            'message' => 'Quiz data retrieved successfully',
-//            'data' => [
-//                'course'         => $course,
-//                'lessons'        => $lessons,
-//                'currentPart'    => $currentPart,
-//                'quiz'           => $quiz,
-//                'totalParts'     => $totalParts,
-//                'completedParts' => $completedParts,
-//
-//            ]
-//        ]);
-//    }
+
     // GET API to fetch course content with lessons, parts, and part-wise quizzes
 // GET API to fetch course content with part-wise quizzes
     public function getCourseQuiz($courseId)
