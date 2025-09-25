@@ -19,7 +19,7 @@
                     @endif
 
                     {{-- Form --}}
-                    <form action="{{ route('lessons.update', $lesson->id) }}" method="post">
+                    <form action="{{ route('web-lessons.update', $lesson->id) }}" method="post">
                         @csrf
                         @method('PUT')
 

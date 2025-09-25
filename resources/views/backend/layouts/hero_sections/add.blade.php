@@ -27,7 +27,7 @@
                     @endif
 
                     {{-- Form --}}
-                    <form action="{{ route('hero-sections.store') }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('web-hero-sections.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
 
                         {{-- Title --}}

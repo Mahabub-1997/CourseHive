@@ -85,7 +85,7 @@
                         <h1 class="m-0">Hero Sections</h1>
                     </div>
                     <div class="col-sm-6 text-right">
-                        <a href="{{ route('hero-sections.create') }}" class="btn bg-gradient-teal btn-sm">
+                        <a href="{{ route('web-hero-sections.create') }}" class="btn bg-gradient-teal btn-sm">
                             <i class="fa fa-plus text-light"></i> Add Hero Section
                         </a>
                     </div>
@@ -129,10 +129,10 @@
                                     @endif
                                 </td>
                                 <td class="text-center">
-                                    <a href="{{ route('hero-sections.edit', $hero->id) }}" class="btn btn-info btn-sm">
+                                    <a href="{{ route('web-hero-sections.edit', $hero->id) }}" class="btn btn-info btn-sm">
                                         <i class="fa fa-edit"></i>
                                     </a>
-                                    <form action="{{ route('hero-sections.destroy', $hero->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this hero section?');">
+                                    <form action="{{ route('web-hero-sections.destroy', $hero->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this hero section?');">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-danger btn-sm">

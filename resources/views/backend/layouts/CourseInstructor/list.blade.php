@@ -12,7 +12,7 @@
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
-                            <a href="{{ route('instructors.create') }}" class="btn bg-gradient-teal btn-sm">
+                            <a href="{{ route('web-instructors.create') }}" class="btn bg-gradient-teal btn-sm">
                                 <i class="fa fa-plus text-light"></i> Add Instructor
                             </a>
                         </ol>
@@ -64,10 +64,10 @@
                                 <td>{{ $inst->total_lesson }}</td>
                                 <td>{{ $inst->user->name ?? 'N/A' }}</td>
                                 <td class="text-center">
-                                    <a href="{{ route('instructors.edit', $inst->id) }}" class="btn btn-info btn-sm">
+                                    <a href="{{ route('web-instructors.edit', $inst->id) }}" class="btn btn-info btn-sm">
                                         <i class="fa fa-edit"></i>
                                     </a>
-                                    <form action="{{ route('instructors.destroy', $inst->id) }}" method="POST"
+                                    <form action="{{ route('web-instructors.destroy', $inst->id) }}" method="POST"
                                           class="d-inline"
                                           onsubmit="return confirm('Are you sure you want to delete this instructor?');">
                                         @csrf

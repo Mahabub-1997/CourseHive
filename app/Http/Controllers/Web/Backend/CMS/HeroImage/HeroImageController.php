@@ -34,48 +34,69 @@ class HeroImageController extends Controller
 
         HeroImage::create(['images' => $paths]);
 
-        return redirect()->route('hero-images.index')->with('success', 'Images uploaded successfully.');
+        return redirect()->route('web-hero-images.index')->with('success', 'Images uploaded successfully.');
     }
-    public function edit(HeroImage $heroImage)
+    public function edit($id)
     {
+
+        $heroImage = HeroImage::findOrFail($id);
         return view('backend.layouts.hero_images.edit', compact('heroImage'));
     }
-    public function update(Request $request, HeroImage $heroImage)
+    public function update(Request $request, $id)
     {
+        // 1️⃣ Retrieve the hero image record or fail with 404
+        $heroImage = HeroImage::findOrFail($id);
+
+        // 2️⃣ Validate input
         $request->validate([
-            'images' => 'nullable|array|max:10',
-            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
+            'images' => 'nullable|array|max:10', // max 10 images
+            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120', // max 5MB per image
         ]);
 
+        // 3️⃣ If new images are uploaded
         if ($request->hasFile('images')) {
-            // Delete old images
-            foreach ($heroImage->images as $oldImage) {
-                if (file_exists(storage_path('app/public/'.$oldImage))) {
-                    unlink(storage_path('app/public/'.$oldImage));
+
+            // a) Delete old images from storage
+            if (is_array($heroImage->images)) {
+                foreach ($heroImage->images as $oldImage) {
+                    $filePath = storage_path('app/public/' . $oldImage);
+                    if (file_exists($filePath)) {
+                        unlink($filePath);
+                    }
                 }
             }
 
+            // b) Store new images and collect paths
             $paths = [];
             foreach ($request->file('images') as $file) {
                 $paths[] = $file->store('hero_images', 'public');
             }
 
+            // c) Update the hero image record
             $heroImage->update(['images' => $paths]);
         }
 
-        return redirect()->route('hero-images.index')->with('success', 'Hero images updated successfully.');
+        // 4️⃣ Redirect back with success message
+        return redirect()->route('web-hero-images.index')
+            ->with('success', 'Hero images updated successfully.');
     }
-    public function destroy(HeroImage $heroImage)
+    public function destroy($id)
     {
-        foreach ($heroImage->images as $img) {
-            if (file_exists(storage_path('app/public/'.$img))) {
-                unlink(storage_path('app/public/'.$img));
+
+        $heroImage = HeroImage::findOrFail($id);
+        if (is_array($heroImage->images)) {
+            foreach ($heroImage->images as $img) {
+                $filePath = storage_path('app/public/' . $img);
+                if (file_exists($filePath)) {
+                    unlink($filePath);
+                }
             }
         }
 
         $heroImage->delete();
 
-        return redirect()->route('hero-images.index')->with('success', 'Hero images deleted successfully.');
+        return redirect()->route('web-hero-images.index')
+            ->with('success', 'Hero images deleted successfully.');
     }
 
 

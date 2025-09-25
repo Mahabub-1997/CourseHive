@@ -19,7 +19,7 @@
                     @endif
 
                     {{-- Form --}}
-                    <form action="{{ route('hero-images.update', $heroImage->id) }}" method="post" enctype="multipart/form-data">
+                    <form action="{{ route('web-hero-images.update', $heroImage->id) }}" method="post" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
 

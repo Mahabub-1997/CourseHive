@@ -19,7 +19,7 @@
                     @endif
 
                     {{-- Form --}}
-                    <form action="{{ route('hero-images.store') }}" method="post" enctype="multipart/form-data">
+                    <form action="{{ route('web-hero-images.store') }}" method="post" enctype="multipart/form-data">
                         @csrf
 
                         {{-- Multiple Images --}}

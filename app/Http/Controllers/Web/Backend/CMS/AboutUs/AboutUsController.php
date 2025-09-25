@@ -36,7 +36,7 @@ class AboutUsController extends Controller
 
         AboutUs::create($validatedData);
 
-        return redirect()->route('about-us.index')->with('success', 'About Us created successfully!');
+        return redirect()->route('web-about-us.index')->with('success', 'About Us created successfully!');
     }
 
     public function edit($id)
@@ -81,7 +81,7 @@ class AboutUsController extends Controller
         $updated = DB::table('about_us')->where('id', $id)->update($data);
 
         if ($updated) {
-            return redirect()->route('about-us.index')->with('message', 'About Us updated successfully!');
+            return redirect()->route('web-about-us.index')->with('message', 'About Us updated successfully!');
         } else {
             return redirect()->back()->with('message', 'Failed to update About Us.')->withInput();
         }
@@ -102,7 +102,7 @@ class AboutUsController extends Controller
 
         // Redirect back with a message
         if ($deleted) {
-            return redirect()->route('about-us.index')->with('message', 'About Us record deleted successfully!');
+            return redirect()->route('web-about-us.index')->with('message', 'About Us record deleted successfully!');
         } else {
             return redirect()->back()->with('message', 'Failed to delete About Us record.');
         }

@@ -19,7 +19,7 @@
                     @endif
 
                     {{-- Form --}}
-                    <form action="{{ route('questions.store') }}" method="post">
+                    <form action="{{ route('web-questions.store') }}" method="post">
                         @csrf
 
                         {{-- Quiz Dropdown --}}

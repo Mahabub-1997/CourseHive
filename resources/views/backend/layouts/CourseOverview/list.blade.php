@@ -12,7 +12,7 @@
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
-                            <a href="{{ route('overview.create') }}" class="btn bg-gradient-teal btn-sm">
+                            <a href="{{ route('web-overview.create') }}" class="btn bg-gradient-teal btn-sm">
                                 <i class="fa fa-plus text-light"></i> Add Course Overview
                             </a>
                         </ol>
@@ -64,10 +64,10 @@
                                 </td>
                                 <td>{{ $learn->user->name ?? 'N/A' }}</td>
                                 <td class="text-center">
-                                    <a href="{{ route('overview.edit', $learn->id) }}" class="btn btn-info btn-sm">
+                                    <a href="{{ route('web-overview.edit', $learn->id) }}" class="btn btn-info btn-sm">
                                         <i class="fa fa-edit"></i>
                                     </a>
-                                    <form action="{{ route('overview.destroy', $learn->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this item?');">
+                                    <form action="{{ route('web-overview.destroy', $learn->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this item?');">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-danger btn-sm">

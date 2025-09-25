@@ -31,7 +31,7 @@
                                     </div>
                                     <div class="col-sm-6">
                                         <ol class="breadcrumb float-sm-right">
-                                            <a href="{{ route('questions.create') }}" class="btn bg-gradient-teal btn-sm">
+                                            <a href="{{ route('web-questions.create') }}" class="btn bg-gradient-teal btn-sm">
                                                 <i class="fa fa-plus text-light"></i> Add New Question
                                             </a>
                                         </ol>
@@ -69,10 +69,10 @@
                                             <td>{{ $question->quiz->title ?? 'N/A' }}</td>
                                             <td>{{ $question->question_text }}</td>
                                             <td class="text-center">
-                                                <a href="{{ route('questions.edit', $question->id) }}" class="btn btn-info btn-sm">
+                                                <a href="{{ route('web-questions.edit', $question->id) }}" class="btn btn-info btn-sm">
                                                     <i class="fa fa-edit"></i>
                                                 </a>
-                                                <form action="{{ route('questions.destroy', $question->id) }}" method="POST" style="display:inline-block;" onsubmit="return confirm('Delete this question?');">
+                                                <form action="{{ route('web-questions.destroy', $question->id) }}" method="POST" style="display:inline-block;" onsubmit="return confirm('Delete this question?');">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-danger btn-sm">

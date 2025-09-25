@@ -19,7 +19,7 @@
                     @endif
 
                     {{-- Form --}}
-                    <form action="{{ route('subscriptions.store') }}" method="post">
+                    <form action="{{ route('web-subscriptions.store') }}" method="post">
                         @csrf
 
                         {{-- Email --}}

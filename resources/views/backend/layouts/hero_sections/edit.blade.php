@@ -27,7 +27,7 @@
                     @endif
 
                     {{-- Form --}}
-                    <form action="{{ route('hero-sections.update', $heroSection->id) }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('web-hero-sections.update', $heroSection->id) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
 

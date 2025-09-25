@@ -1,6 +1,6 @@
 <aside class="main-sidebar sidebar-primary elevation-4">
 
-    <!-- Brand Logo Section -->
+    <!-- =================== Brand Logo Section =================== -->
     <a href="" class="brand-link">
         <div style="text-align: center; padding: 5px 0; background-color: #f8f9fa;">
             <img src="{{ asset('backend/AdminAssets/backend/dist/img/BrandLogo.jpg') }}"
@@ -9,15 +9,13 @@
         </div>
     </a>
 
-    <!-- Sidebar Section -->
+    <!-- =================== Sidebar Section =================== -->
     <div class="sidebar">
 
-        <!-- Sidebar Menu -->
+        <!-- =================== Sidebar Menu =================== -->
         <nav class="mt-10" style="margin-top: 50px;">
             <ul class="nav nav-pills nav-sidebar flex-column"
-                data-widget="treeview"
-                role="menu"
-                data-accordion="false">
+                data-widget="treeview" role="menu" data-accordion="false">
 
                 <!-- =================== Dashboard =================== -->
                 <li class="nav-item">
@@ -37,39 +35,33 @@
                     </a>
                 </li>
 
-                <!-- =================== CMS (Expandable Menu) =================== -->
+                <!-- =================== Create Course Dropdown =================== -->
                 @php
-                    $cmsRoutes = [
-                        'categories.index', 'category.index', 'subcategories.index',
-                        'online-courses.index', 'top-course.index', 'about-us.index', 'subscriptions.index','instructors.index'
+                    $createCourseRoutes = [
+                        'web-online-courses.index',
+                        'overview.index',
+                        'instructors.index'
                     ];
-                    $cmsOpen = collect($cmsRoutes)->contains(fn($r) => request()->routeIs($r) || request()->is("admin/{$r}/*"));
+                    $createCourseOpen = collect($createCourseRoutes)->contains(fn($r) => request()->routeIs($r) || request()->is("admin/{$r}/*"));
                 @endphp
 
-                <li class="nav-item {{ $cmsOpen ? 'menu-open' : '' }}">
-                    <a href="#"
-                       class="nav-link {{ $cmsOpen ? 'active' : '' }}">
-                        <i class="nav-icon fas fa-folder"></i>
+                <li class="nav-item {{ $createCourseOpen ? 'menu-open' : '' }}">
+                    <a href="#" class="nav-link {{ $createCourseOpen ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-plus-circle"></i>
                         <p>
-                            CMS
+                            Create Course
                             <i class="right fas fa-angle-left"></i>
                         </p>
                     </a>
 
-                    <!-- CMS Submenu -->
                     <ul class="nav nav-treeview">
                         @php
                             $subMenu = [
-                                ['route' => 'categories.index', 'icon' => 'far fa-circle', 'label' => 'Category'],
-                                ['route' => 'web-online-courses.index', 'icon' => 'far fa-circle', 'label' => 'Online Courses'],
+                                ['route' => 'web-categories.index', 'icon' => 'far fa-circle', 'label' => 'Category'],
+                                ['route' => 'web-online-courses.index', 'icon' => 'far fa-circle', 'label' => 'Create Course'],
+                                ['route' => 'web-overview.index', 'icon' => 'far fa-circle', 'label' => 'Course Overview'],
+                                ['route' => 'web-instructors.index', 'icon' => 'far fa-circle', 'label' => 'Course Instructor'],
                                 ['route' => 'top.courses', 'icon' => 'far fa-circle', 'label' => 'Top Course'],
-                                ['route' => 'about-us.index', 'icon' => 'far fa-circle', 'label' => 'About Us'],
-                                ['route' => 'subscriptions.index', 'icon' => 'far fa-circle', 'label' => 'Subscription'],
-                                ['route' => 'hero-images.index', 'icon' => 'far fa-circle', 'label' => 'Hero Images'],
-                                ['route' => 'hero-sections.index', 'icon' => 'far fa-circle', 'label' => 'Hero Sections'],
-                                ['route' => 'contactus.index', 'icon' => 'far fa-circle', 'label' => 'Contact Us'],
-                                ['route' => 'overview.index', 'icon' => 'far fa-circle', 'label' => 'Course Overview'], //new
-                                ['route' => 'instructors.index', 'icon' => 'far fa-circle', 'label' => 'Course instructor'], //new
                             ];
                         @endphp
 
@@ -85,15 +77,55 @@
                     </ul>
                 </li>
 
-                <!-- =================== Quiz (Expandable Menu) =================== -->
+                <!-- =================== CMS Dropdown =================== -->
+                @php
+                    $cmsRoutes = [
+                        'categories.index', 'category.index', 'subcategories.index',
+                        'online-courses.index', 'top-course.index', 'about-us.index', 'subscriptions.index','instructors.index'
+                    ];
+                    $cmsOpen = collect($cmsRoutes)->contains(fn($r) => request()->routeIs($r) || request()->is("admin/{$r}/*"));
+                @endphp
+
+                <li class="nav-item {{ $cmsOpen ? 'menu-open' : '' }}">
+                    <a href="#" class="nav-link {{ $cmsOpen ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-folder"></i>
+                        <p>
+                            CMS
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+
+                    <ul class="nav nav-treeview">
+                        @php
+                            $subMenu = [
+                                ['route' => 'web-about-us.index', 'icon' => 'far fa-circle', 'label' => 'About Us'],
+                                ['route' => 'web-subscriptions.index', 'icon' => 'far fa-circle', 'label' => 'Subscription'],
+                                ['route' => 'web-hero-images.index', 'icon' => 'far fa-circle', 'label' => 'Hero Images'],
+                                ['route' => 'web-hero-sections.index', 'icon' => 'far fa-circle', 'label' => 'Hero Sections'],
+                                ['route' => 'web-contactus.index', 'icon' => 'far fa-circle', 'label' => 'Contact Us'],
+                            ];
+                        @endphp
+
+                        @foreach($subMenu as $item)
+                            <li class="nav-item">
+                                <a href="{{ route($item['route']) }}"
+                                   class="nav-link {{ request()->routeIs($item['route']) ? 'active' : '' }}">
+                                    <i class="{{ $item['icon'] }} nav-icon"></i>
+                                    <p>{{ $item['label'] }}</p>
+                                </a>
+                            </li>
+                        @endforeach
+                    </ul>
+                </li>
+
+                <!-- =================== Quiz Dropdown =================== -->
                 @php
                     $quizRoutes = ['lessons.index','parts.index','quizzes.index','questions.index','options.index'];
                     $quizOpen = collect($quizRoutes)->contains(fn($r) => request()->routeIs($r) || request()->is("admin/{$r}/*"));
                 @endphp
 
                 <li class="nav-item {{ $quizOpen ? 'menu-open' : '' }}">
-                    <a href="#"
-                       class="nav-link {{ $quizOpen ? 'active' : '' }}">
+                    <a href="#" class="nav-link {{ $quizOpen ? 'active' : '' }}">
                         <i class="nav-icon fas fa-question-circle"></i>
                         <p>
                             Quiz
@@ -101,15 +133,14 @@
                         </p>
                     </a>
 
-                    <!-- Quiz Submenu -->
                     <ul class="nav nav-treeview">
                         @php
                             $quizSubMenu = [
-                                ['route' => 'lessons.index', 'icon' => 'far fa-circle', 'label' => 'Lessons'],
-                                ['route' => 'parts.index', 'icon' => 'far fa-circle', 'label' => 'Parts'],
-                                ['route' => 'quizzes.index', 'icon' => 'far fa-circle', 'label' => 'Quizzes'],
-                                ['route' => 'questions.index', 'icon' => 'far fa-circle', 'label' => 'Questions'],
-                                ['route' => 'options.index', 'icon' => 'far fa-circle', 'label' => 'Options'],
+                                ['route' => 'web-lessons.index', 'icon' => 'far fa-circle', 'label' => 'Lessons'],
+                                ['route' => 'web-parts.index', 'icon' => 'far fa-circle', 'label' => 'Parts'],
+                                ['route' => 'web-quizzes.index', 'icon' => 'far fa-circle', 'label' => 'Quizzes'],
+                                ['route' => 'web-questions.index', 'icon' => 'far fa-circle', 'label' => 'Questions'],
+                                ['route' => 'web-options.index', 'icon' => 'far fa-circle', 'label' => 'Options'],
                             ];
                         @endphp
 
@@ -125,7 +156,7 @@
                     </ul>
                 </li>
 
-                <!-- =================== Student Review =================== -->
+                <!-- =================== Single Links =================== -->
                 <li class="nav-item">
                     <a href="{{ route('share.experiance.index') }}"
                        class="nav-link {{ request()->routeIs('share.experiance.index') ? 'active' : '' }}">
@@ -134,7 +165,6 @@
                     </a>
                 </li>
 
-                <!-- =================== Enrollments =================== -->
                 <li class="nav-item">
                     <a href="{{ route('enrollments.index') }}"
                        class="nav-link {{ request()->routeIs('enrollments.index') ? 'active' : '' }}">
@@ -142,7 +172,7 @@
                         <p>Enrollments</p>
                     </a>
                 </li>
-                <!-- =================== Certificate =================== -->
+
                 <li class="nav-item">
                     <a href="{{ route('certificate.index') }}"
                        class="nav-link {{ request()->routeIs('certificate.index') ? 'active' : '' }}">
@@ -151,9 +181,8 @@
                     </a>
                 </li>
 
-                <!-- =================== Earning =================== -->
                 <li class="nav-item">
-                    <a href="#"
+                    <a href="{{ route('earning.index') }}"
                        class="nav-link {{ request()->routeIs('earning.index') || request()->is('admin/earning/*') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-coins"></i>
                         <p>Earning</p>
@@ -166,6 +195,7 @@
 
     </div>
     <!-- /.sidebar -->
+
 </aside>
 
 <!-- =================== Sidebar Custom Styles =================== -->

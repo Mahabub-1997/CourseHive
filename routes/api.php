@@ -37,9 +37,14 @@ use App\Http\Controllers\API\MyCourse\CourseController;
 use App\Http\Controllers\API\QuizOverview\QuizController;
 
 
-// ==========================
-// Public Authentication Routes
-// ==========================
+
+/*
+|--------------------------------------------------------------------------
+| Public Routes (No Authentication Required)
+|--------------------------------------------------------------------------
+*/
+
+// 🔐 Authentication (Public)
 Route::post('/register', [RegisteredUserController::class, 'store']);
 Route::post('/login', [AuthenticatedSessionController::class, 'login']);
 Route::post('/forgot-password', [ForgotPasswordController::class, 'sendOtp']);
@@ -47,71 +52,7 @@ Route::post('/reset-password', [ResetPasswordController::class, 'verifyOtp']);
 Route::post('/verify-otp', [OtpVerificationController::class, 'verify']);
 Route::post('/reset-verify-otp', [ForgotPasswordController::class, 'verifyOtpRegister']);
 
-
-// ==========================
-// Protected Routes (Require Sanctum Auth)
-// ==========================
-Route::middleware('auth:sanctum')->group(function () {
-    // Example Dashboard
-    Route::get('/dashboard', function (Request $request) {
-        return response()->json([
-            'message' => 'Welcome to dashboard',
-            'user'    => $request->user()
-        ]);
-    });
-
-    // Logout
-    Route::post('/logout', [AuthenticatedSessionController::class, 'destroy']);
-
-    // My Courses
-    Route::get('/my-courses', [CourseController::class, 'index']);
-
-    // Enrollment
-    Route::post('courses/{id}/enroll', [EnrollmentController::class, 'enroll']);
-    Route::post('createPayment/{id}', [EnrollmentController::class, 'createPayment']);
-    Route::post('/enroll/payment-success', [EnrollmentController::class, 'handlePaymentSuccess']);
-
-
-
-
-    // Courses
-    Route::get('courses', [CourseController::class, 'courseindex']);
-    Route::get('/courses/{id}', [CourseController::class, 'courseShow']);
-    Route::get('/courses/{id}', [CourseController::class, 'Contentshow']); // ⚠️ DUPLICATE — may need fixing
-
-    // Quiz
-    Route::get('courses/{course}/quiz', [CourseController::class, 'getCourseQuiz']);
-    Route::get('quiz/{quizId}/result', [CourseController::class, 'getResult']);
-    Route::get('/quiz-performance', [QuizController::class, 'performance']);
-    Route::middleware('auth:sanctum')->post('/quizzes/{quizId}/submit', [QuizController::class, 'submit']);
-
-    Route::middleware('auth:sanctum')->post('/quizzes/{quiz}/review', [QuizController::class, 'review']);  //addd
-//    Route::middleware('auth:sanctum')->get('/quizzes/{quiz}/result', [QuizController::class, 'resultApi']);
-
-    // Certificates
-    Route::get('/certificates', [CertificateController::class, 'index']);
-    Route::get('/certificates/{id}', [CertificateController::class, 'show']);
-
-    // Dashboard (custom endpoints)
-    Route::get('/dashboard', [DashboardController::class, 'index']);
-    Route::get('/get-profile-info', [DashboardController::class, 'userprofileinfo']);
-    Route::post('/profile-update', [DashboardController::class, 'userprofileupdate']);
-//    new-----
-    Route::middleware('auth:sanctum')->post('/user/password/update', [DashboardController::class, 'updatePassword']);
-});
-
-
-// ==========================
-// User Info (Sanctum Protected)
-// ==========================
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
-
-
-// ==========================
-// CMS Resources
-// ==========================
+// 📚 Public CMS (Accessible without auth)
 Route::apiResource('top-courses', TopCourseController::class);
 Route::apiResource('categories', CategoryController::class);
 Route::apiResource('ratings', RatingController::class);
@@ -123,30 +64,67 @@ Route::apiResource('hero-images', HeroImageController::class);
 Route::apiResource('hero-sections', HeroSectionController::class);
 Route::apiResource('share-experiance', ShareExperianceController::class);
 
-// Special Hero Section Route
+// 📌 Special CMS Routes
 Route::patch('update-hero-section/{id}', [HeroSectionController::class, 'updateHeroSection']);
 Route::get('hero-sections/search/courses', [HeroSectionController::class, 'searchCourses']);
 
-
-// ==========================
-// Contact (Custom)
-// ==========================
+// 📬 Contact (Custom)
 Route::get('contacts', [ContactController::class, 'index']);
 Route::post('contacts', [ContactController::class, 'store']);
 Route::delete('contacts/{id}', [ContactController::class, 'destroy']);
 
-
-// ==========================
-// Extra Public Routes
-// ==========================
-Route::get('/top-courses', [TopCourseController::class, 'index']); // duplicate with apiResource
-Route::get('/about-us', [AboutUsController::class, 'show']); // duplicate with apiResource
-Route::get('/online-courses/{id}', [CourseController::class, 'show']); // note: might conflict with OnlineCourseController
+// 📢 Extra Public Duplicates (⚠️ consider removing)
+Route::get('/top-courses', [TopCourseController::class, 'index']);
+Route::get('/about-us', [AboutUsController::class, 'show']);
+Route::get('/online-courses/{id}', [CourseController::class, 'show']);
 
 
 
+/*
+|--------------------------------------------------------------------------
+| Protected Routes (Require Sanctum Authentication)
+|--------------------------------------------------------------------------
+*/
+Route::middleware('auth:sanctum')->group(function () {
 
-// Free + Paid course enroll API
-Route::middleware('auth:sanctum')->post('/enroll/{course_id}', [EnrollmentController::class, 'enroll']);
+    // 👤 User Info
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    });
+
+    // 🔐 Authentication
+    Route::post('/logout', [AuthenticatedSessionController::class, 'destroy']);
+
+    // 🏠 Dashboard
+    Route::get('/dashboard', [DashboardController::class, 'index']);
+    Route::get('/get-profile-info', [DashboardController::class, 'userprofileinfo']);
+    Route::post('/profile-update', [DashboardController::class, 'userprofileupdate']);
+    Route::post('/user/password/update', [DashboardController::class, 'updatePassword']);
+
+    // 🎓 My Courses
+    Route::get('/my-courses', [CourseController::class, 'index']);
+
+    // 📚 Courses (⚠️ Duplicate `/courses/{id}` — fix needed)
+    Route::get('courses', [CourseController::class, 'courseindex']);
+    Route::get('/courses/{id}', [CourseController::class, 'courseShow']);
+    Route::get('/courses/{id}/contents', [CourseController::class, 'Contentshow']); //  renamed for clarity
+
+    // 📝 Quiz
+    Route::get('courses/{course}/quiz', [CourseController::class, 'getCourseQuiz']);
+    Route::get('/quizzes/{quizId}/result', [QuizController::class, 'getResult'])->name('quiz.result');
 
 
+    Route::get('/quiz-performance', [QuizController::class, 'performance']);
+    Route::post('/quizzes/{quizId}/submit', [QuizController::class, 'submit']);
+    Route::post('/quizzes/{quiz}/review', [QuizController::class, 'review']);
+
+    // 📜 Certificates
+    Route::get('/certificates', [CertificateController::class, 'index']);
+    Route::get('/certificates/{id}', [CertificateController::class, 'show']);
+
+    // 📝 Enrollment & Payment
+    Route::post('/courses/{id}/enroll', [EnrollmentController::class, 'enroll']);
+    Route::post('/createPayment/{id}', [EnrollmentController::class, 'createPayment']);
+    Route::post('/enroll/payment-success', [EnrollmentController::class, 'handlePaymentSuccess']);
+    Route::post('/enroll/{course_id}', [EnrollmentController::class, 'enroll']); // ⚠️ duplicate of /courses/{id}/enroll
+});

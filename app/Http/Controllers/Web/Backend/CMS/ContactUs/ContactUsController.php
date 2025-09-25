@@ -32,7 +32,7 @@ class ContactUsController extends Controller
 
         ContactUs::create($request->only(['name', 'email', 'description']));
 
-        return redirect()->route('contactus.index')
+        return redirect()->route('web-contactus.index')
             ->with('success', 'Contact added successfully!');
     }
 
@@ -56,7 +56,7 @@ class ContactUsController extends Controller
 
         $contact->update($request->only(['name', 'email', 'description']));
 
-        return redirect()->route('contactus.index')
+        return redirect()->route('web-contactus.index')
             ->with('message', 'Contact updated successfully!');
     }
 
@@ -66,7 +66,7 @@ class ContactUsController extends Controller
         $contact = ContactUs::findOrFail($id);
         $contact->delete();
 
-        return redirect()->route('contactus.index')
+        return redirect()->route('web-contactus.index')
             ->with('message', 'Contact deleted successfully!');
     }
 }

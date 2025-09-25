@@ -58,7 +58,7 @@ class InstructorController extends Controller
             'total_lesson' => $request->total_lesson, // 👈 manual input
         ]);
 
-        return redirect()->route('instructors.index')->with('success', 'Instructor created successfully.');
+        return redirect()->route('web-instructors.index')->with('success', 'Instructor created successfully.');
     }
 
     /**
@@ -107,7 +107,7 @@ class InstructorController extends Controller
             'user_id'      => auth()->id(),
         ]);
 
-        return redirect()->route('instructors.index')->with('success', 'Instructor updated successfully.');
+        return redirect()->route('web-instructors.index')->with('success', 'Instructor updated successfully.');
     }
 
     /**
@@ -124,7 +124,7 @@ class InstructorController extends Controller
 
         $instructor->delete();
 
-        return redirect()->route('instructors.index')->with('success', 'Instructor deleted successfully.');
+        return redirect()->route('web-instructors.index')->with('success', 'Instructor deleted successfully.');
     }
 
 

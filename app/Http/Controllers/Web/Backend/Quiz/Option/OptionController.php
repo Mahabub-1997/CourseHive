@@ -47,7 +47,7 @@ class OptionController extends Controller
             ]);
         }
 
-        return redirect()->route('options.index')->with('success', 'Options added successfully.');
+        return redirect()->route('web-options.index')->with('success', 'Options added successfully.');
     }
 
 
@@ -80,7 +80,7 @@ class OptionController extends Controller
             }
         }
 
-        return redirect()->route('options.index')->with('success', 'Options updated successfully.');
+        return redirect()->route('web-options.index')->with('success', 'Options updated successfully.');
     }
     public function destroy($questionId)
     {
@@ -92,6 +92,6 @@ class OptionController extends Controller
         // Then delete the question itself
         $question->delete();
 
-        return redirect()->route('options.index')->with('success', 'Question and its options deleted successfully.');
+        return redirect()->route('web-options.index')->with('success', 'Question and its options deleted successfully.');
     }
 }

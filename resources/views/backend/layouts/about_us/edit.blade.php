@@ -19,7 +19,7 @@
                     @endif
 
                     {{-- Form --}}
-                    <form action="{{ route('about-us.update', $aboutUs->id) }}" method="post" enctype="multipart/form-data">
+                    <form action="{{ route('web-about-us.update', $aboutUs->id) }}" method="post" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
 

@@ -84,7 +84,7 @@
                         <h1 class="m-0">Hero Images</h1>
                     </div>
                     <div class="col-sm-6 text-right">
-                        <a href="{{ route('hero-images.create') }}" class="btn bg-gradient-teal btn-sm">
+                        <a href="{{ route('web-hero-images.create') }}" class="btn bg-gradient-teal btn-sm">
                             <i class="fa fa-plus text-light"></i> Add Hero Images
                         </a>
                     </div>
@@ -121,10 +121,10 @@
                                     @endforeach
                                 </td>
                                 <td class="text-center">
-                                    <a href="{{ route('hero-images.edit', $heroImage->id) }}" class="btn btn-info btn-sm">
+                                    <a href="{{ route('web-hero-images.edit', $heroImage->id) }}" class="btn btn-info btn-sm">
                                         <i class="fa fa-edit"></i>
                                     </a>
-                                    <form action="{{ route('hero-images.destroy', $heroImage->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this hero images group?');">
+                                    <form action="{{ route('web-hero-images.destroy', $heroImage->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this hero images group?');">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-danger btn-sm">

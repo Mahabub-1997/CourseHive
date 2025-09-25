@@ -21,7 +21,7 @@
                     @endif
 
                     {{-- Form --}}
-                    <form action="{{ route('overview.store') }}" method="POST">
+                    <form action="{{ route('web-overview.store') }}" method="POST">
                         @csrf
 
                         {{-- Course --}}

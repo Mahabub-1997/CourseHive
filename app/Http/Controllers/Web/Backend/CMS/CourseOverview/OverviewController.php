@@ -50,7 +50,7 @@ class OverviewController extends Controller
             'description' => $request->description, // auto JSON cast হবে
         ]);
 
-        return redirect()->route('overview.index')
+        return redirect()->route('web-overview.index')
             ->with('success', 'Course Overview created successfully!');
     }
 
@@ -90,7 +90,7 @@ class OverviewController extends Controller
             'description' => $request->description,
         ]);
 
-        return redirect()->route('overview.index')->with('success', 'Course Overview updated successfully!');
+        return redirect()->route('web-overview.index')->with('success', 'Course Overview updated successfully!');
     }
 
     /**
@@ -103,6 +103,6 @@ class OverviewController extends Controller
         // Delete record
         $learn->delete();
 
-        return redirect()->route('overview.index')->with('success', 'Course Overview deleted successfully!');
+        return redirect()->route('web-overview.index')->with('success', 'Course Overview deleted successfully!');
     }
 }

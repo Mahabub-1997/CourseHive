@@ -36,7 +36,7 @@
                     @endif
 
                     {{-- Edit Form --}}
-                    <form action="{{ route('quizzes.update', $quiz->id) }}" method="POST">
+                    <form action="{{ route('web-quizzes.update', $quiz->id) }}" method="POST">
                         @csrf
                         @method('PUT')
 

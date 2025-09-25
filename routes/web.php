@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Web\Backend\Earning\EarningController;
 use Illuminate\Support\Facades\Route;
 
 // ==============================
@@ -99,13 +100,13 @@ Route::middleware('auth')->group(function () {
 /* ==============================
    CMS Management
    ============================== */
-Route::resource('about-us', AboutUsController::class);
-Route::resource('categories', CategoryController::class);
+Route::resource('web-about-us', AboutUsController::class);
+Route::resource('web-categories', CategoryController::class);
 Route::resource('web-online-courses', OnlineCoursesController::class);
-Route::resource('subscriptions', SubscriptionController::class);
-Route::resource('contactus', ContactUsController::class);
-Route::resource('hero-images', HeroImageController::class);
-Route::resource('hero-sections', HeroSectionController::class);
+Route::resource('web-subscriptions', SubscriptionController::class);
+Route::resource('web-contactus', ContactUsController::class);
+Route::resource('web-hero-images', HeroImageController::class);
+Route::resource('web-hero-sections', HeroSectionController::class);
 
 /* ==============================
    Student Reviews
@@ -120,13 +121,13 @@ Route::get('/top-courses', [EnrollmentController::class, 'topCourses'])->name('t
 /* ==============================
    Quiz Module
    ============================== */
-Route::resource('lessons', LessonController::class);
-Route::resource('parts', PartController::class);
-Route::resource('quizzes', QuizController::class);
-Route::resource('questions', QuestionController::class);
-Route::resource('options', OptionController::class);
-Route::resource('overview', OverviewController::class);
-Route::resource('instructors', InstructorController::class);
+Route::resource('web-lessons', LessonController::class);
+Route::resource('web-parts', PartController::class);
+Route::resource('web-quizzes', QuizController::class);
+Route::resource('web-questions', QuestionController::class);
+Route::resource('web-options', OptionController::class);
+Route::resource('web-overview', OverviewController::class);
+Route::resource('web-instructors', InstructorController::class);
 
 /* ==============================
    My Courses
@@ -156,6 +157,11 @@ Route::post('/quiz/{quiz}/result', [QuizResultController::class, 'result'])->nam
 
 // My Quiz
 Route::get('courses/{course}/my-quiz', [QuizResultController::class, 'showCourseQuiz'])->name('course.my-quiz');
+
+
+//Earning
+
+Route::get('/earning', [EarningController::class, 'index'])->name('earning.index'); //added
 
 /* ==============================
    Course Reviews

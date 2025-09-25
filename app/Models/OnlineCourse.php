@@ -9,6 +9,9 @@ class OnlineCourse extends Model
 {
     use HasFactory;
 
+    // =========================
+    // Mass assignable fields
+    // =========================
     protected $fillable = [
         'title',
         'description',
@@ -17,51 +20,25 @@ class OnlineCourse extends Model
         'duration',
         'language',
         'image',
-        'user_id',
-        'course_type',
-        'rating_id',
-        'category_id',
-        'created_by',
-        'updated_by'
+        'user_id',        // Owner/creator of the course
+        'course_type',    // free or paid
+        'rating_id',      // Average rating reference
+        'category_id',    // Course category
+        'created_by',     // Admin/User who created
+        'updated_by'      // Admin/User who last updated
     ];
 
-    // Relations
+    // =========================
+    // Relationships
+    // =========================
+
+    // The user who owns the course
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    // Relationships
-    public function lessons()
-    {
-        return $this->hasMany(Lesson::class, 'course_id');
-    }
-
-    public function quiz()
-    {
-        return $this->hasMany(Quiz::class, 'course_id');
-    }
-//    public function quizzes()
-//    {
-//        return $this->hasMany(Quiz::class, 'online_course_id'); // use correct foreign key
-//    }
-
-    public function rating()
-    {
-        return $this->belongsTo(Rating::class, 'rating_id');
-    }
-
-
-    public function shareExperiances()
-    {
-        return $this->hasMany(ShareExperiance::class, 'online_course_id');
-    }
-
-    public function category()
-    {
-        return $this->belongsTo(Category::class, 'category_id');
-    }
-
+    // Course creator & updater references
     public function creator()
     {
         return $this->belongsTo(User::class, 'created_by');
@@ -72,13 +49,37 @@ class OnlineCourse extends Model
         return $this->belongsTo(User::class, 'updated_by');
     }
 
-    // One course has many enrollments
-    public function enrollments()
+    // Course category
+    public function category()
     {
-        return $this->hasMany(Enrollment::class, 'course_id');
+        return $this->belongsTo(Category::class, 'category_id');
     }
 
-    // Users enrolled in this course
+    // Average rating
+    public function rating()
+    {
+        return $this->belongsTo(Rating::class, 'rating_id');
+    }
+
+    // Lessons under this course
+    public function lessons()
+    {
+        return $this->hasMany(Lesson::class, 'course_id');
+    }
+
+    // Quizzes under this course
+    public function quiz()
+    {
+        return $this->hasMany(Quiz::class, 'course_id');
+    }
+
+    // Course instructors
+    public function instructors()
+    {
+        return $this->hasOne(Instructor::class, 'course_id');
+    }
+
+    // Users enrolled in this course (Many-to-Many via enrollments)
     public function users()
     {
         return $this->belongsToMany(User::class, 'enrollments')
@@ -86,33 +87,46 @@ class OnlineCourse extends Model
             ->withTimestamps();
     }
 
-    // ✅ Course has many reviews
+    // All enrollments for this course
+    public function enrollments()
+    {
+        return $this->hasMany(Enrollment::class, 'course_id');
+    }
+
+    // Reviews for this course
     public function reviews()
     {
         return $this->hasMany(Reviews::class, 'course_id');
     }
 
+    // Learn materials associated with course
     public function learns()
     {
         return $this->hasMany(Learn::class, 'course_id');
     }
 
-    public function instructors()
+    // User share experiences for this course
+    public function shareExperiances()
     {
-        return $this->hasOne(Instructor::class, 'course_id');
+        return $this->hasMany(ShareExperiance::class, 'online_course_id');
     }
-//---------------------------payment----------
+
+    // Payments for this course
     public function payments()
     {
         return $this->hasMany(Payment::class, 'course_id');
     }
 
-    // Promo codes applied to this course (via payments)
+    // Promo codes applied via payments
     public function promoCodesApplied()
     {
-        return $this->hasManyThrough(PromoCode::class,
-            Payment::class, 'course_id', 'id', 'id', 'promo_code_id');
+        return $this->hasManyThrough(
+            PromoCode::class,
+            Payment::class,
+            'course_id',      // Foreign key on Payment
+            'id',             // Foreign key on PromoCode
+            'id',             // Local key on OnlineCourse
+            'promo_code_id'   // Local key on Payment
+        );
     }
-
-
 }

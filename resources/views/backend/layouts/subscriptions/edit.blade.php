@@ -19,7 +19,7 @@
                     @endif
 
                     {{-- Form --}}
-                    <form action="{{ route('subscriptions.update', $subscription->id) }}" method="post">
+                    <form action="{{ route('web-subscriptions.update', $subscription->id) }}" method="post">
                         @csrf
                         @method('PUT') {{-- Use PUT method for update --}}
 

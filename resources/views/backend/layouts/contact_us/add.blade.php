@@ -19,7 +19,7 @@
                     @endif
 
                     {{-- Form --}}
-                    <form action="{{ route('contactus.store') }}" method="post">
+                    <form action="{{ route('web-contactus.store') }}" method="post">
                         @csrf
 
                         {{-- Name --}}
