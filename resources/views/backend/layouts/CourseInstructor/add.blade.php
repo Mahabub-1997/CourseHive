@@ -12,7 +12,7 @@
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
-                            <a href="{{ route('instructors.index') }}" class="btn bg-gradient-secondary btn-sm">
+                            <a href="{{ route('web-instructors.index') }}" class="btn bg-gradient-secondary btn-sm">
                                 <i class="fa fa-arrow-left text-light"></i> Back to List
                             </a>
                         </ol>
@@ -24,7 +24,7 @@
         <!-- ================== Form Section ================== -->
         <div class="card">
             <div class="card-body">
-                <form action="{{ route('instructors.store') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('web-instructors.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
 
                     <div class="row">

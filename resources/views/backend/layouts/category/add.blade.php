@@ -19,7 +19,7 @@
                     @endif
 
                     {{-- Form --}}
-                    <form action="{{ route('categories.store') }}" method="post">
+                    <form action="{{ route('web-categories.store') }}" method="post">
                         @csrf
 
                         {{-- Name --}}

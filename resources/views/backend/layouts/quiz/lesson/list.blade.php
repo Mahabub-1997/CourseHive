@@ -25,7 +25,7 @@
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
-                            <a href="{{ route('lessons.create') }}" class="btn bg-gradient-teal btn-sm">
+                            <a href="{{ route('web-lessons.create') }}" class="btn bg-gradient-teal btn-sm">
                                 <i class="fa fa-plus text-light"></i> Add New Lesson
                             </a>
                         </ol>
@@ -64,10 +64,10 @@
                                 <td>{{ $lesson->title }}</td>
                                 <td>{{ $lesson->description }}</td>
                                 <td class="text-center">
-                                    <a href="{{ route('lessons.edit', $lesson->id) }}" class="btn btn-info btn-sm">
+                                    <a href="{{ route('web-lessons.edit', $lesson->id) }}" class="btn btn-info btn-sm">
                                         <i class="fa fa-edit"></i>
                                     </a>
-                                    <form action="{{ route('lessons.destroy', $lesson->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this lesson?');">
+                                    <form action="{{ route('web-lessons.destroy', $lesson->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this lesson?');">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-danger btn-sm">

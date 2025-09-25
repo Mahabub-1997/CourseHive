@@ -86,7 +86,7 @@
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
-                            <a href="{{ route('contactus.create') }}" class="btn bg-gradient-teal btn-sm">
+                            <a href="{{ route('web-contactus.create') }}" class="btn bg-gradient-teal btn-sm">
                                 <i class="fa fa-plus text-light"></i> Add New Contact
                             </a>
                         </ol>
@@ -125,10 +125,10 @@
                                 <td>{{ $contact->email }}</td>
                                 <td>{{ Str::limit($contact->description, 50) }}</td>
                                 <td class="text-center">
-                                    <a href="{{ route('contactus.edit', $contact->id) }}" class="btn btn-info btn-sm">
+                                    <a href="{{ route('web-contactus.edit', $contact->id) }}" class="btn btn-info btn-sm">
                                         <i class="fa fa-edit"></i>
                                     </a>
-                                    <form action="{{ route('contactus.destroy', $contact->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this record?');">
+                                    <form action="{{ route('web-contactus.destroy', $contact->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this record?');">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-danger btn-sm">

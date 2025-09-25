@@ -18,58 +18,7 @@
                         </div>
                     @endif
 
-                    {{-- Form --}}
-{{--                    <form action="{{ route('parts.store') }}" method="post">--}}
-{{--                        @csrf--}}
-
-{{--                        --}}{{-- Lesson Dropdown --}}
-{{--                        <div class="form-group row">--}}
-{{--                            <label class="col-md-3 col-form-label">Lesson <i class="text-danger">*</i></label>--}}
-{{--                            <div class="col-md-9">--}}
-{{--                                <select name="lesson_id" class="form-control" required>--}}
-{{--                                    <option value="">Select Lesson</option>--}}
-{{--                                    @foreach($lessons as $lesson)--}}
-{{--                                        <option value="{{ $lesson->id }}" {{ old('lesson_id') == $lesson->id ? 'selected' : '' }}>--}}
-{{--                                            {{ $lesson->title }}--}}
-{{--                                        </option>--}}
-{{--                                    @endforeach--}}
-{{--                                </select>--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
-
-{{--                        --}}{{-- Title --}}
-{{--                        <div class="form-group row">--}}
-{{--                            <label class="col-md-3 col-form-label">Title <i class="text-danger">*</i></label>--}}
-{{--                            <div class="col-md-9">--}}
-{{--                                <input type="text" name="title" class="form-control" value="{{ old('title') }}" required placeholder="Enter part title">--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
-
-{{--                        --}}{{-- Video --}}
-{{--                        <div class="form-group row">--}}
-{{--                            <label class="col-md-3 col-form-label">Video</label>--}}
-{{--                            <div class="col-md-9">--}}
-{{--                                <input type="text" name="video" class="form-control" value="{{ old('video') }}" placeholder="Enter video link (optional)">--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
-
-{{--                        --}}{{-- Content --}}
-{{--                        <div class="form-group row">--}}
-{{--                            <label class="col-md-3 col-form-label">Content</label>--}}
-{{--                            <div class="col-md-9">--}}
-{{--                                <textarea name="content" class="form-control" placeholder="Enter part content">{{ old('content') }}</textarea>--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
-
-{{--                        --}}{{-- Submit Button --}}
-{{--                        <div class="form-group row">--}}
-{{--                            <div class="col-md-9 offset-md-3">--}}
-{{--                                <input type="submit" class="btn btn-success" value="Save Part">--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
-
-{{--                    </form>--}}
-                    <form action="{{ route('parts.store') }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('web-parts.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
 
                         {{-- Lesson Dropdown --}}

@@ -19,9 +19,9 @@
                     @endif
 
                     {{-- Form --}}
-                    <form action="{{ route('categories.update', $category->id) }}" method="post">
+                    <form action="{{ route('web-categories.update', $category->id) }}" method="post">
                         @csrf
-                        @method('PUT')
+                        @method('PATCH')
 
                         {{-- Name --}}
                         <div class="form-group row">

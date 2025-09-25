@@ -36,7 +36,7 @@
                     @endif
 
                     {{-- Form --}}
-                    <form action="{{ route('questions.update', $question->id) }}" method="post">
+                    <form action="{{ route('web-questions.update', $question->id) }}" method="post">
                         @csrf
                         @method('PUT')
 

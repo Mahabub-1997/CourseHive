@@ -19,7 +19,7 @@
                     @endif
 
                     {{-- Form --}}
-                    <form action="{{ route('contactus.update', $contact->id) }}" method="post">
+                    <form action="{{ route('web-contactus.update', $contact->id) }}" method="post">
                         @csrf
                         @method('PUT')
 

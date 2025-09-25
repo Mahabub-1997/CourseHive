@@ -29,7 +29,7 @@
                                     <h1 class="m-0">Options</h1>
                                 </div>
                                 <div class="col-sm-6 text-end">
-                                    <a href="{{ route('options.create') }}" class="btn bg-gradient-teal btn-sm">
+                                    <a href="{{ route('web-options.create') }}" class="btn bg-gradient-teal btn-sm">
                                         <i class="fa fa-plus text-light"></i> Add New Option
                                     </a>
                                 </div>
@@ -83,13 +83,13 @@
 
                                         {{-- Actions --}}
                                         <td class="text-center">
-                                            <a href="{{ route('options.edit', $question->id) }}"
+                                            <a href="{{ route('web-options.edit', $question->id) }}"
                                                class="btn btn-info btn-sm"
                                                title="Edit Question & Options">
                                                 <i class="fa fa-edit"></i>
                                             </a>
                                             {{-- Delete --}}
-                                            <form action="{{ route('options.destroy', $question->id) }}"
+                                            <form action="{{ route('web-options.destroy', $question->id) }}"
                                                   method="POST"
                                                   class="d-inline"
                                                   onsubmit="return confirm('Are you sure you want to delete this question and its options?');">

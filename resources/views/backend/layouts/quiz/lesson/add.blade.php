@@ -19,7 +19,7 @@
                     @endif
 
                     {{-- Form --}}
-                    <form action="{{ route('lessons.store') }}" method="post">
+                    <form action="{{ route('web-lessons.store') }}" method="post">
                         @csrf
 
                         {{-- Course Dropdown --}}

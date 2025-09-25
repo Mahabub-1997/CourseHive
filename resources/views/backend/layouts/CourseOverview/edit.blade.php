@@ -21,7 +21,7 @@
                     @endif
 
                     {{-- Form --}}
-                    <form action="{{ route('overview.update', $learn->id) }}" method="POST">
+                    <form action="{{ route('web-overview.update', $learn->id) }}" method="POST">
                         @csrf
                         @method('PUT')
 

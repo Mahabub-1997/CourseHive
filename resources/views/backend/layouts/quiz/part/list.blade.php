@@ -28,7 +28,7 @@
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
-                            <a href="{{ route('parts.create') }}" class="btn bg-gradient-teal btn-sm">
+                            <a href="{{ route('web-parts.create') }}" class="btn bg-gradient-teal btn-sm">
                                 <i class="fa fa-plus text-light"></i> Add New Part
                             </a>
                         </ol>
@@ -88,10 +88,10 @@
                                     @endif
                                 </td>
                                 <td class="text-center">
-                                    <a href="{{ route('parts.edit', $part->id) }}" class="btn btn-info btn-sm">
+                                    <a href="{{ route('web-parts.edit', $part->id) }}" class="btn btn-info btn-sm">
                                         <i class="fa fa-edit"></i>
                                     </a>
-                                    <form action="{{ route('parts.destroy', $part->id) }}" method="POST"
+                                    <form action="{{ route('web-parts.destroy', $part->id) }}" method="POST"
                                           class="d-inline"
                                           onsubmit="return confirm('Are you sure you want to delete this part?');">
                                         @csrf

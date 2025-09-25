@@ -8,57 +8,111 @@ use Illuminate\Http\Request;
 
 class SubscriptionController extends Controller
 {
-
+    /**
+     * Display a listing of subscriptions.
+     *
+     * @return \Illuminate\View\View
+     */
     public function index()
     {
+        // Fetch latest subscriptions and paginate (10 per page)
         $subscriptions = Subscription::latest()->paginate(10);
+
+        // Return the list view with subscriptions
         return view('backend.layouts.subscriptions.list', compact('subscriptions'));
     }
-    public function create(){
+
+    /**
+     * Show the form for creating a new subscription.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function create()
+    {
         return view('backend.layouts.subscriptions.add');
     }
+
+    /**
+     * Store a newly created subscription in the database.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function store(Request $request)
     {
-        // Validate the input
+        // 1️⃣ Validate the input
         $request->validate([
             'email' => 'required|email|unique:subscriptions,email',
         ]);
 
-        // Create subscription
+        // 2️⃣ Create a new subscription record
         Subscription::create([
             'email' => $request->email,
         ]);
 
-        // Redirect with success message
-        return redirect()->route('subscriptions.index')->with('success', 'Subscription added successfully.');
+        // 3️⃣ Redirect to subscription list with success message
+        return redirect()->route('web-subscriptions.index')
+            ->with('success', 'Subscription added successfully.');
     }
 
-    public function edit(Subscription $subscription)
+    /**
+     * Show the form for editing the specified subscription.
+     *
+     * @param int $id
+     * @return \Illuminate\View\View
+     */
+    public function edit($id)
     {
+        // 1️⃣ Retrieve the subscription by ID or fail with 404
+        $subscription = Subscription::findOrFail($id);
+
+        // 2️⃣ Pass the subscription object to the edit view
         return view('backend.layouts.subscriptions.edit', compact('subscription'));
     }
 
-    public function update(Request $request, Subscription $subscription)
+    /**
+     * Update the specified subscription in the database.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function update(Request $request, $id)
     {
-        // Validate the email
+        // 1️⃣ Retrieve the subscription or fail if not found
+        $subscription = Subscription::findOrFail($id);
+
+        // 2️⃣ Validate the email input
         $request->validate([
             'email' => 'required|email|unique:subscriptions,email,' . $subscription->id,
         ]);
 
-        // Update subscription
+        // 3️⃣ Update the subscription email
         $subscription->update([
             'email' => $request->email,
         ]);
 
-        // Redirect with success message
-        return redirect()->route('subscriptions.index')->with('success', 'Subscription updated successfully.');
+        // 4️⃣ Redirect back to subscription list with success message
+        return redirect()->route('web-subscriptions.index')
+            ->with('success', 'Subscription updated successfully.');
     }
-    public function destroy(Subscription $subscription)
+
+    /**
+     * Remove the specified subscription from the database.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function destroy($id)
     {
-        // Delete the subscription
+        // 1️⃣ Retrieve the subscription by ID or fail with 404
+        $subscription = Subscription::findOrFail($id);
+
+        // 2️⃣ Delete the subscription
         $subscription->delete();
 
-        // Redirect with success message
-        return redirect()->route('subscriptions.index')->with('success', 'Subscription deleted successfully.');
+        // 3️⃣ Redirect to subscription list with success message
+        return redirect()->route('web-subscriptions.index')
+            ->with('success', 'Subscription deleted successfully.');
     }
 }

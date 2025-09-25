@@ -12,7 +12,7 @@
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
-                            <a href="{{ route('instructors.index') }}" class="btn bg-gradient-secondary btn-sm">
+                            <a href="{{ route('web-instructors.index') }}" class="btn bg-gradient-secondary btn-sm">
                                 <i class="fa fa-arrow-left text-light"></i> Back to List
                             </a>
                         </ol>
@@ -24,7 +24,7 @@
         <!-- ================== Form Section ================== -->
         <div class="card">
             <div class="card-body">
-                <form action="{{ route('instructors.update', $instructor->id) }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('web-instructors.update', $instructor->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
 
@@ -109,7 +109,7 @@
                         <button type="submit" class="btn bg-gradient-teal text-white me-2">
                             <i class="fa fa-save"></i> Update
                         </button>
-                        <a href="{{ route('instructors.index') }}" class="btn bg-gradient-secondary">
+                        <a href="{{ route('web-instructors.index') }}" class="btn bg-gradient-secondary">
                             Cancel
                         </a>
                     </div>
