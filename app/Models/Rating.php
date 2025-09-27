@@ -55,7 +55,7 @@ class Rating extends Model
     */
 
 
-    // ✅ Rating may be linked to a review
+    // Rating may be linked to a review
     public function review()
     {
         return $this->hasOne(Reviews::class);

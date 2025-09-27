@@ -51,41 +51,6 @@ class HeroSectionController extends Controller
     /**
      * Update the specified resource in storage.
      */
-//    public function update(Request $request, HeroSection $heroSection)
-//    {
-////        dd($request->all());
-//        $request->validate([
-//            'title' => 'sometimes|required|string|max:255',
-//            'description' => 'nullable|string',
-//            'image' => 'nullable|image|max:2048'
-//        ]);
-////        dd($request->toArray());
-//
-//        $data = $request->only(['title', 'description', 'image']);
-////dd($data);
-//        // Handle image update
-//        if ($request->hasFile('image')) {
-//            // Delete old image if exists
-//            if ($heroSection->image && \Storage::disk('public')->exists($heroSection->image)) {
-//                \Storage::disk('public')->delete($heroSection->image);
-//            }
-//
-//
-//            // Store new image
-//            $data['image'] = $request->file('image')->store('hero_images', 'public');
-//        }
-////        dd($data);
-//
-//        $heroSection->update($data);
-//
-//        return response()->json([
-//            'message' => 'Hero Section updated successfully',
-//            'data' => $heroSection
-//        ], 200);
-//    }
-
-
-
     public function update(Request $request, HeroSection $heroSection)
     {
         $request->validate([

@@ -35,17 +35,6 @@ class Instructor extends Model
     {
         return $this->hasMany(Rating::class, 'instructor_id');
     }
-//    public function ratings()
-//    {
-//        return $this->hasManyThrough(
-//            Rating::class,        // Final model
-//            OnlineCourse::class,  // Intermediate model
-//            'id',                 // Local key on OnlineCourse
-//            'course_id',          // Foreign key on Rating
-//            'course_id',          // Local key on Instructor
-//            'id'                  // Local key on OnlineCourse
-//        );
-//    }
 
     // Dynamic lesson count
     public function getTotalLessonAttribute($value)

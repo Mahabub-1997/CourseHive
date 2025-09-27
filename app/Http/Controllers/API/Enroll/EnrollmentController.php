@@ -169,7 +169,7 @@ class EnrollmentController extends Controller
     {
         $course = OnlineCourse::findOrFail($course_id);
 
-        // ✅ Validate input
+        // Validate input
         $request->validate([
             'payment_method' => 'required|in:stripe,paypal,manual',
             'success_url' => 'required|url',

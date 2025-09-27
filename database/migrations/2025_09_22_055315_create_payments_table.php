@@ -13,14 +13,14 @@ return new class extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id');                                             // Who paid
-            $table->foreignId('course_id');                                            // Which course
-            $table->decimal('amount', 10, 2);                              // Amount paid
+            $table->foreignId('user_id');
+            $table->foreignId('course_id');
+            $table->decimal('amount', 10, 2);
             $table->string('currency', 10);
-            $table->string('payment_method')->nullable();                               // e.g., card
-            $table->string('stripe_payment_id')->nullable();                         // Stripe transaction ID
+            $table->string('payment_method')->nullable();
+            $table->string('stripe_payment_id')->nullable();
             $table->enum('status', ['pending', 'success', 'failed'])->default('pending');
-            $table->foreignId('promo_code_id')->nullable();                             // Optional applied promo
+            $table->foreignId('promo_code_id')->nullable();
             $table->timestamps();
         });
     }

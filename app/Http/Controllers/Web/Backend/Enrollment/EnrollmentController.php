@@ -14,18 +14,18 @@ use Stripe\Checkout\Session as StripeSession;
 class EnrollmentController extends Controller
 {
     /**
-     * 1️⃣ Enroll in a free course
+     *  Enroll in a free course
      */
     public function enroll($course_id)
     {
         $course = OnlineCourse::findOrFail($course_id);
 
-        // ✅ Only free courses can be enrolled directly
+        //  Only free courses can be enrolled directly
         if ($course->course_type != 'free') {
             return redirect()->back()->with('error', 'This is a paid course. Please buy it.');
         }
 
-        // ✅ Prevent duplicate enrollment
+        //  Prevent duplicate enrollment
         $existing = Enrollment::where('user_id', Auth::id())
             ->where('course_id', $course_id)
             ->first();
@@ -34,7 +34,7 @@ class EnrollmentController extends Controller
             return redirect()->back()->with('message', 'You are already enrolled in this course.');
         }
 
-        // ✅ Create enrollment record
+        //  Create enrollment record
         Enrollment::create([
             'user_id'     => Auth::id(),
             'course_id'   => $course_id,
@@ -46,13 +46,13 @@ class EnrollmentController extends Controller
     }
 
     /**
-     * 2️⃣ Payment page (show checkout screen)
+     *  Payment page (show checkout screen)
      */
     public function pay($course_id)
     {
         $course = OnlineCourse::findOrFail($course_id);
 
-        // ✅ Try to fetch existing enrollment if exists
+        // Try to fetch existing enrollment if exists
         $enrollment = Enrollment::where('user_id', auth()->id())
             ->where('course_id', $course->id)
             ->first();
@@ -61,16 +61,16 @@ class EnrollmentController extends Controller
     }
 
     /**
-     * 3️⃣ Stripe checkout session
+     *  Stripe checkout session
      */
     public function checkout($course_id)
     {
         $course = OnlineCourse::findOrFail($course_id);
 
-        // ✅ Set Stripe secret key
+        //  Set Stripe secret key
         Stripe::setApiKey(env('STRIPE_SECRET'));
 
-        // ✅ Create Stripe checkout session
+        //  Create Stripe checkout session
         $session = StripeSession::create([
             'payment_method_types' => ['card'],
             'line_items' => [[
@@ -90,7 +90,7 @@ class EnrollmentController extends Controller
     }
 
     /**
-     * 4️⃣ Handle Stripe success payment
+     *  Handle Stripe success payment
      */
     public function success(Request $request, $course_id)
     {
@@ -100,7 +100,7 @@ class EnrollmentController extends Controller
         $session = StripeSession::retrieve($request->get('session_id'));
 
         if ($session->payment_status === 'paid') {
-            // ✅ Store payment record
+            //  Store payment record
             $payment = Payment::updateOrCreate(
                 ['stripe_payment_id' => $session->payment_intent],
                 [
@@ -113,7 +113,7 @@ class EnrollmentController extends Controller
                 ]
             );
 
-            // ✅ Store enrollment record
+            // Store enrollment record
             Enrollment::updateOrCreate(
                 ['user_id' => Auth::id(), 'course_id' => $course->id],
                 [
@@ -132,7 +132,7 @@ class EnrollmentController extends Controller
     }
 
     /**
-     * 5️⃣ Handle Stripe cancel payment
+     *  Handle Stripe cancel payment
      */
     public function cancel($course_id)
     {
@@ -141,7 +141,7 @@ class EnrollmentController extends Controller
     }
 
     /**
-     * 6️⃣ Manual / custom payment processing (admin use)
+     *  Manual / custom payment processing (admin use)
      */
     public function processPayment(Request $request, $course_id)
     {
@@ -154,7 +154,7 @@ class EnrollmentController extends Controller
 
         $status = ($request->payment_method === 'stripe') ? 'success' : 'pending';
 
-        // ✅ Create payment record
+        // Create payment record
         $payment = Payment::create([
             'user_id'          => Auth::id(),
             'course_id'        => $course->id,
@@ -165,14 +165,14 @@ class EnrollmentController extends Controller
             'status'           => $status,
         ]);
 
-        // ✅ Update enrollment if payment is successful
+        // Update enrollment if payment is successful
         if ($status === 'success') {
             Enrollment::updateOrCreate(
                 ['user_id' => Auth::id(), 'course_id' => $course->id],
                 [
                     'status'      => 'pending',
                     'payment_id'  => $payment->id,
-                    'enrolled_at' => now(), // ✅ ekhaneo enrolled_at save korchi
+                    'enrolled_at' => now(),
                 ]
             );
         }
@@ -182,7 +182,7 @@ class EnrollmentController extends Controller
     }
 
     /**
-     * 7️⃣ Admin: List all payments
+     *  Admin: List all payments
      */
     public function index()
     {
@@ -191,7 +191,7 @@ class EnrollmentController extends Controller
     }
 
     /**
-     * 8️⃣ Show logged-in user's courses
+     *  Show logged-in user's courses
      */
     public function myCourses()
     {
@@ -205,7 +205,7 @@ class EnrollmentController extends Controller
     }
 
     /**
-     * 9️⃣ Show all enrollments for logged-in user
+     *  Show all enrollments for logged-in user
      */
     public function indexEnrollments()
     {
@@ -221,7 +221,7 @@ class EnrollmentController extends Controller
     }
 
     /**
-     * 🔟 Show all users enrolled in a specific course
+     *Show all users enrolled in a specific course
      */
     public function courseEnrolledUsers($course_id)
     {
@@ -236,7 +236,7 @@ class EnrollmentController extends Controller
     }
 
     /**
-     * 1️⃣1️⃣ Admin: Update enrollment status
+     * Admin: Update enrollment status
      */
     public function updateStatus(Request $request, $id)
     {
@@ -252,7 +252,7 @@ class EnrollmentController extends Controller
     }
 
     /**
-     * 1️⃣2️⃣ Show top 5 most enrolled courses
+     *  Show top 5 most enrolled courses
      */
     public function topCourses()
     {

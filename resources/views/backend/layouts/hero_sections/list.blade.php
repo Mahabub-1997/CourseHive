@@ -6,75 +6,13 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-md-12 align-items-center">
-
-                    </div><!-- /.col -->
-                    <div class="col-sm-6">
-                        <h1 class="m-0">Hero Sections </h1>
                     </div><!-- /.col -->
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
-
                         </ol>
                     </div><!-- /.col -->
                 </div><!-- /.row -->
             </div><!-- /.container-fluid -->
-        </div>
-
-        {{-- Dashboard Info Boxes --}}
-        <div class="container-fluid mb-4">
-            <div class="row mt-4">
-                <div class="col-12">
-                    <div class="info-box mb-3 d-flex justify-content-between align-items-center bg-primary text-white">
-                        <div class="info-box-content">
-                            <span class="info-box-text fw-bold" style="font-size: 2rem;">My Course</span>
-                            <span class="info-box-number" style="font-size: .7rem;">
-                                You're making excellent progress in your healthcare training
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <!-- Total Courses Card -->
-                <div class="col-12 col-sm-6 col-md-4">
-                    <div class="info-box mb-3 d-flex justify-content-between align-items-center">
-                        <div class="info-box-content">
-                            <span class="info-box-text fw-bold" style="font-size: 1.5rem;">Total Courses</span>
-                            <span class="info-box-number text-primary" style="font-size: 2rem;">120</span>
-                        </div>
-                        <span class="info-box-icon bg-white elevation-1 text-dark">
-                            <i class="fas fa-graduation-cap" style="font-size: 2rem;"></i>
-                        </span>
-                    </div>
-                </div>
-
-                <!-- In Progress Card -->
-                <div class="col-12 col-sm-6 col-md-4">
-                    <div class="info-box mb-3 d-flex justify-content-between align-items-center">
-                        <div class="info-box-content">
-                            <span class="info-box-text fw-bold" style="font-size: 1.5rem;">In Progress</span>
-                            <span class="info-box-number text-primary" style="font-size: 2rem;">45</span>
-                        </div>
-                        <span class="info-box-icon bg-white elevation-1 text-dark">
-                            <i class="fas fa-graduation-cap" style="font-size: 2rem;"></i>
-                        </span>
-                    </div>
-                </div>
-
-                <!-- Completed Card -->
-                <div class="col-12 col-sm-6 col-md-4">
-                    <div class="info-box mb-3 d-flex justify-content-between align-items-center">
-                        <div class="info-box-content">
-                            <span class="info-box-text fw-bold" style="font-size: 1.5rem;">Completed</span>
-                            <span class="info-box-number text-primary" style="font-size: 2rem;">75</span>
-                        </div>
-                        <span class="info-box-icon bg-white elevation-1 text-dark">
-                            <i class="fas fa-graduation-cap" style="font-size: 2rem;"></i>
-                        </span>
-                    </div>
-                </div>
-            </div>
         </div>
 
         {{-- Page Header --}}

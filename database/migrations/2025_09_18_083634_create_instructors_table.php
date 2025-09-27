@@ -15,10 +15,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id');
             $table->foreignId('course_id');
-            $table->unsignedBigInteger('rating_id')->nullable(); // if you have ratings table
+            $table->unsignedBigInteger('rating_id')->nullable();
             $table->string('name');
             $table->string('image')->nullable();
-            $table->decimal('rating', 3, 2)->default(0); // e.g. 4.50
+            $table->decimal('rating', 3, 2)->default(0);
             $table->text('description')->nullable();
             $table->integer('total_lesson')->default(0);
             $table->timestamps();

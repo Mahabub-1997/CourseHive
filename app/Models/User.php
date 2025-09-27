@@ -59,37 +59,37 @@ class User extends Authenticatable
     |--------------------------------------------------------------------------
     */
 
-    // ✅ User can give multiple ratings
+    //  User can give multiple ratings
     public function ratings()
     {
         return $this->hasMany(Rating::class);
     }
 
-    // ✅ Courses created by this user
+    //  Courses created by this user
     public function createdCourses()
     {
         return $this->hasMany(OnlineCourse::class, 'created_by');
     }
 
-    // ✅ Courses updated by this user
+    //  Courses updated by this user
     public function updatedCourses()
     {
         return $this->hasMany(OnlineCourse::class, 'updated_by');
     }
 
-    // ✅ Courses owned by this user
+    //  Courses owned by this user
     public function courses()
     {
         return $this->hasMany(OnlineCourse::class, 'user_id');
     }
 
-    // ✅ Enrollments of this user
+    //  Enrollments of this user
     public function enrollments()
     {
         return $this->hasMany(Enrollment::class);
     }
 
-    // ✅ Courses the user has enrolled in (many-to-many)
+    //  Courses the user has enrolled in (many-to-many)
     public function enrolledCourses()
     {
         return $this->belongsToMany(OnlineCourse::class, 'enrollments')
@@ -97,19 +97,19 @@ class User extends Authenticatable
             ->withTimestamps();
     }
 
-    // ✅ User's shared experiences
+    //  User's shared experiences
     public function shareExperiences()
     {
         return $this->hasMany(ShareExperiance::class, 'user_id');
     }
 
-    // ✅ User quiz results
+    //  User quiz results
     public function quizResults()
     {
         return $this->hasMany(QuizResult::class);
     }
 
-    // ✅ All quizzes attempted by the user (many-to-many through quiz_results)
+    //  All quizzes attempted by the user (many-to-many through quiz_results)
     public function quizzesAttempted()
     {
         return $this->belongsToMany(Quiz::class, 'quiz_results')
@@ -117,40 +117,40 @@ class User extends Authenticatable
             ->withTimestamps();
     }
 
-    // ✅ User reviews
+    //  User reviews
     public function reviews()
     {
         return $this->hasMany(Reviews::class);
     }
 
-    // ✅ Learn records of the user
+    //  Learn records of the user
     public function learns()
     {
         return $this->hasMany(Learn::class, 'user_id');
     }
 
-    // ✅ Instructors linked to this user
+    //  Instructors linked to this user
     public function instructors()
     {
         return $this->hasMany(Instructor::class);
     }
 
-    // ✅ Payments made by this user
+    //  Payments made by this user
     public function payments()
     {
         return $this->hasMany(Payment::class);
     }
 
-    // ✅ Promo codes used by this user (via payments)
+    //  Promo codes used by this user (via payments)
     public function promoCodesUsed()
     {
         return $this->hasManyThrough(
             PromoCode::class,
             Payment::class,
-            'user_id',        // Foreign key on payments table
-            'id',             // Local key on PromoCode table (id)
-            'id',             // Local key on User table (id)
-            'promo_code_id'   // Foreign key on Payment table pointing to PromoCode
+            'user_id',
+            'id',
+            'id',
+            'promo_code_id'
         );
     }
 
@@ -178,7 +178,7 @@ class User extends Authenticatable
 
         // For API requests, return full URL
         if (request()->is('api/*')) {
-            return url('storage/' . $value); // stored in "storage/app/public/"
+            return url('storage/' . $value);
         }
 
         // For web requests, return relative path

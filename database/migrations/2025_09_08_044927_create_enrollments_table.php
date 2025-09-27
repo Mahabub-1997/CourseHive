@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
 
             // Foreign keys
-            $table->foreignId('user_id'); // references users.id
-            $table->foreignId('course_id'); // references online_courses.id
+            $table->foreignId('user_id');
+            $table->foreignId('course_id');
 
             // Enrollment info
             $table->enum('status', ['pending', 'success', 'failed'])->default('pending');

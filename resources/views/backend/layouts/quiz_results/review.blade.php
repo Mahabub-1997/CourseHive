@@ -1,32 +1,3 @@
-{{--@extends('backend.partials.master')--}}
-
-{{--@section('content')--}}
-{{--    <h3>Review your answers</h3>--}}
-
-{{--    @foreach($results as $r)--}}
-{{--        <div class="card mb-2">--}}
-{{--            <div class="card-body">--}}
-{{--                <p><strong>{{ $loop->iteration }}.</strong> {!! $r['question'] !!}</p>--}}
-{{--                <p>Your answer: {!! $r['user_answer'] ?? '<em>Not answered</em>' !!}</p>--}}
-{{--                <p>Correct answer: {!! $r['correct_answer'] ?? '<em>N/A</em>' !!}</p>--}}
-{{--                <p>Status: {!! $r['is_correct'] ? '<span class="text-success">Correct</span>' : '<span class="text-danger">Wrong</span>' !!}</p>--}}
-{{--            </div>--}}
-{{--        </div>--}}
-{{--    @endforeach--}}
-
-{{--    <form action="{{ route('quiz.submit', $quiz->id) }}" method="POST">--}}
-{{--        @csrf--}}
-
-{{--        --}}{{-- re-send all answers as hidden inputs --}}
-{{--        @foreach($answers as $qId => $oId)--}}
-{{--            <input type="hidden" name="answers[{{ $qId }}]" value="{{ $oId }}">--}}
-{{--        @endforeach--}}
-
-{{--        <a href="javascript:history.back()" class="btn btn-secondary">Edit Answers</a>--}}
-{{--        <button type="submit" class="btn btn-success">Confirm & Submit</button>--}}
-{{--    </form>--}}
-{{--@endsection--}}
-
 @extends('backend.partials.master')
 
 @section('content')

@@ -156,57 +156,6 @@ class CourseController extends Controller
         return redirect()->back()->with('success', 'Thanks — your review has been submitted.');
     }
 
-
-//    public function content($id, $partId = null)
-//    {
-//        // load course with lessons and parts
-//        $course = OnlineCourse::with('lessons.parts', 'creator')->findOrFail($id);
-//
-//        $lessons = $course->lessons;
-//
-//        // flatten all parts into a single ordered collection
-//        $allParts = $lessons->pluck('parts')->flatten(1)->values();
-//
-//        if ($allParts->isEmpty()) {
-//            abort(404, 'No course parts found.');
-//        }
-//
-//        // find the requested part (or default to the first part)
-//        $currentPart = $partId ? $allParts->firstWhere('id', $partId) : null;
-//        $currentPart = $currentPart ?? $allParts->first();
-//
-//        // detect embed URL if it’s YouTube
-//        if ($currentPart && $currentPart->video) {
-//            if (str_contains($currentPart->video, 'youtube.com/watch')) {
-//                $currentPart->video = preg_replace(
-//                    '/watch\?v=([^\&]+)/',
-//                    'embed/$1',
-//                    $currentPart->video
-//                );
-//            } elseif (str_contains($currentPart->video, 'youtu.be')) {
-//                $currentPart->video = str_replace('youtu.be/', 'www.youtube.com/embed/', $currentPart->video);
-//            }
-//        }
-//
-//        // find index and prev/next
-//        $currentIndex = $allParts->search(fn($p) => $p->id === $currentPart->id);
-//        $previousPart = $allParts->get($currentIndex - 1);
-//        $nextPart     = $allParts->get($currentIndex + 1);
-//
-//        $totalParts = $allParts->count();
-//        $completedParts = 0; // compute from user progress as needed
-//
-//        return view('backend.layouts.mycourse.course-content', compact(
-//            'course',
-//            'lessons',
-//            'totalParts',
-//            'completedParts',
-//            'currentPart',
-//            'previousPart',
-//            'nextPart'
-//        ));
-//    }
-
     public function content($id, $partId = null)
     {
         // load course with lessons and parts

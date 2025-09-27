@@ -20,12 +20,12 @@ class OnlineCourse extends Model
         'duration',
         'language',
         'image',
-        'user_id',        // Owner/creator of the course
-        'course_type',    // free or paid
-        'rating_id',      // Average rating reference
-        'category_id',    // Course category
-        'created_by',     // Admin/User who created
-        'updated_by'      // Admin/User who last updated
+        'user_id',
+        'course_type',
+        'rating_id',
+        'category_id',
+        'created_by',
+        'updated_by'
     ];
 
     // =========================
@@ -123,10 +123,10 @@ class OnlineCourse extends Model
         return $this->hasManyThrough(
             PromoCode::class,
             Payment::class,
-            'course_id',      // Foreign key on Payment
-            'id',             // Foreign key on PromoCode
-            'id',             // Local key on OnlineCourse
-            'promo_code_id'   // Local key on Payment
+            'course_id',
+            'id',
+            'id',
+            'promo_code_id'
         );
     }
 }

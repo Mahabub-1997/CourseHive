@@ -80,111 +80,6 @@ class QuizController extends Controller
     /**
      * Submit quiz answers and calculate score
      */
-//    public function submit(Request $request, $quizId)
-//    {
-//        $quiz = Quiz::with('questions.options')->findOrFail($quizId);
-//        $userId = $request->user()->id;
-//
-//        // Get submitted answers (question_id => option_id)
-//        $answers = $request->input('answers', []);
-//
-//        $score = 0;
-//        $results = [];
-//
-//        foreach ($quiz->questions as $question) {
-//            $correctOption = $question->options->where('is_correct', 1)->first();
-//            $userAnswerId  = $answers[$question->id] ?? null;
-//            $userOption    = $userAnswerId ? $question->options->where('id', $userAnswerId)->first() : null;
-//            $isCorrect     = $correctOption && $userAnswerId == $correctOption->id;
-//
-//            if ($isCorrect) {
-//                $score++;
-//            }
-//
-//            $results[] = [
-//                'question_id'    => $question->id,
-//                'question'       => $question->question_text,
-//                'correct_answer' => $correctOption ? $correctOption->option_text : null,
-//                'user_answer'    => $userOption ? $userOption->option_text : null,
-//                'is_correct'     => $isCorrect,
-//            ];
-//        }
-//
-//        $totalQuestions = $quiz->questions->count();
-//        $percentage     = $totalQuestions > 0 ? round(($score / $totalQuestions) * 100, 2) : 0;
-//        $isPassed       = $percentage >= 70;
-//
-//        // Save result
-//        $quizResult = QuizResult::create([
-//            'quiz_id'         => $quiz->id,
-//            'user_id'         => $userId,
-//            'score'           => $score,
-//            'total_questions' => $totalQuestions,
-//            'percentage'      => $percentage,
-//            'is_passed'       => $isPassed,
-//            'answers'         => json_encode($results),
-//        ]);
-//
-//        // Return JSON response instead of view
-//        return response()->json([
-//            'status' => true,
-//            'message' => 'Quiz submitted successfully',
-//            'quiz' => [
-//                'id' => $quiz->id,
-//                'title' => $quiz->title,
-//            ],
-//            'score' => $score,
-//            'total_questions' => $totalQuestions,
-//            'percentage' => $percentage,
-//            'is_passed' => $isPassed,
-//            'results' => $results,
-//        ]);
-//    }
-//    public function review(Request $request, $quizId)
-//    {
-//        // Accept answers as associative array: question_id => option_id
-//        $request->validate([
-//            'answers' => 'required|array',
-//        ]);
-//
-//        $answers = $request->input('answers', []);
-//
-//        // Load quiz with questions and options
-//        $quiz = Quiz::with('questions.options')->findOrFail($quizId);
-//
-//        $results = [];
-//        $score = 0;
-//
-//        foreach ($quiz->questions as $question) {
-//            $correctOption = $question->options->firstWhere('is_correct', 1);
-//            $userAnswerId = $answers[$question->id] ?? null;
-//            $userOption = $question->options->firstWhere('id', $userAnswerId);
-//
-//            $isCorrect = $correctOption && $userOption && $userOption->id == $correctOption->id;
-//            if ($isCorrect) $score++;
-//
-//            $results[] = [
-//                'question_id'      => $question->id,
-//                'question'         => $question->question_text,
-//                'correct_option_id'=> $correctOption?->id,
-//                'correct_answer'   => $correctOption?->option_text,
-//                'user_option_id'   => $userOption?->id,
-//                'user_answer'      => $userOption?->option_text,
-//                'is_correct'       => $isCorrect,
-//            ];
-//        }
-//
-//        $totalQuestions = $quiz->questions->count();
-//        $percentage = $totalQuestions > 0 ? round(($score / $totalQuestions) * 100, 2) : 0;
-//
-//        return response()->json([
-//            'quiz_id'         => $quiz->id,
-//            'score'           => $score,
-//            'total_questions' => $totalQuestions,
-//            'percentage'      => $percentage,
-//            'results'         => $results,
-//        ]);
-//    }
 
     public function review(Request $request, $quizId)
     {
@@ -224,7 +119,7 @@ class QuizController extends Controller
 
         $totalQuestions = $quiz->questions->count();
         $percentage     = $totalQuestions > 0 ? round(($score / $totalQuestions) * 100, 2) : 0;
-        $isPassed       = $percentage >= 50; // ✅ change rule if needed
+        $isPassed       = $percentage >= 50;
 
         // Track attempt number
         $attemptNumber = QuizResult::where('quiz_id', $quizId)

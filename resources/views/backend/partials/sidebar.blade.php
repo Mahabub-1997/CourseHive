@@ -249,3 +249,88 @@
         color: #fff !important;
     }
 </style>
+<!-- =================== Mobile Styles =================== -->
+<style>
+    @media (max-width: 768px) {
+        .main-sidebar {
+            position: fixed;
+            top: 0;
+            left: -260px; /* hidden initially */
+            width: 260px;
+            height: 100%;
+            background: #fff;
+            z-index: 1050;
+            overflow-y: auto;
+            transition: left 0.3s;
+        }
+        .main-sidebar.open {
+            left: 0;
+        }
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1040;
+        }
+        .sidebar-overlay.active {
+            display: block;
+        }
+
+        /* Menu text bold and black */
+        .nav-sidebar .nav-link {
+            font-weight: bold;
+            color: #000 !important;
+        }
+        .nav-sidebar .nav-link i.nav-icon {
+            color: #343a40;
+        }
+
+        /* Submenu collapsed initially */
+        .nav-treeview {
+            display: none;
+            padding-left: 15px;
+        }
+        .nav-item.menu-open > .nav-treeview {
+            display: block;
+        }
+    }
+</style>
+
+<!-- =================== Mobile JS =================== -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const sidebar = document.querySelector('.main-sidebar');
+        const toggleBtn = document.getElementById('sidebarToggle');
+
+        // Create overlay
+        const overlay = document.createElement('div');
+        overlay.classList.add('sidebar-overlay');
+        document.body.appendChild(overlay);
+
+        // Toggle sidebar
+        toggleBtn.addEventListener('click', function() {
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('active');
+        });
+
+        overlay.addEventListener('click', function() {
+            sidebar.classList.remove('open');
+            overlay.classList.remove('active');
+        });
+
+        // Mobile submenu toggle
+        document.querySelectorAll('.nav-item.has-treeview > a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                if (window.innerWidth <= 768) {
+                    e.preventDefault();
+                    const parent = link.parentElement;
+                    parent.classList.toggle('menu-open');
+                }
+            });
+        });
+    });
+</script>
+
+

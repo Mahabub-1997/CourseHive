@@ -40,17 +40,17 @@ class SubscriptionController extends Controller
      */
     public function store(Request $request)
     {
-        // 1️⃣ Validate the input
+        //  Validate the input
         $request->validate([
             'email' => 'required|email|unique:subscriptions,email',
         ]);
 
-        // 2️⃣ Create a new subscription record
+        //  Create a new subscription record
         Subscription::create([
             'email' => $request->email,
         ]);
 
-        // 3️⃣ Redirect to subscription list with success message
+        //  Redirect to subscription list with success message
         return redirect()->route('web-subscriptions.index')
             ->with('success', 'Subscription added successfully.');
     }
@@ -63,10 +63,10 @@ class SubscriptionController extends Controller
      */
     public function edit($id)
     {
-        // 1️⃣ Retrieve the subscription by ID or fail with 404
+        //  Retrieve the subscription by ID or fail with 404
         $subscription = Subscription::findOrFail($id);
 
-        // 2️⃣ Pass the subscription object to the edit view
+        //  Pass the subscription object to the edit view
         return view('backend.layouts.subscriptions.edit', compact('subscription'));
     }
 
@@ -79,20 +79,20 @@ class SubscriptionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // 1️⃣ Retrieve the subscription or fail if not found
+        //  Retrieve the subscription or fail if not found
         $subscription = Subscription::findOrFail($id);
 
-        // 2️⃣ Validate the email input
+        //  Validate the email input
         $request->validate([
             'email' => 'required|email|unique:subscriptions,email,' . $subscription->id,
         ]);
 
-        // 3️⃣ Update the subscription email
+        // Update the subscription email
         $subscription->update([
             'email' => $request->email,
         ]);
 
-        // 4️⃣ Redirect back to subscription list with success message
+        // Redirect back to subscription list with success message
         return redirect()->route('web-subscriptions.index')
             ->with('success', 'Subscription updated successfully.');
     }
@@ -105,13 +105,11 @@ class SubscriptionController extends Controller
      */
     public function destroy($id)
     {
-        // 1️⃣ Retrieve the subscription by ID or fail with 404
+        //  Retrieve the subscription by ID or fail with 404
         $subscription = Subscription::findOrFail($id);
-
-        // 2️⃣ Delete the subscription
         $subscription->delete();
 
-        // 3️⃣ Redirect to subscription list with success message
+
         return redirect()->route('web-subscriptions.index')
             ->with('success', 'Subscription deleted successfully.');
     }

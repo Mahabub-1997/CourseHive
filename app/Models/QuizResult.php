@@ -37,5 +37,4 @@ class QuizResult extends Model
     public  function course(){
         return $this->belongsTo(OnlineCourse::class, 'course_id');
     }
-
 }

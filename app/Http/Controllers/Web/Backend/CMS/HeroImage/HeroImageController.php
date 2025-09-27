@@ -44,16 +44,16 @@ class HeroImageController extends Controller
     }
     public function update(Request $request, $id)
     {
-        // 1️⃣ Retrieve the hero image record or fail with 404
+        // Retrieve the hero image record or fail with 404
         $heroImage = HeroImage::findOrFail($id);
 
-        // 2️⃣ Validate input
+        // Validate input
         $request->validate([
             'images' => 'nullable|array|max:10', // max 10 images
             'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120', // max 5MB per image
         ]);
 
-        // 3️⃣ If new images are uploaded
+        //  If new images are uploaded
         if ($request->hasFile('images')) {
 
             // a) Delete old images from storage
@@ -76,7 +76,7 @@ class HeroImageController extends Controller
             $heroImage->update(['images' => $paths]);
         }
 
-        // 4️⃣ Redirect back with success message
+        // Redirect back with success message
         return redirect()->route('web-hero-images.index')
             ->with('success', 'Hero images updated successfully.');
     }
@@ -98,6 +98,4 @@ class HeroImageController extends Controller
         return redirect()->route('web-hero-images.index')
             ->with('success', 'Hero images deleted successfully.');
     }
-
-
 }

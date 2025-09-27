@@ -10,7 +10,7 @@ class Option extends Model
 
     // Automatically cast JSON and boolean fields
     protected $casts = [
-        'option_text' => 'array',  // stored as JSON, retrieved as array
+        'option_text' => 'array',
         'is_correct'  => 'boolean',
     ];
 

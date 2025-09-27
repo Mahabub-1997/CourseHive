@@ -112,32 +112,6 @@ class AboutUsController extends Controller
         }
     }
 
-
-    // DELETE /api/contact-us/{id}
-//    public function destroy($id)
-//    {
-//        try {
-//            $contact = ContactUs::findOrFail($id);
-//
-//            if ($contact->image) {
-//                Storage::disk('public')->delete($contact->image);
-//            }
-//
-//            $contact->delete();
-//
-//            return response()->json([
-//                'success' => true,
-//                'message' => 'Contact deleted successfully.'
-//            ], 200);
-//
-//        } catch (\Exception $e) {
-//            return response()->json([
-//                'success' => false,
-//                'message' => $e->getMessage()
-//            ], 500);
-//        }
-//    }
-
     public function destroy($id)
     {
         $contact = ContactUs::find($id);

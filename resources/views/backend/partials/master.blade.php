@@ -16,12 +16,12 @@
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="{{ asset('/')}}backend/AdminAssets/backend/plugins/fontawesome-free/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" />
-    <script type="text/javascript" src="https://cdn.jwplayer.com/libraries/rgoZYM8H.js"></script>
+{{--    <script type="text/javascript" src="https://cdn.jwplayer.com/libraries/rgoZYM8H.js"></script>--}}
     <!-- overlayScrollbars -->
     <link rel="stylesheet" href="{{ asset('/')}}backend/AdminAssets/backend/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset('/')}}backend/AdminAssets/backend/dist/css/adminlte.min.css">
-    <link rel="stylesheet" href="{{asset('/')}}backend/css/bootstrap-4.min.css">
+{{--    <link rel="stylesheet" href="{{asset('/')}}backend/css/bootstrap-4.min.css">--}}
     <!-- Select2 -->
     <link rel="stylesheet" href="{{ asset('/')}}backend/AdminAssets/backend/plugins/select2/css/select2.min.css">
     <link rel="stylesheet" href="{{ asset('/')}}backend/AdminAssets/backend/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
@@ -37,16 +37,16 @@
     <!-- New font start-->
     <link rel="stylesheet" href="{{  asset('/')}}backend/AdminAssets/backend/dist/css/alt/bootstrap.min.css" />
     <link rel="stylesheet" href="{{  asset('/')}}backend/AdminAssets/backend/dist/css/alt/bootstrap-select.min.css" />
-    <script src="{{  asset('/')}}backend/AdminAssets/js/app.js')" defer></script>
+    <script src="{{ asset('backend/AdminAssets/js/app.js') }}" defer></script>
     {{--    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">--}}
     <!-- New font end-->
 </head>
 <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
 <div class="wrapper" id="app">
     <!-- Preloader -->
-    <div class="preloader flex-column justify-content-center align-items-center">
-        <img class="animation__wobble" src="{{ asset('/')}}backend/AdminAssets/backend/dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60">
-    </div>
+{{--    <div class="preloader flex-column justify-content-center align-items-center">--}}
+{{--        <img class="animation__wobble" src="{{ asset('/')}}backend/AdminAssets/backend/dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60">--}}
+{{--    </div>--}}
     <!-- Navbar -->
     @include('backend.partials.navbar')
     <!-- /.navbar -->
@@ -60,7 +60,7 @@
     <!-- /.control-sidebar -->
     <!-- Main Footer -->
     <footer class="main-footer">
-        <strong>Copyright &copy; 2019-2025 <a href="">EduHTrainerCo</a>.</strong>
+        <strong>Copyright &copy; 2025 <a href="">EduHTrainerCo</a>.</strong>
         All rights reserved At EduHTrainerCo.
     </footer>
 </div>
@@ -94,7 +94,7 @@
 <script src="{{ asset('/')}}backend/AdminAssets/backend/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- Option 2: Separate Popper and Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-<script src="{{  asset('/')}}backend/AdminAssets/backend/plugins/dist/js/popper.min.js"></script>
+{{--<script src="{{  asset('/')}}backend/AdminAssets/backend/plugins/dist/js/popper.min.js"></script>--}}
 <script src="{{ asset('/')}}backend/AdminAssets/backend/plugins/bootstrap/js/bootstrap.min.js"></script>
 <script src="{{ asset('/')}}backend/AdminAssets/backend/dist/js/bootstrap-select.min.js"></script>
 

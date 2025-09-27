@@ -64,13 +64,6 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $part->lesson->title ?? 'N/A' }}</td>
                                 <td>{{ $part->title }}</td>
-{{--                                <td>--}}
-{{--                                    @if($part->video)--}}
-{{--                                        <a href="{{ $part->video }}" target="_blank">View Video</a>--}}
-{{--                                    @else--}}
-{{--                                        N/A--}}
-{{--                                    @endif--}}
-{{--                                </td>--}}
                                 <td>
                                     @if($part->video)
                                         @if(Str::contains($part->video, ['youtube.com', 'youtu.be', 'vimeo.com']))

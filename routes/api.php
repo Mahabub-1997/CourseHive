@@ -126,5 +126,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/courses/{id}/enroll', [EnrollmentController::class, 'enroll']);
     Route::post('/createPayment/{id}', [EnrollmentController::class, 'createPayment']);
     Route::post('/enroll/payment-success', [EnrollmentController::class, 'handlePaymentSuccess']);
-    Route::post('/enroll/{course_id}', [EnrollmentController::class, 'enroll']); // ⚠️ duplicate of /courses/{id}/enroll
+    Route::post('/enroll/{course_id}', [EnrollmentController::class, 'enroll']);
 });

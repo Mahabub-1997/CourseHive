@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('promo_codes', function (Blueprint $table) {
             $table->id();
-            $table->string('code')->unique();                            // e.g., SUMMER10
+            $table->string('code')->unique();
             $table->enum('type', ['percentage', 'fixed'])->default('percentage');
-            $table->decimal('value', 10, 2);                             // e.g., 10% or $20
+            $table->decimal('value', 10, 2);
             $table->integer('used_count')->default(0);
             $table->timestamp('expires_at')->nullable();
             $table->enum('status', ['active', 'inactive'])->default('active');

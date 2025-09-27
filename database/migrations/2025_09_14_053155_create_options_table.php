@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('options', function (Blueprint $table) {
             $table->id();
             $table->foreignId('question_id');
-            $table->json('option_text'); // ✅ JSON column
-            $table->boolean('is_correct')->default(false); // multiple correct allowed
+            $table->json('option_text');
+            $table->boolean('is_correct')->default(false);
             $table->timestamps();
         });
     }

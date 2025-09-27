@@ -29,8 +29,11 @@ class ProfileController extends Controller
         // Total courses the user is enrolled in
         $totalCourses = $enrollments->count();
 
-        // Completed courses
-        $inProgress = $enrollments->where('status', 'success')->count();
+
+        // Count of in-progress courses (pending status)
+        $inProgress = Enrollment::where('user_id', $userId)
+            ->where('status', 'pending')
+            ->count();
 
         // Incomplete courses
         $inComplete = $enrollments->where('status', '!=', 'success')->count();

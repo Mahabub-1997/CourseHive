@@ -37,7 +37,7 @@
                     <div class="info-box mb-3 d-flex justify-content-between align-items-center">
                         <div class="info-box-content">
                             <span class="info-box-text fw-bold" style="font-size: 1.5rem;">Success</span>
-                            <span class="info-box-number text-success" style="font-size: 2rem;">
+                            <span class="info-box-number text-primary" style="font-size: 2rem;">
                             {{ $payments->where('status', 'success')->count() }}
                         </span>
                         </div>

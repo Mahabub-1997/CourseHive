@@ -28,10 +28,12 @@
                                 <div class="col-sm-6">
                                     <h1 class="m-0">Options</h1>
                                 </div>
-                                <div class="col-sm-6 text-end">
-                                    <a href="{{ route('web-options.create') }}" class="btn bg-gradient-teal btn-sm">
-                                        <i class="fa fa-plus text-light"></i> Add New Option
-                                    </a>
+                                <div class="col-sm-6">
+                                    <ol class="breadcrumb float-sm-right">
+                                        <a href="{{ route('web-options.create') }}" class="btn bg-gradient-teal btn-sm">
+                                            <i class="fa fa-plus text-light"></i> Add New Option
+                                        </a>
+                                    </ol>
                                 </div>
                             </div>
                         </div>
@@ -41,7 +43,7 @@
                     <div class="card">
                         <div class="card-body table-responsive">
                             <table class="table table-bordered table-striped">
-                                <thead class="bg-primary text-white">
+                                <thead class="bg-gradient-teal text-white">
                                 <tr>
                                     <th>#</th>
                                     <th>Question</th>

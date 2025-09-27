@@ -35,7 +35,7 @@ class ForgotPasswordController extends Controller
         // Return OTP in response (for testing/debugging)
         return response()->json([
             'message' => 'OTP sent to your email',
-            'otp' => $otp // ⚠️ Remove in production for security
+            'otp' => $otp
         ]);
     }
     public function verifyOtpRegister(Request $request)
