@@ -33,6 +33,13 @@ class CourseController extends Controller
             ->where('status', 'pending')
             ->paginate(6);
 
+       $inProgressCourses->getCollection()->transform(function ($enrollment) {
+    if ($enrollment->course && $enrollment->course->image) {
+        $enrollment->course->image = 'uploads/courses/' . $enrollment->course->image;
+    }
+    return $enrollment;
+});
+
         return response()->json([
             'status'  => true,
             'message' => 'My courses retrieved successfully',
@@ -114,6 +121,8 @@ class CourseController extends Controller
                 'message' => 'Course not found or not enrolled',
             ], 404);
         }
+
+
 
         return response()->json([
             'status'  => true,

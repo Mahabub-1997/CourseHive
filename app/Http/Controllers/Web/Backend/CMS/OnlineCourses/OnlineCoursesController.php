@@ -22,7 +22,7 @@ class OnlineCoursesController extends Controller
         $inProgress = Enrollment::where('status', 'pending')->count();
         $inComplete = Enrollment::where('status', 'success')->count();
         $categories = Category::all();
-        return view('backend.layouts.online_courses.list', compact('courses', 'users', 'categories', 'totalCourses', 'inProgress','inComplete'));
+        return view('backend.layouts.online_courses.list', compact('courses', 'users', 'categories', 'totalCourses', 'inProgress', 'inComplete'));
     }
 
     public function create()
@@ -48,14 +48,26 @@ class OnlineCoursesController extends Controller
         ]);
 
         $data = $request->only([
-            'title', 'description', 'price', 'level', 'duration', 'language', 'rating_id', 'category_id', 'course_type'
+            'title',
+            'description',
+            'price',
+            'level',
+            'duration',
+            'language',
+            'rating_id',
+            'category_id',
+            'course_type'
         ]);
 
         // Handle Image Upload
         if ($request->hasFile('image')) {
             $image = $request->file('image');
-            $imageName = time().'_'.Str::slug($request->title).'.'.$image->getClientOriginalExtension();
-            $image->move(public_path('uploads/courses'), $imageName);
+            $imageName = time() . '_' . Str::slug($request->title) . '.' . $image->getClientOriginalExtension();
+
+            // Save in storage/app/public/courses
+            $image->storeAs('courses', $imageName, 'public');
+
+            // Save the filename in DB
             $data['image'] = $imageName;
         }
 
@@ -103,7 +115,7 @@ class OnlineCoursesController extends Controller
                 unlink(public_path('uploads/courses/' . $web_online_course->image));
             }
             $image = $request->file('image');
-            $imageName = time().'_'.Str::slug($request->title).'.'.$image->getClientOriginalExtension();
+            $imageName = time() . '_' . Str::slug($request->title) . '.' . $image->getClientOriginalExtension();
             $image->move(public_path('uploads/courses'), $imageName);
             $data['image'] = $imageName;
         }
@@ -123,6 +135,4 @@ class OnlineCoursesController extends Controller
         $web_online_course->delete();
         return redirect()->route('web-online-courses.index')->with('success', 'Course deleted successfully!');
     }
-
-
 }

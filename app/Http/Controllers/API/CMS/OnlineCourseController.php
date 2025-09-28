@@ -30,9 +30,54 @@ class OnlineCourseController extends Controller
      * Store a newly created resource in storage.
      */
     // Create a new course
+//    public function store(Request $request)
+//    {
+//        try {
+//            $validated = $request->validate([
+//                'title' => 'nullable|string|max:255',
+//                'description' => 'nullable|string',
+//                'price' => 'nullable|numeric',
+//                'level' => 'nullable|string',
+//                'duration' => 'nullable|string',
+//                'language' => 'nullable|string',
+//                'image' => 'nullable',
+//                'user_id' => 'required|exists:users,id',
+//                'rating_id' => 'nullable|exists:ratings,id',
+//                'category_id' => 'nullable|exists:categories,id',
+//                'created_by' => 'required|exists:users,id',
+//                'updated_by' => 'nullable|exists:users,id',
+//            ]);
+//
+//        if ($request->hasFile('image')) {
+//            $request->validate([
+//                'image' => 'image|mimes:jpeg,png,jpg,gif,webp|max:2048'
+//            ]);
+//            $validated['image'] = $request->file('image')->store('courses', 'public'); // e.g. storage/app/public/courses/xxxx.jpg
+//        } else if ($request->filled('image')) {
+//            // if image is provided as URL/string
+//            $request->validate(['image' => 'string|max:2048']);
+//            // you could also enforce URL: 'url'
+//            $validated['image'] = $request->input('image');
+//        }
+//
+//            $course = OnlineCourse::create($validated);
+//
+//            return response()->json([
+//                'success' => true,
+//                'message' => 'Online course created successfully',
+//                'data' => $course
+//            ], 201);
+//
+//        } catch (\Illuminate\Validation\ValidationException $e) {
+//            return response()->json(['success' => false, 'errors' => $e->errors()], 422);
+//        } catch (\Exception $e) {
+//            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+//        }
+//    }
     public function store(Request $request)
     {
         try {
+            // Validate request fields
             $validated = $request->validate([
                 'title' => 'nullable|string|max:255',
                 'description' => 'nullable|string',
@@ -48,20 +93,31 @@ class OnlineCourseController extends Controller
                 'updated_by' => 'nullable|exists:users,id',
             ]);
 
-        if ($request->hasFile('image')) {
-            $request->validate([
-                'image' => 'image|mimes:jpeg,png,jpg,gif,webp|max:2048'
-            ]);
-            $validated['image'] = $request->file('image')->store('courses', 'public'); // e.g. storage/app/public/courses/xxxx.jpg
-        } else if ($request->filled('image')) {
-            // if image is provided as URL/string
-            $request->validate(['image' => 'string|max:2048']);
-            // you could also enforce URL: 'url'
-            $validated['image'] = $request->input('image');
-        }
+            // Handle image upload
+            if ($request->hasFile('image')) {
+                $request->validate([
+                    'image' => 'image|mimes:jpeg,png,jpg,gif,webp|max:2048'
+                ]);
 
+                $imageName = time() . '_' . \Str::slug($request->title ?? 'course') . '.' .
+                    $request->file('image')->getClientOriginalExtension();
+
+                // Save file to storage/app/public/online_course
+                $request->file('image')->storeAs('online_course', $imageName, 'public');
+
+                // Save only filename in DB
+                $validated['image'] = $imageName;
+            }
+            // Handle image as URL/string
+            else if ($request->filled('image')) {
+                $request->validate(['image' => 'string|max:2048']);
+                $validated['image'] = $request->input('image');
+            }
+
+            // Create course
             $course = OnlineCourse::create($validated);
 
+            // Return JSON with appended 'image_url'
             return response()->json([
                 'success' => true,
                 'message' => 'Online course created successfully',
@@ -69,9 +125,15 @@ class OnlineCourseController extends Controller
             ], 201);
 
         } catch (\Illuminate\Validation\ValidationException $e) {
-            return response()->json(['success' => false, 'errors' => $e->errors()], 422);
+            return response()->json([
+                'success' => false,
+                'errors' => $e->errors()
+            ], 422);
         } catch (\Exception $e) {
-            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 500);
         }
     }
 

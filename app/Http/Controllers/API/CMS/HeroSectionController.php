@@ -22,6 +22,22 @@ class HeroSectionController extends Controller
      * Store a newly created resource in storage.
      */
     // Store hero section
+//    public function store(Request $request)
+//    {
+//        $request->validate([
+//            'title' => 'required|string|max:255',
+//            'description' => 'nullable|string',
+//            'image' => 'nullable|image|max:2048'
+//        ]);
+//
+//        $data = $request->all();
+//
+//        if ($request->hasFile('image')) {
+//            $data['image'] = $request->file('image')->store('hero_images', 'public');
+//        }
+//
+//        return HeroSection::create($data);
+//    }
     public function store(Request $request)
     {
         $request->validate([
@@ -30,13 +46,30 @@ class HeroSectionController extends Controller
             'image' => 'nullable|image|max:2048'
         ]);
 
-        $data = $request->all();
+        $data = $request->only(['title', 'description']);
 
         if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('hero_images', 'public');
+            // Generate unique file name
+            $imageName = time() . '_' . \Str::slug($request->title) . '.' . $request->file('image')->getClientOriginalExtension();
+
+            // Store in storage/app/public/hero-sections
+            $request->file('image')->storeAs('hero-sections', $imageName, 'public');
+
+            // Store relative path in DB
+            $data['image'] = 'hero-sections/' . $imageName;
         }
 
-        return HeroSection::create($data);
+        // Create hero section
+        $hero = HeroSection::create($data);
+
+        // Transform image to full URL for API response
+        $hero->image = url('storage/' . $hero->image);
+
+        // Return JSON for Postman
+        return response()->json([
+            'success' => true,
+            'data' => $hero
+        ]);
     }
 
     /**
