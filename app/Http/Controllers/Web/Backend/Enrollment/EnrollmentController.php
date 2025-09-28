@@ -260,7 +260,7 @@ class EnrollmentController extends Controller
             $query->where('status', 'success'); // ✅ count only successful enrollments
         }])
             ->orderByDesc('enrollments_count')
-            ->take(5)
+            ->take(1)
             ->get();
 
         return view('backend.layouts.top_course.list', compact('topCourses'));

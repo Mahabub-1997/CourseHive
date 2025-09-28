@@ -57,7 +57,7 @@
                                 <td>{{ $rating->user->name ?? 'N/A' }}</td>
 
                                 <!-- Course -->
-                                <td>{{ $rating->course->title ?? '-' }}</td>
+                                <td>{{ $rating->onlinecourse->title ?? '-' }}</td>
 
                                 <!-- Rating -->
                                 <td>

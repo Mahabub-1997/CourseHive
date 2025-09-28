@@ -65,5 +65,9 @@ class Rating extends Model
     {
         return $this->belongsTo(Instructor::class, 'instructor_id');
     }
+    public function onlinecourse()
+    {
+        return $this->belongsTo(OnlineCourse::class, 'course_id');
+    }
 
 }

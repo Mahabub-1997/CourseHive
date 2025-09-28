@@ -129,4 +129,8 @@ class OnlineCourse extends Model
             'promo_code_id'
         );
     }
+    public function ratings()
+    {
+        return $this->hasOne(Rating::class, 'course_id');
+    }
 }
