@@ -70,6 +70,37 @@ class PartController extends Controller
             ->with('success', 'Part created successfully!');
     }
 
+//    public function store(Request $request)
+//    {
+//        $request->validate([
+//            'lesson_id' => 'required|exists:lessons,id',
+//            'title' => 'required|string|max:255',
+//            'content' => 'nullable|string',
+//            'video' => 'nullable|mimes:mp4,mov,avi,wmv|max:51200',
+//        ]);
+//
+//        $videoUrl = null;
+//
+//        if ($request->hasFile('video')) {
+//            // Store the video in storage/app/public/videos
+//            $path = $request->file('video')->store('videos', 'public');
+//
+//            // Generate full URL to store in DB
+//            $videoUrl = asset('storage/' . $path); // http://yourdomain.com/storage/videos/filename.mp4
+//        }
+//
+//        // Save part with full URL
+//        Part::create([
+//            'lesson_id' => $request->lesson_id,
+//            'title' => $request->title,
+//            'content' => $request->content,
+//            'video' => $videoUrl,
+//        ]);
+//
+//        return redirect()->route('web-parts.index')
+//            ->with('success', 'Part created successfully!');
+//    }
+
     /**
      * Display the specified part.
      *

@@ -28,7 +28,7 @@ class OnlineCourse extends Model
         'updated_by'
     ];
 
-    protected $appends = ['image_url'];
+//    protected $appends = ['image_url'];
     // =========================
     // Relationships
     // =========================
@@ -135,11 +135,11 @@ class OnlineCourse extends Model
         return $this->hasOne(Rating::class, 'course_id');
     }
     // Accessor to get full image URL
-    public function getImageUrlAttribute()
-    {
-        if ($this->image && !str_starts_with($this->image, 'http')) {
-            return url('storage/online_course/' . $this->image);
-        }
-        return $this->image;
-    }
+//    public function getImageUrlAttribute()
+//    {
+//        if ($this->image && !str_starts_with($this->image, 'http')) {
+//            return url('storage/online_course/' . $this->image);
+//        }
+//        return $this->image;
+//    }
 }

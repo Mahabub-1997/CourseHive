@@ -119,7 +119,7 @@
                                 <div class="card shadow-sm mb-3">
                                     <div class="ratio ratio-16x9">
                                         <video controls style="width:1172px; height:450px; object-fit:cover;">
-                                            <source src="{{ asset('storage/' . ltrim($currentPart->video, '/')) }}" type="video/mp4">
+                                            <source src="{{ asset('storage/' . $part->video) }}" type="video/mp4">
                                             Your browser does not support the video tag.
                                         </video>
                                     </div>

@@ -9,6 +9,7 @@ use App\Models\OnlineCourse;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class OnlineCoursesController extends Controller
@@ -64,8 +65,8 @@ class OnlineCoursesController extends Controller
             $image = $request->file('image');
             $imageName = time() . '_' . Str::slug($request->title) . '.' . $image->getClientOriginalExtension();
 
-            // Save in storage/app/public/courses
-            $image->storeAs('courses', $imageName, 'public');
+            // Save to storage/app/public/courses
+            $image->storeAs('public/courses', $imageName);
 
             // Save the filename in DB
             $data['image'] = $imageName;
@@ -111,13 +112,14 @@ class OnlineCoursesController extends Controller
         $data = $request->except('image');
 
         if ($request->hasFile('image')) {
-            if ($web_online_course->image && file_exists(public_path('uploads/courses/' . $web_online_course->image))) {
-                unlink(public_path('uploads/courses/' . $web_online_course->image));
+            // delete old image if exists
+            if ($web_online_course->image && \Storage::disk('public')->exists($web_online_course->image)) {
+                \Storage::disk('public')->delete($web_online_course->image);
             }
-            $image = $request->file('image');
-            $imageName = time() . '_' . Str::slug($request->title) . '.' . $image->getClientOriginalExtension();
-            $image->move(public_path('uploads/courses'), $imageName);
-            $data['image'] = $imageName;
+
+            // store new one
+            $path = $request->file('image')->store('courses', 'public');
+            $data['image'] = $path;
         }
 
         $data['updated_by'] = Auth::id() ?? null;
