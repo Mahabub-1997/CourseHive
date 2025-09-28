@@ -40,7 +40,8 @@
                     $createCourseRoutes = [
                         'web-online-courses.index',
                         'overview.index',
-                        'instructors.index'
+                        'instructors.index',
+                        'web.ratings.index'
                     ];
                     $createCourseOpen = collect($createCourseRoutes)->contains(fn($r) => request()->routeIs($r) || request()->is("admin/{$r}/*"));
                 @endphp
@@ -62,6 +63,7 @@
                                 ['route' => 'web-overview.index', 'icon' => 'far fa-circle', 'label' => 'Course Overview'],
                                 ['route' => 'web-instructors.index', 'icon' => 'far fa-circle', 'label' => 'Course Instructor'],
                                 ['route' => 'top.courses', 'icon' => 'far fa-circle', 'label' => 'Top Course'],
+                                ['route' => 'web.ratings.index', 'icon' => 'far fa-circle', 'label' => 'Rating'],
                             ];
                         @endphp
 

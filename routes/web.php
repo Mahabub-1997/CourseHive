@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Web\Backend\Earning\EarningController;
+use App\Http\Controllers\Web\Backend\Rating\RatingController;
 use Illuminate\Support\Facades\Route;
 
 // ==============================
@@ -128,6 +129,16 @@ Route::resource('web-questions', QuestionController::class);
 Route::resource('web-options', OptionController::class);
 Route::resource('web-overview', OverviewController::class);
 Route::resource('web-instructors', InstructorController::class);
+//Route::resource('web.ratings', RatingController::class);
+Route::get('web/ratings', [RatingController::class, 'index'])->name('web.ratings.index');
+Route::get('web/ratings/create', [RatingController::class, 'create'])->name('web.ratings.create');
+Route::post('web/ratings', [RatingController::class, 'store'])->name('web.ratings.store');
+Route::get('web/ratings/{rating}', [RatingController::class, 'show'])->name('web.ratings.show');
+Route::get('web/ratings/{rating}/edit', [RatingController::class, 'edit'])->name('web.ratings.edit');
+Route::put('web/ratings/{rating}', [RatingController::class, 'update'])->name('web.ratings.update');
+Route::delete('web/ratings/{rating}', [RatingController::class, 'destroy'])->name('web.ratings.destroy');
+
+
 
 /* ==============================
    My Courses

@@ -14,7 +14,8 @@ class Rating extends Model
      */
     protected $fillable = [
         'user_id',
-        'rating_point'
+        'rating_point',
+        'course_id',
     ];
 
     /* =====================
