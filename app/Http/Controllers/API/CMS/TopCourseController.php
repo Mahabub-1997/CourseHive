@@ -13,13 +13,40 @@ class TopCourseController extends Controller
     /**
      * Display a listing of the resource.
      */
+//    public function index()
+//    {
+//        $topCourses = OnlineCourse::withCount(['enrollments as enrollments_count' => function ($query) {
+//            $query->where('status', 'success'); // only successful enrollments
+//        }])
+//            ->orderByDesc('enrollments_count')
+//            ->take(5)
+//            ->get()
+//            ->map(function ($course) {
+//                return [
+//                    'id' => $course->id,
+//                    'title' => $course->title,
+//                    'subtitle' => $course->subtitle,
+//                    'description' => $course->description,
+//                    'enrollments_count' => $course->enrollments_count,
+//                    'image' => $course->image
+//                        ? asset('uploads/courses/' . $course->image)
+//                        : asset('images/default-course.png')
+//                ];
+//            });
+//
+//        return response()->json([
+//            'status' => 'success',
+//            'data' => $topCourses
+//        ]);
+//    }
+
     public function index()
     {
         $topCourses = OnlineCourse::withCount(['enrollments as enrollments_count' => function ($query) {
             $query->where('status', 'success'); // only successful enrollments
         }])
             ->orderByDesc('enrollments_count')
-            ->take(5)
+            ->take(1)
             ->get()
             ->map(function ($course) {
                 return [
@@ -29,8 +56,8 @@ class TopCourseController extends Controller
                     'description' => $course->description,
                     'enrollments_count' => $course->enrollments_count,
                     'image' => $course->image
-                        ? asset('uploads/courses/' . $course->image)
-                        : asset('images/default-course.png')
+                        ? asset('storage/' . $course->image) // ✅ storage path
+                        : asset('images/default-course.png'),
                 ];
             });
 
