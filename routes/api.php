@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\ChatGpt\ChatController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -77,6 +78,11 @@ Route::delete('contacts/{id}', [ContactController::class, 'destroy']);
 Route::get('/top-courses', [TopCourseController::class, 'index']);
 Route::get('/about-us', [AboutUsController::class, 'show']);
 Route::get('/online-courses/{id}', [CourseController::class, 'show']);
+
+//chatgpt APi
+Route::post('/chat', [ChatController::class, 'ask']);
+// Route::post('/chat', [ChatController::class, 'ask'])->middleware('throttle:10,1');
+
 
 
 
